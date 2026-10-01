@@ -1,0 +1,10 @@
+{{- $displayThemeToggle := site.Params.theme.displayToggle | default true -}}
+{{- $footerSwitchesVisible := or hugo.IsMultilingual $displayThemeToggle -}}
+<footer class="hextra-footer hx:bg-gray-100 hx:pb-[env(safe-area-inset-bottom)] hx:dark:bg-neutral-900 hx:print:bg-transparent">
+  {{- if $footerSwitchesVisible -}}
+    <div class="hx:mx-auto hx:flex hx:gap-2 hx:py-2 hx:px-4 hextra-max-footer-width">
+      {{- if hugo.IsMultilingual }}{{ partial "language-switch.html" (dict "context" .) }}{{ end -}}
+      {{- if $displayThemeToggle }}{{ partial "theme-toggle.html" }}{{ end -}}
+    </div>
+  {{- end -}}
+</footer>
