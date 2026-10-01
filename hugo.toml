@@ -35,12 +35,12 @@ enableRobotsTXT = true
     contentDir = 'content'
     [languages.en.params]
       description = 'Senior Software Engineer @ PicPay. Writing about software engineering, architecture and AI.'
-  [languages.pt-br]
+  [languages."pt-br"]
     languageName = 'Português'
     languageCode = 'pt-br'
     weight = 2
     contentDir = 'content'
-    [languages.pt-br.params]
+    [languages."pt-br".params]
       description = 'Senior Software Engineer @ PicPay. Escrevendo sobre engenharia de software, arquitetura e IA.'
 
 [[languages.en.menu.main]]
@@ -62,22 +62,22 @@ enableRobotsTXT = true
     type = 'search'
     icon = 'search'
 
-[[languages.pt-br.menu.main]]
+[[languages."pt-br".menu.main]]
   name = 'Artigos'
   pageRef = '/posts'
   weight = 1
-[[languages.pt-br.menu.main]]
+[[languages."pt-br".menu.main]]
   name = 'Palestras'
   pageRef = '/speakers'
   weight = 2
-[[languages.pt-br.menu.main]]
+[[languages."pt-br".menu.main]]
   name = 'Contato'
   pageRef = '/contact'
   weight = 3
-[[languages.pt-br.menu.main]]
+[[languages."pt-br".menu.main]]
   name = 'Buscar'
   weight = 4
-  [languages.pt-br.menu.main.params]
+  [languages."pt-br".menu.main.params]
     type = 'search'
     icon = 'search'
 
