@@ -1,16 +1,16 @@
 ---
 title: 'Luiz Schons'
-description: 'Artigos sobre engenharia de software, arquitetura e agentes de IA.'
+description: 'Senior Software Engineer @ PicPay. Writing about software engineering, architecture and AI.'
 toc: false
 ---
 
 # Luiz Schons
 
-**Engenheiro de software e arquiteto de sistemas**
+**Senior Software Engineer @ PicPay**
 
-Reflexões práticas sobre arquitetura, desenvolvimento de software e o futuro do trabalho com agentes de IA.
+Notes on software engineering, architecture and the future of building with AI agents.
 
-[LinkedIn](https://www.linkedin.com/in/luiz-schons/) · [Ver séries](/meu-blog/series/)
+[LinkedIn](https://www.linkedin.com/in/luiz-schons/) · [GitHub](https://github.com/sschonss) · [Talks](/meu-blog/speakers/)
 
 {{< cards >}}
   {{< card link="posts" title="Ler os artigos" icon="book-open" >}}

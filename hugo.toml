@@ -1,5 +1,6 @@
 baseURL = 'https://sschonss.github.io/meu-blog/'
-languageCode = 'pt-br'
+defaultContentLanguage = 'en'
+defaultContentLanguageInSubdir = false
 title = 'Luiz Schons'
 theme = 'hextra'
 enableRobotsTXT = true
@@ -26,20 +27,57 @@ enableRobotsTXT = true
   index = 'content'
   tokenize = 'forward'
 
-[[menu.main]]
+[languages]
+  [languages.en]
+    languageName = 'English'
+    languageCode = 'en-us'
+    weight = 1
+    contentDir = 'content'
+    [languages.en.params]
+      description = 'Senior Software Engineer @ PicPay. Writing about software engineering, architecture and AI.'
+  [languages.pt-br]
+    languageName = 'Português'
+    languageCode = 'pt-br'
+    weight = 2
+    contentDir = 'content'
+    [languages.pt-br.params]
+      description = 'Senior Software Engineer @ PicPay. Escrevendo sobre engenharia de software, arquitetura e IA.'
+
+[[languages.en.menu.main]]
+  name = 'Articles'
+  pageRef = '/posts'
+  weight = 1
+[[languages.en.menu.main]]
+  name = 'Talks'
+  pageRef = '/speakers'
+  weight = 2
+[[languages.en.menu.main]]
+  name = 'Contact'
+  pageRef = '/contact'
+  weight = 3
+[[languages.en.menu.main]]
+  name = 'Search'
+  weight = 4
+  [languages.en.menu.main.params]
+    type = 'search'
+    icon = 'search'
+
+[[languages.pt-br.menu.main]]
   name = 'Artigos'
   pageRef = '/posts'
   weight = 1
-
-[[menu.main]]
-  name = 'RSS'
-  url = '/meu-blog/index.xml'
+[[languages.pt-br.menu.main]]
+  name = 'Palestras'
+  pageRef = '/speakers'
   weight = 2
-
-[[menu.main]]
-  name = 'Buscar'
+[[languages.pt-br.menu.main]]
+  name = 'Contato'
+  pageRef = '/contact'
   weight = 3
-  [menu.main.params]
+[[languages.pt-br.menu.main]]
+  name = 'Buscar'
+  weight = 4
+  [languages.pt-br.menu.main.params]
     type = 'search'
     icon = 'search'
 
