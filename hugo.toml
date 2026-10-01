@@ -18,6 +18,14 @@ enableRobotsTXT = true
   displayCopyright = true
   displayPoweredBy = true
 
+[params.search]
+  enable = true
+  type = 'flexsearch'
+
+[params.search.flexsearch]
+  index = 'content'
+  tokenize = 'forward'
+
 [[menu.main]]
   name = 'Artigos'
   pageRef = '/posts'
