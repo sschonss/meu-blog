@@ -16,7 +16,7 @@ enableRobotsTXT = true
   displayLogo = false
 
 [params.footer]
-  displayCopyright = true
+  displayCopyright = false
   displayPoweredBy = false
 
 [params.search]
