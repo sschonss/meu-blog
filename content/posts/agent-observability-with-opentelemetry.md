@@ -3,6 +3,7 @@ title: 'Agent Observability with OpenTelemetry'
 date: 2026-09-16
 source: https://luizschons.com/agent-observability-with-opentelemetry
 series: ['AI-Friendly Architecture']
+translationKey: agent-observability-with-opentelemetry
 draft: false
 ---
 
