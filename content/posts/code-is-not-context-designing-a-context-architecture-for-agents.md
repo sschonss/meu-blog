@@ -4,6 +4,7 @@ date: 2026-08-21
 source: https://luizschons.com/code-is-not-context-designing-a-context-architecture-for-agents
 series: ['AI-Friendly Architecture']
 draft: false
+translationKey: 'code-is-not-context-designing-a-context-architecture-for-agents'
 ---
 
 <p>This is the second article in a series about AI-friendly architecture. In the first article, I explained how AI is like a new person joining a company and trying to understand a system for the first time.</p>

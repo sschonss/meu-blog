@@ -2,7 +2,7 @@
 title: 'Observabilidade também é contexto para agentes de IA'
 date: 2026-08-21
 source: https://luizschons.com/observability-is-also-context-for-ai-agents
-series: ['AI-Friendly Architecture']
+series: ['Arquitetura Amigável à IA']
 draft: false
 ---
 

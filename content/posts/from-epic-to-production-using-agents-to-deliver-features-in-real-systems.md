@@ -4,6 +4,7 @@ date: 2026-09-12
 source: https://luizschons.com/from-epic-to-production-using-agents-to-deliver-features-in-real-systems
 series: ['AI-Friendly Architecture']
 draft: false
+translationKey: 'from-epic-to-production-using-agents-to-deliver-features-in-real-systems'
 ---
 
 <p>This is the eighth article in the series about AI-friendly architecture. In the previous articles, we talked about context, documentation, observability, skills, Context Skills, agents, tools, MCP, guardrails, and harnesses.</p>

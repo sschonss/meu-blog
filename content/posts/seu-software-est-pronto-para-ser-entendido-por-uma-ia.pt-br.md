@@ -2,7 +2,7 @@
 title: 'Seu software está pronto para ser entendido por uma IA?'
 date: 2026-08-20
 source: https://luizschons.com/seu-software-est-pronto-para-ser-entendido-por-uma-ia
-series: ['AI-Friendly Architecture']
+series: ['Arquitetura Amigável à IA']
 draft: false
 ---
 

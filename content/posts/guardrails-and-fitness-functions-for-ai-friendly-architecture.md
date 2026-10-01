@@ -4,6 +4,7 @@ date: 2026-08-31
 source: https://luizschons.com/guardrails-and-fitness-functions-for-ai-friendly-architecture
 series: ['AI-Friendly Architecture']
 draft: false
+translationKey: 'guardrails-and-fitness-functions-for-ai-friendly-architecture'
 ---
 
 <p>This is the fifth article in the series about AI-friendly architecture. We have already discussed how agents find context, use skills, and work with specialized knowledge.</p>
