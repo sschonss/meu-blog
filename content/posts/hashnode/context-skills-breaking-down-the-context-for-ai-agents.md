@@ -2,6 +2,7 @@
 title: 'Context Skills: Breaking Down the Context for AI Agents'
 date: 2026-09-05
 source: https://luizschons.com/context-skills-breaking-down-the-context-for-ai-agents
+series: ['AI-Friendly Architecture']
 draft: false
 ---
 

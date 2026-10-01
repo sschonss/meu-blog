@@ -2,6 +2,7 @@
 title: 'Guardrails and Fitness Functions for AI-Friendly Architecture'
 date: 2026-08-31
 source: https://luizschons.com/guardrails-and-fitness-functions-for-ai-friendly-architecture
+series: ['AI-Friendly Architecture']
 draft: false
 ---
 

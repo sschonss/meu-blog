@@ -2,6 +2,7 @@
 title: 'Skills: Specialized Context for AI Agents'
 date: 2026-08-21
 source: https://luizschons.com/skills-specialized-context-for-ai-agents
+series: ['AI-Friendly Architecture']
 draft: false
 ---
 

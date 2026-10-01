@@ -32,7 +32,9 @@ def main():
         content = item.findtext(f"{{{CONTENT_NS}}}encoded") or item.findtext("description") or ""
         slug = slug_from_url(link)
         path = os.path.join(OUT, f"{slug}.md")
-        frontmatter = f"---\ntitle: {title!r}\ndate: {date.isoformat()}\nsource: {link}\ndraft: false\n---\n\n"
+        series = "AI-Friendly Architecture" if any(word in title.lower() for word in ("agent", "context", "skill", "guardrail", "software ready", "epic to production", "observability")) else ""
+        series_line = f"series: ['{series}']\n" if series else ""
+        frontmatter = f"---\ntitle: {title!r}\ndate: {date.isoformat()}\nsource: {link}\n{series_line}draft: false\n---\n\n"
         with open(path, "w", encoding="utf-8") as file:
             file.write(frontmatter + clean(content) + "\n")
     print(f"Synced {len(root.findall('./channel/item'))} Hashnode posts")

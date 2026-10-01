@@ -27,3 +27,13 @@ enableRobotsTXT = true
   name = 'RSS'
   url = '/meu-blog/index.xml'
   weight = 2
+
+[[menu.main]]
+  name = 'Buscar'
+  weight = 3
+  [menu.main.params]
+    type = 'search'
+    icon = 'search'
+
+[taxonomies]
+  series = 'series'

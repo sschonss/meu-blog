@@ -2,6 +2,7 @@
 title: 'Agents, Skills, Tools, and MCP: How These Pieces Fit Together'
 date: 2026-09-08
 source: https://luizschons.com/agents-skills-tools-and-mcp-how-these-pieces-fit-together
+series: ['AI-Friendly Architecture']
 draft: false
 ---
 
