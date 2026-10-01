@@ -1,0 +1,11 @@
+{{ define "main" }}
+<div class="profile-page">
+  <header class="profile-header"><p class="profile-kicker">{{ if eq site.Language.Lang "pt-br" }}CONTATO{{ else }}CONTACT{{ end }}</p><h1>{{ .Title }}</h1><p>{{ .Description }}</p></header>
+  <section class="profile-section"><h2>{{ if eq site.Language.Lang "pt-br" }}Encontre-me online{{ else }}Find me online{{ end }}</h2><div class="contact-grid">
+    <a class="contact-card" href="https://www.linkedin.com/in/luiz-schons/"><span class="contact-label">LinkedIn</span><span>{{ if eq site.Language.Lang "pt-br" }}Perfil profissional e mensagens{{ else }}Professional profile and messages{{ end }}</span><b>↗</b></a>
+    <a class="contact-card" href="https://github.com/sschonss"><span class="contact-label">GitHub</span><span>{{ if eq site.Language.Lang "pt-br" }}Código e projetos open source{{ else }}Code and open-source projects{{ end }}</span><b>↗</b></a>
+    <a class="contact-card" href="{{ "index.xml" | relURL }}"><span class="contact-label">RSS</span><span>{{ if eq site.Language.Lang "pt-br" }}Assine os novos artigos{{ else }}Subscribe to new articles{{ end }}</span><b>↗</b></a>
+  </div></section>
+  <p class="profile-note">{{ if eq site.Language.Lang "pt-br" }}Para convites para palestras, conversas técnicas ou colaborações, o LinkedIn é a melhor forma de falar comigo.{{ else }}For speaking invitations, technical conversations or collaboration opportunities, LinkedIn is the best way to reach me.{{ end }}</p>
+</div>
+{{ end }}

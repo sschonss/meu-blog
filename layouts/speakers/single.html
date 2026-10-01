@@ -1,0 +1,7 @@
+{{ define "main" }}
+<div class="profile-page">
+  <header class="profile-header"><p class="profile-kicker">{{ if eq site.Language.Lang "pt-br" }}PALESTRAS{{ else }}TALKS & SPEAKING{{ end }}</p><h1>{{ .Title }}</h1><p>{{ .Description }}</p></header>
+  <section class="profile-section"><h2>{{ if eq site.Language.Lang "pt-br" }}Palestras{{ else }}Talks{{ end }}</h2><div class="talk-card"><div class="talk-icon">◎</div><div><h3>{{ if eq site.Language.Lang "pt-br" }}Em breve{{ else }}Coming soon{{ end }}</h3><p>{{ if eq site.Language.Lang "pt-br" }}Em breve, vou listar aqui minhas palestras, eventos e gravações.{{ else }}Talks, events and recordings will be listed here soon.{{ end }}</p></div></div></section>
+  <p class="profile-note">{{ if eq site.Language.Lang "pt-br" }}Para convites, entre em contato pelo LinkedIn.{{ else }}For invitations, get in touch on LinkedIn.{{ end }} <a href="https://www.linkedin.com/in/luiz-schons/">LinkedIn ↗</a></p>
+</div>
+{{ end }}
