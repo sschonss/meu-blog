@@ -1,0 +1,10 @@
+baseURL = 'https://sschonss.github.io/blog/'
+languageCode = 'pt-br'
+title = 'Meu Blog'
+enableRobotsTXT = true
+
+[params]
+  description = 'Artigos e ideias'
+
+[permalinks]
+  posts = '/posts/:slug/'

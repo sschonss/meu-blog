@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ if .Title }}{{ .Title }} · {{ end }}{{ site.Title }}</title>
+  <meta name="description" content="{{ site.Params.description }}">
+  <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+</head>
+<body>
+  <header><a href="{{ "/" | relURL }}">{{ site.Title }}</a></header>
+  <main>{{ block "main" . }}{{ end }}</main>
+  <footer>Construído com Hugo · <a href="{{ "index.xml" | relURL }}">RSS</a></footer>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{{ define "main" }}
+<h1>Artigos</h1>
+{{ range where site.RegularPages "Section" "posts" }}
+<article><h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2><small>{{ .Date.Format "02/01/2006" }}</small><p>{{ .Summary }}</p></article>
+{{ end }}
+{{ end }}
