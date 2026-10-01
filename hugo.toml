@@ -1,13 +1,29 @@
-baseURL = 'https://sschonss.github.io/blog/'
+baseURL = 'https://sschonss.github.io/meu-blog/'
 languageCode = 'pt-br'
-title = 'Meu Blog'
+title = 'Luiz Schons'
+theme = 'hextra'
 enableRobotsTXT = true
 
 [markup.goldmark.renderer]
   unsafe = true
 
-[params]
-  description = 'Artigos e ideias'
+[markup.highlight]
+  noClasses = false
 
-[permalinks]
-  posts = '/posts/:slug/'
+[params.navbar]
+  displayTitle = true
+  displayLogo = false
+
+[params.footer]
+  displayCopyright = true
+  displayPoweredBy = true
+
+[[menu.main]]
+  name = 'Artigos'
+  pageRef = '/posts'
+  weight = 1
+
+[[menu.main]]
+  name = 'RSS'
+  url = '/meu-blog/index.xml'
+  weight = 2
