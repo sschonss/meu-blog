@@ -55,7 +55,7 @@ Information about all teams
 <p>Podemos aplicar uma ideia semelhante ao contexto dado aos agentes.</p>
 <h2>O contexto também pode ser decomposto</h2>
 <p>Em vez de dar todas as instruções para cada problema, podemos criar especializações:</p>
-<img src="/meu-blog/images/posts/context-skills-breaking-down-the-context-for-ai-agents/c4a20dee-f240-4c5a-9203-1a486b0fed2f.png" alt="Um agente, vários contextos" style="display:block;margin:0 auto" />
+<img src="/images/posts/context-skills-breaking-down-the-context-for-ai-agents/c4a20dee-f240-4c5a-9203-1a486b0fed2f.png" alt="Um agente, vários contextos" style="display:block;margin:0 auto" />
 
 <p>Cada habilidade conhece profundamente um contexto. Pode ter seu próprio vocabulário, regras, ferramentas e limites.</p>
 <p>Uma habilidade de pagamentos pode explicar os estados das transações, as políticas de reembolso e a integração do provedor. Uma habilidade de entrega pode explicar o fluxo de implantação, ambientes e aprovações. Uma habilidade de observabilidade pode orientar investigações usando logs, métricas e traços.</p>
@@ -66,7 +66,7 @@ Information about all teams
 <p>A conexão entre os conceitos está na ideia de decomposição.</p>
 <p>Microsserviços ajudam a separar capacidades de software. Context Skills ajudam a separar conhecimento e fluxos de trabalho para agentes.</p>
 <p>O mesmo domínio pode ter um serviço, documentação, painéis e uma ou mais skills relacionadas. A skill conhece o contexto e sabe consultar as fontes corretas, mas os dados continuam nos sistemas responsáveis por eles.</p>
-<img src="/meu-blog/images/posts/context-skills-breaking-down-the-context-for-ai-agents/2f622eba-b9f9-4eec-874a-51ef1c5c0f3d.png" alt="Contexto distribuído: pagamentos" style="display:block;margin:0 auto" />
+<img src="/images/posts/context-skills-breaking-down-the-context-for-ai-agents/2f622eba-b9f9-4eec-874a-51ef1c5c0f3d.png" alt="Contexto distribuído: pagamentos" style="display:block;margin:0 auto" />
 
 <p>O valor vem da conexão entre essas partes.</p>
 <h2>Uma skill é mais do que documentação</h2>

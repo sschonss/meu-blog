@@ -34,7 +34,7 @@ draft: false
 <h2>Where Each Part Lives</h2>
 <p>Just as documentation does not need to be inside the code, observability data does not need to be stored in the repository.</p>
 <p>The service creates events and signals. An instrumentation layer collects these signals. The observability platform stores and connects the data. Documentation explains the meaning of important metrics, alerts, and flows.</p>
-<img src="/meu-blog/images/posts/observability-is-also-context-for-ai-agents/91445626-d25b-4a7d-a40f-035f366c83ee.png" alt="Observability as context" style="display:block;margin:0 auto" />
+<img src="/images/posts/observability-is-also-context-for-ai-agents/91445626-d25b-4a7d-a40f-035f366c83ee.png" alt="Observability as context" style="display:block;margin:0 auto" />
 
 <p>The repository can keep only the instrumentation settings, the names of the signals, and links to dashboards and runbooks. The data history stays in the operations platform, which is the right place to check how the system behaves over time.</p>
 <p>The important thing is to connect these sources. An agent must be able to leave the service in the repository, reach the right dashboard, and find an explanation of what it is seeing.</p>

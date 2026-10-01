@@ -56,14 +56,14 @@ draft: false
 <p>Podemos querer colocar tudo em um só lugar. Poderíamos criar uma página grande chamada “Como a empresa funciona” e esperar que todos encontrem ali o que precisam.</p>
 <p>Na prática, esse documento fica desatualizado muito rapidamente. Torna-se difícil saber o que ainda é válido, quem deve atualizá-lo e qual parte se aplica a cada situação.</p>
 <p>Talvez seja melhor pensar no contexto como uma rede:</p>
-<img src="/meu-blog/images/posts/code-is-not-context-designing-a-context-architecture-for-agents/9fb6215a-d1db-49a0-bd1b-59c5db990aab.png" alt="Context Architecture" style="display:block;margin:0 auto" />
+<img src="/images/posts/code-is-not-context-designing-a-context-architecture-for-agents/9fb6215a-d1db-49a0-bd1b-59c5db990aab.png" alt="Context Architecture" style="display:block;margin:0 auto" />
 
 <p>Cada fonte pode permanecer onde funciona melhor. O que muda é que existem links claros entre elas.</p>
 <p>Uma tarefa deve apontar para o domínio afetado. O domínio deve apontar para os serviços envolvidos. O serviço deve ter sua documentação operacional. Decisões importantes devem ser registradas. Os sinais de produção também devem ser fáceis de encontrar.</p>
 <p>O objetivo não é centralizar o conhecimento. É torná-lo fácil de encontrar.</p>
 <h2>Exemplo de estrutura</h2>
 <p>Imagine um domínio de pagamentos. O código pode estar em um repositório, enquanto a documentação, os ADRs e os runbooks permanecem nas ferramentas que o time já usa:</p>
-<img src="/meu-blog/images/posts/code-is-not-context-designing-a-context-architecture-for-agents/2b3eab9e-984a-4bb7-94c2-3ade8f135b7f.png" alt="Distributed context: payments" style="display:block;margin:0 auto" />
+<img src="/images/posts/code-is-not-context-designing-a-context-architecture-for-agents/2b3eab9e-984a-4bb7-94c2-3ade8f135b7f.png" alt="Distributed context: payments" style="display:block;margin:0 auto" />
 
 <p>O <code>README.md</code> do repositório pode explicar a responsabilidade do serviço e apontar para o <code>Architecture Hub</code>. A página <code>context.md</code> pode descrever conceitos de negócio e limites de domínio. ADRs podem ficar em uma ferramenta de arquitetura, runbooks em uma plataforma de documentação e dashboards na ferramenta de observabilidade.</p>
 <p>O arquivo <code>links.md</code> não precisa copiar o conteúdo dessas fontes. Ele pode funcionar como um índice confiável, com links para onde cada informação está armazenada.</p>

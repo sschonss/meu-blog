@@ -34,7 +34,7 @@ draft: false
 <h2>Onde cada parte fica</h2>
 <p>Assim como a documentação não precisa estar dentro do código, os dados de observabilidade não precisam ser armazenados no repositório.</p>
 <p>O serviço cria eventos e sinais. Uma camada de instrumentação coleta esses sinais. A plataforma de observabilidade armazena e conecta os dados. A documentação explica o significado de métricas, alertas e fluxos importantes.</p>
-<img src="/meu-blog/images/posts/observability-is-also-context-for-ai-agents/91445626-d25b-4a7d-a40f-035f366c83ee.png" alt="Observabilidade como contexto" style="display:block;margin:0 auto" />
+<img src="/images/posts/observability-is-also-context-for-ai-agents/91445626-d25b-4a7d-a40f-035f366c83ee.png" alt="Observabilidade como contexto" style="display:block;margin:0 auto" />
 
 <p>O repositório pode manter apenas as configurações de instrumentação, os nomes dos sinais e links para dashboards e runbooks. O histórico dos dados permanece na plataforma de operações, que é o lugar certo para verificar como o sistema se comporta ao longo do tempo.</p>
 <p>O importante é conectar essas fontes. Um agente precisa conseguir sair do serviço no repositório, chegar ao dashboard correto e encontrar uma explicação do que está observando.</p>

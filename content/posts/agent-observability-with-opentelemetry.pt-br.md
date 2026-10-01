@@ -18,7 +18,7 @@ draft: false
 <p>Com agentes, muitas equipes ainda fazem o oposto. Avaliam a ferramenta por meio de algumas interações isoladas e decidem que ela é rápida, lenta, boa ou ruim.</p>
 <p>Uma sessão de agente também é um fluxo distribuído. Ela envolve modelo, contexto, ferramentas, permissões, sistemas externos, arquivos, testes e decisões humanas. O resultado final é apenas o último evento dessa cadeia.</p>
 <p>Se queremos melhorar esse fluxo, precisamos enxergar o que acontece antes do resultado final.</p>
-<img src="/meu-blog/images/posts/agent-observability-with-opentelemetry/e98ed5d6-ff82-4af9-abd1-c47cbabb2f20.png" alt="" style="display:block;margin:0 auto" />
+<img src="/images/posts/agent-observability-with-opentelemetry/e98ed5d6-ff82-4af9-abd1-c47cbabb2f20.png" alt="" style="display:block;margin:0 auto" />
 
 <h2>O que vale a pena medir?</h2>
 <p>Observabilidade não significa registrar tudo. O objetivo não é vigiar desenvolvedores nem transformar contagem de tokens em uma falsa medida de produtividade.</p>

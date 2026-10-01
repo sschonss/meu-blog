@@ -70,7 +70,7 @@ expiration: 15 minutes
 <p>The service that receives this credential must validate its scope. A description in the prompt does not replace this validation.</p>
 <h3>Derived Data for Investigation</h3>
 <p>We can also keep the agent away from the production application. Events, metrics, sanitized logs, and operational information can be sent to a separate place for queries, such as a replica, a data lake, or a data warehouse.</p>
-<img src="/meu-blog/images/posts/guardrails-and-fitness-functions-for-ai-friendly-architecture/7cd5dbfe-0c2e-40c9-88bb-2d7f12fd3cfc.png" alt="Context Without Opening Production" style="display:block;margin:0 auto" />
+<img src="/images/posts/guardrails-and-fitness-functions-for-ai-friendly-architecture/7cd5dbfe-0c2e-40c9-88bb-2d7f12fd3cfc.png" alt="Context Without Opening Production" style="display:block;margin:0 auto" />
 
 <p>This layer can apply retention, anonymization, field filtering, and a delay before data is available. The agent receives enough context to investigate without getting a way into the production application.</p>
 <h3>The Least Privilege Database Possible</h3>
@@ -96,7 +96,7 @@ REVOKE ALL ON SCHEMA customers FROM incident_reader;
 <h3>Example: A CPU Incident</h3>
 <p>During an incident, the investigation may show that the pods are running out of CPU. The agent can connect the signals, form a hypothesis, and prepare a change in the infrastructure repository.</p>
 <p>It can also open the pull request and create the change request. But the change still depends on a responsible person. That person reviews the impact, approves the change request, and merges or approves the merge. After that, the pipeline applies the change to the pods.</p>
-<img src="/meu-blog/images/posts/guardrails-and-fitness-functions-for-ai-friendly-architecture/9ea1e52a-ecc7-4554-8526-5d36780a0363.png" alt="From Incident to Controlled Change" style="display:block;margin:0 auto" />
+<img src="/images/posts/guardrails-and-fitness-functions-for-ai-friendly-architecture/9ea1e52a-ecc7-4554-8526-5d36780a0363.png" alt="From Incident to Controlled Change" style="display:block;margin:0 auto" />
 
 <p>Guardrails can also limit file paths, network destinations, query size, execution time, number of records, and types of returned data.</p>
 <h2>Deterministic Fitness Functions</h2>

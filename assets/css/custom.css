@@ -86,7 +86,19 @@ article img {
 .article-content { font-size: 1.06rem; line-height: 1.8; padding: 2.7rem 0; }
 .article-content h2, .article-content h3 { letter-spacing: -.035em; margin-top: 2.2em; }
 .article-content img { display: block; height: auto; margin: 2rem auto; max-width: 100%; }
-.article-content pre { border-radius: .7rem; font-size: .88rem; overflow-x: auto; padding: 1.2rem; }
+.article-content p { margin: 1.15rem 0; }
+.article-content ul, .article-content ol { margin: 1.15rem 0 1.4rem; padding-left: 1.65rem; }
+.article-content ul { list-style: disc; }
+.article-content ol { list-style: decimal; }
+.article-content li { margin: .45rem 0; padding-left: .25rem; }
+.article-content li > p { display: inline; margin: 0; }
+.article-content a { color: #2563eb; text-decoration: underline; text-decoration-color: rgba(37, 99, 235, .35); text-underline-offset: .16em; }
+.article-content code { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: .3rem; font-size: .88em; padding: .12em .35em; }
+.article-content pre { background: #0f172a; border: 1px solid #1e293b; border-radius: .7rem; color: #e2e8f0; font-size: .88rem; line-height: 1.65; margin: 1.6rem 0; overflow-x: auto; padding: 1.2rem; white-space: pre; }
+.article-content pre code { background: transparent; border: 0; color: inherit; padding: 0; }
+.article-content table { border-collapse: collapse; display: block; margin: 1.6rem 0; max-width: 100%; overflow-x: auto; width: max-content; }
+.article-content th, .article-content td { border: 1px solid #e2e8f0; padding: .65rem .8rem; text-align: left; }
+.article-content th { background: #f8fafc; font-weight: 650; }
 .article-content blockquote { border-left: 3px solid #2563eb; color: #64748b; padding-left: 1.2rem; }
 .article-footer { border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; padding-top: 1.5rem; }
 .article-footer a { color: #2563eb; font-size: .85rem; font-weight: 600; }
