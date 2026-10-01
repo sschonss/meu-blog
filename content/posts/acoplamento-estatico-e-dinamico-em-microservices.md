@@ -19,7 +19,7 @@ draft: false
 <p>Existem dois tipos de acoplamento em microservices: acoplamento estático e acoplamento dinâmico, e é sobre eles que vamos falar hoje.</p>
 <hr />
 <h2><strong>Exemplo de arquitetura de microservices</strong></h2>
-<img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1728676759014/bb9c5c1b-8245-4a17-9691-a5a166d7539f.png" alt="" style="display:block;margin:0 auto" />
+<img src="/meu-blog/images/posts/acoplamento-estatico-e-dinamico-em-microservices/bb9c5c1b-8245-4a17-9691-a5a166d7539f.png" alt="" style="display:block;margin:0 auto" />
 
 <h3><strong>Componentes:</strong></h3>
 <ol>

@@ -55,14 +55,14 @@ draft: false
 <p>We may want to put everything in one place. We could create a big page called “How the Company Works” and expect everyone to find what they need there.</p>
 <p>In practice, this document becomes outdated very quickly. It becomes hard to know what is still valid, who should update it, and which part applies to each situation.</p>
 <p>Maybe it is better to think of context as a network:</p>
-<img src="https://cdn.hashnode.com/uploads/covers/67081fa628a6c4cdb75a7fc9/9fb6215a-d1db-49a0-bd1b-59c5db990aab.png" alt="Context Architecture" style="display:block;margin:0 auto" />
+<img src="/meu-blog/images/posts/code-is-not-context-designing-a-context-architecture-for-agents/9fb6215a-d1db-49a0-bd1b-59c5db990aab.png" alt="Context Architecture" style="display:block;margin:0 auto" />
 
 <p>Each source can stay where it works best. What changes is that there are clear links between them.</p>
 <p>A task should point to the affected domain. The domain should point to the services involved. The service should have its operational documentation. Important decisions should be recorded. Production signals should also be easy to find.</p>
 <p>The goal is not to centralize knowledge. The goal is to make it easy to find.</p>
 <h2>Example Structure</h2>
 <p>Let’s imagine a payments domain. The code may be in a repository, while the documentation, ADRs, and runbooks stay in the tools the team already uses:</p>
-<img src="https://cdn.hashnode.com/uploads/covers/67081fa628a6c4cdb75a7fc9/2b3eab9e-984a-4bb7-94c2-3ade8f135b7f.png" alt="Distributed context: payments" style="display:block;margin:0 auto" />
+<img src="/meu-blog/images/posts/code-is-not-context-designing-a-context-architecture-for-agents/2b3eab9e-984a-4bb7-94c2-3ade8f135b7f.png" alt="Distributed context: payments" style="display:block;margin:0 auto" />
 
 <p>The repository’s <code>README.md</code> can explain the service’s responsibility and link to the <code>Architecture Hub</code>. The <code>context.md</code> page can describe business concepts and domain boundaries. ADRs can stay in an architecture tool, runbooks can stay in a documentation platform, and dashboards can stay in the observability tool.</p>
 <p>The <code>links.md</code> file does not need to copy the content from these sources. It can work as a trusted index, with links to where each piece of information is stored.</p>

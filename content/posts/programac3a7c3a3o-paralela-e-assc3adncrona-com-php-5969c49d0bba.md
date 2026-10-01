@@ -27,7 +27,7 @@ draft: false
 <p>Isso não é bala de prata, e nem sempre é a melhor solução para todos os problemas. No entanto, em alguns casos, a programação paralela pode ser uma forma eficiente de melhorar o desempenho de uma aplicação.</p>
 <p>O exemplo acima é bastante simplificado, mas ilustra como a programação paralela pode ser utilizada em PHP. Para obter mais informações sobre a extensão parallel, consulte a <a target="_blank" href="https://www.php.net/manual/en/book.parallel.php">documentação oficial</a>.</p>
 <p>Aqui esta uma imagem de um exemplo de programação paralela em PHP:</p>
-<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1728586235019/e7563efd-e150-4fc2-a5d1-758f6bb59a65.png" alt /></p>
+<p><img src="/meu-blog/images/posts/programac3a7c3a3o-paralela-e-assc3adncrona-com-php-5969c49d0bba/e7563efd-e150-4fc2-a5d1-758f6bb59a65.png" alt /></p>
 <p><em>Imagem ilustrativa de um exemplo de programação paralela retirada da internet.</em></p>
 <p>Perceba que a programação paralela é diferente da programação assíncrona. Na programação paralela, várias threads são executadas simultaneamente, enquanto na programação assíncrona, várias tarefas podem ser executadas de forma concorrente, mas não necessariamente simultaneamente.</p>
 <h3 id="heading-programacao-assincrona">Programação Assíncrona</h3>
@@ -46,7 +46,7 @@ draft: false
 <p>No exemplo acima, estamos utilizando a extensão swoole para criar um servidor web assíncrono em PHP. O servidor irá escutar na porta 9501 e responder a todas as requisições com uma mensagem contendo os dados recebidos</p>
 <p>Esse exemplo é bastante simplificado, mas ilustra como a programação assíncrona pode ser utilizada em PHP. Para obter mais informações sobre a extensão swoole, consulte a <a target="_blank" href="https://www.swoole.co.uk/">documentação oficial</a>.</p>
 <p>Aqui esta uma imagem de um exemplo de programação assíncrona:</p>
-<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1728586236219/554adf54-7f19-4abf-bea2-aad9a2b23333.png" alt /></p>
+<p><img src="/meu-blog/images/posts/programac3a7c3a3o-paralela-e-assc3adncrona-com-php-5969c49d0bba/554adf54-7f19-4abf-bea2-aad9a2b23333.png" alt /></p>
 <p>Imagem ilustrativa de um exemplo de programação assíncrona retirada da internet.</p>
 <h3 id="heading-ciclo-de-vida-de-uma-requisicao-no-php-fpm">Ciclo de Vida de uma Requisição no PHP-FPM</h3>
 <p>Quando uma requisição é feita a um servidor web PHP, como o PHP-FPM, o servidor passa por várias etapas para processar a requisição e retornar uma resposta ao cliente. O ciclo de vida de uma requisição no PHP-FPM pode ser dividido em várias etapas:</p>

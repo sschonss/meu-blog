@@ -52,7 +52,7 @@ Information about all teams
 <p>We can apply a similar idea to the context given to agents.</p>
 <h2>Context Can Also Be Decomposed</h2>
 <p>Instead of giving every instruction for every problem, we can create specializations:</p>
-<img src="https://cdn.hashnode.com/uploads/covers/67081fa628a6c4cdb75a7fc9/c4a20dee-f240-4c5a-9203-1a486b0fed2f.png" alt="One Agent, Several Contexts" style="display:block;margin:0 auto" />
+<img src="/meu-blog/images/posts/context-skills-breaking-down-the-context-for-ai-agents/c4a20dee-f240-4c5a-9203-1a486b0fed2f.png" alt="One Agent, Several Contexts" style="display:block;margin:0 auto" />
 
 <p>Each skill knows one context deeply. It can have its own vocabulary, rules, tools, and limits.</p>
 <p>A payments skill can explain transaction states, refund policies, and the provider integration. A delivery skill can explain the deployment flow, environments, and approvals. An observability skill can guide investigations using logs, metrics, and traces.</p>
@@ -63,7 +63,7 @@ Information about all teams
 <p>The connection between the concepts is the idea of decomposition.</p>
 <p>Microservices help separate software capabilities. Context Skills help separate knowledge and workflows for agents.</p>
 <p>The same domain may have a service, documentation, dashboards, and one or more related skills. The skill knows the context and knows how to query the right sources, but the data stays in the systems responsible for it.</p>
-<img src="https://cdn.hashnode.com/uploads/covers/67081fa628a6c4cdb75a7fc9/2f622eba-b9f9-4eec-874a-51ef1c5c0f3d.png" alt="Distributed Context: Payments" style="display:block;margin:0 auto" />
+<img src="/meu-blog/images/posts/context-skills-breaking-down-the-context-for-ai-agents/2f622eba-b9f9-4eec-874a-51ef1c5c0f3d.png" alt="Distributed Context: Payments" style="display:block;margin:0 auto" />
 
 <p>The value comes from connecting these parts.</p>
 <h2>A Skill Is More Than Documentation</h2>

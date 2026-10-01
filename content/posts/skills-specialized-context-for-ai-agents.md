@@ -54,13 +54,13 @@ draft: false
 <p>We learned that large systems are easier to change when they are separated by responsibility and business context. Each context can have clearer vocabulary, rules, data, contracts, and ownership.</p>
 <p>We can use a similar idea for the context we give to agents.</p>
 <p>Instead of creating one agent that knows a little about every domain, we can create specialized contexts with clear boundaries:</p>
-<img src="https://cdn.hashnode.com/uploads/covers/67081fa628a6c4cdb75a7fc9/e98f98b4-fb9b-45f6-92fc-df22073ed217.png" alt="Engineering Agent" style="display:block;margin:0 auto" />
+<img src="/meu-blog/images/posts/skills-specialized-context-for-ai-agents/e98f98b4-fb9b-45f6-92fc-df22073ed217.png" alt="Engineering Agent" style="display:block;margin:0 auto" />
 
 <p>The agent still has a general view of the system, but it can use a specialized context when it needs to investigate a specific problem.</p>
 <h2>Specialized Context Does Not Mean Isolated Context</h2>
 <p>Breaking knowledge into smaller parts does not mean creating boxes that cannot communicate.</p>
 <p>An investigation may start with observability, continue through delivery, and end with data. The agent needs to know when each context matters and how to connect the evidence it finds.</p>
-<img src="https://cdn.hashnode.com/uploads/covers/67081fa628a6c4cdb75a7fc9/f0a395fc-f30c-4a9d-9f96-547af24fa796.png" alt="Incident Investigation" style="display:block;margin:0 auto" />
+<img src="/meu-blog/images/posts/skills-specialized-context-for-ai-agents/f0a395fc-f30c-4a9d-9f96-547af24fa796.png" alt="Incident Investigation" style="display:block;margin:0 auto" />
 
 <p>A skill provides depth. The agent coordinates the work.</p>
 <h2>A Skill Needs Clear Boundaries</h2>
