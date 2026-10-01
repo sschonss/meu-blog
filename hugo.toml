@@ -19,6 +19,10 @@ enableRobotsTXT = true
   displayCopyright = false
   displayPoweredBy = false
 
+[params.theme]
+  default = 'light'
+  displayToggle = false
+
 [params.search]
   enable = true
   type = 'flexsearch'
