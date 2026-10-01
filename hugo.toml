@@ -17,7 +17,7 @@ enableRobotsTXT = true
 
 [params.footer]
   displayCopyright = true
-  displayPoweredBy = true
+  displayPoweredBy = false
 
 [params.search]
   enable = true
