@@ -1,0 +1,18 @@
+{{ define "main" }}
+<div class="series-page">
+  <header class="series-header">
+    <p class="series-kicker">COLEÇÕES DE ARTIGOS</p>
+    <h1>Séries</h1>
+    <p>Artigos conectados por um mesmo tema, organizados para acompanhar uma ideia do começo ao fim.</p>
+  </header>
+  <section class="series-grid">
+    {{ range .Data.Terms.ByCount.Reverse }}
+    <a class="series-card" href="{{ .Page.RelPermalink }}">
+      <span class="series-count">{{ .Count }} {{ if eq .Count 1 }}artigo{{ else }}artigos{{ end }}</span>
+      <h2>{{ .Page.Title }}</h2>
+      <span class="series-arrow">Ver série <span>→</span></span>
+    </a>
+    {{ end }}
+  </section>
+</div>
+{{ end }}

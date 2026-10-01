@@ -1,0 +1,15 @@
+{{ define "main" }}
+<div class="series-page">
+  <a class="series-back" href="{{ "series" | relURL }}">← Todas as séries</a>
+  <header class="series-header series-term-header">
+    <p class="series-kicker">SÉRIE</p>
+    <h1>{{ .Title }}</h1>
+    <p>{{ len .Pages }} artigos sobre este tema.</p>
+  </header>
+  <div class="series-posts">
+    {{ range $index, $post := .Pages.ByDate }}
+    <article class="series-post"><div class="series-post-number">{{ add $index 1 }}</div><div><p class="series-post-date">{{ $post.Date.Format "02 Jan 2006" }} · {{ $post.ReadingTime }} min de leitura</p><h2><a href="{{ $post.RelPermalink }}">{{ $post.Title }}</a></h2><p>{{ $post.Summary | plainify | truncate 180 }}</p></div></article>
+    {{ end }}
+  </div>
+</div>
+{{ end }}
