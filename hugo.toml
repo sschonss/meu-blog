@@ -3,6 +3,9 @@ languageCode = 'pt-br'
 title = 'Meu Blog'
 enableRobotsTXT = true
 
+[markup.goldmark.renderer]
+  unsafe = true
+
 [params]
   description = 'Artigos e ideias'
 

@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * *'
 
 permissions:
   contents: read
@@ -11,7 +13,23 @@ permissions:
   id-token: write
 
 jobs:
+  sync-hashnode:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sync Hashnode posts
+        run: python3 scripts/sync_hashnode.py
+      - name: Commit synchronized posts
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add content/posts/hashnode
+          git diff --cached --quiet || (git commit -m 'Sync posts from Hashnode' && git push)
+
   deploy:
+    needs: sync-hashnode
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
