@@ -61,6 +61,12 @@ enableRobotsTXT = true
   [languages.en.menu.main.params]
     type = 'search'
     icon = 'search'
+[[languages.en.menu.main]]
+  name = 'Language'
+  weight = 5
+  [languages.en.menu.main.params]
+    type = 'language-switch'
+    icon = 'translate'
 
 [[languages."pt-br".menu.main]]
   name = 'Artigos'
@@ -80,6 +86,12 @@ enableRobotsTXT = true
   [languages."pt-br".menu.main.params]
     type = 'search'
     icon = 'search'
+[[languages."pt-br".menu.main]]
+  name = 'Idioma'
+  weight = 5
+  [languages."pt-br".menu.main.params]
+    type = 'language-switch'
+    icon = 'translate'
 
 [taxonomies]
   series = 'series'

@@ -1,12 +1,12 @@
 {{ define "main" }}
 <article class="article-page">
-  <a class="article-back" href="{{ "posts" | relURL }}">← Voltar aos artigos</a>
+  <a class="article-back" href="{{ "posts" | relURL }}">← {{ i18n "backToArticles" }}</a>
   <header class="article-header">
-    <p class="article-kicker">ARTIGO</p>
+    <p class="article-kicker">{{ i18n "article" }}</p>
     <h1>{{ .Title }}</h1>
-    <div class="article-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time><span>{{ .ReadingTime }} min de leitura</span>{{ with .Params.series }}<a href="{{ (printf "/series/%s/" (index . 0 | urlize)) | relURL }}">Série: {{ index . 0 }}</a>{{ end }}</div>
+    <div class="article-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time><span>{{ i18n "readingTime" .ReadingTime }}</span>{{ with .Params.series }}<a href="{{ (printf "/series/%s/" (index . 0 | urlize)) | relURL }}">{{ i18n "series" }} {{ index . 0 }}</a>{{ end }}</div>
   </header>
   <div class="article-content">{{ .Content }}</div>
-  <footer class="article-footer"><a href="{{ "posts" | relURL }}">← Ver todos os artigos</a><a href="https://www.linkedin.com/in/luiz-schons/">Conecte-se no LinkedIn ↗</a></footer>
+  <footer class="article-footer"><a href="{{ "posts" | relURL }}">← {{ i18n "articles" }}</a><a href="https://www.linkedin.com/in/luiz-schons/">LinkedIn ↗</a></footer>
 </article>
 {{ end }}

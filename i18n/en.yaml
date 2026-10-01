@@ -1,0 +1,15 @@
+archive: Archive
+articles: Articles
+recentArticles: Recent articles
+viewArchive: View archive
+backToArticles: Back to articles
+article: Article
+readingTime: "{{ .Count }} min read"
+series: "Series:"
+allSeries: All series
+collections: Article collections
+seriesDescription: Articles connected by a common theme, organized to follow an idea from beginning to end.
+viewSeries: View series
+talks: Talks & Speaking
+talksDescription: Conferences, meetups and conversations about building software.
+contact: Contact

@@ -1,14 +1,14 @@
 {{ define "main" }}
 <div class="posts-page">
   <header class="posts-header">
-    <p class="posts-kicker">ARQUIVO</p>
-    <h1>Artigos</h1>
-    <p>Notas práticas sobre engenharia de software, arquitetura, infraestrutura e inteligência artificial.</p>
+    <p class="posts-kicker">{{ i18n "archive" }}</p>
+    <h1>{{ i18n "articles" }}</h1>
+    <p>{{ if eq site.Language.Lang "pt-br" }}Notas práticas sobre engenharia de software, arquitetura, infraestrutura e inteligência artificial.{{ else }}Practical notes on software engineering, architecture, infrastructure and artificial intelligence.{{ end }}</p>
   </header>
   <div class="posts-list">
     {{ range .Pages.ByDate.Reverse }}
     <article class="post-row">
-      <div class="post-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time><span>{{ .ReadingTime }} min de leitura</span></div>
+      <div class="post-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time><span>{{ i18n "readingTime" .ReadingTime }}</span></div>
       <div class="post-main"><h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2><p>{{ .Summary | plainify | truncate 220 }}</p>
         {{ with .Params.series }}<div class="post-tags"><a href="{{ (printf "/series/%s/" (index . 0 | urlize)) | relURL }}">série: {{ index . 0 }}</a></div>{{ end }}
       </div>

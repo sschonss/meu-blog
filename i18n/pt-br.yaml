@@ -1,0 +1,15 @@
+archive: Arquivo
+articles: Artigos
+recentArticles: Artigos recentes
+viewArchive: Ver arquivo
+backToArticles: Voltar aos artigos
+article: Artigo
+readingTime: "{{ .Count }} min de leitura"
+series: "Série:"
+allSeries: Todas as séries
+collections: Coleções de artigos
+seriesDescription: Artigos conectados por um mesmo tema, organizados para acompanhar uma ideia do começo ao fim.
+viewSeries: Ver série
+talks: Palestras
+talksDescription: Conferências, meetups e conversas sobre construção de software.
+contact: Contato
