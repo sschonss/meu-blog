@@ -25,7 +25,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add content/posts/hashnode
+          git add content/posts static/images/posts
           git diff --cached --quiet || (git commit -m 'Sync posts from Hashnode' && git push)
 
   deploy:
