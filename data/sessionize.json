@@ -1,0 +1,46 @@
+{
+  "speaker": {
+    "firstName": "Luiz",
+    "lastName": "Schons",
+    "tagline": "Senior Software Engineer @ PicPay",
+    "bio": "I am a Senior Software Engineer at PicPay and a Community Manager at DevParaná, where I help organize events and foster knowledge sharing in the technology community. My work focuses on software architecture, backend development and the design of scalable systems, with a strong background in PHP, microservices and event-driven architectures.",
+    "speakerProfileUrl": "https://sessionize.com/sschonss",
+    "photoUrl": "https://cdn.sessionize.com/image/d60f-200o200o2-5DiBVKByMudZz9jEG7kgb.png",
+    "photoLargeUrl": "https://cdn.sessionize.com/image/4bf9-1000o1000o1-5DiBVKByMudZz9jEG7kgb.png"
+  },
+  "sessions": [
+    {
+      "id": 187694,
+      "title": "Design for Failure: Building Systems That Expect the Unexpected",
+      "description": "Modern systems fail in ways that are often difficult to predict: dependencies slow down, networks become unreliable, services degrade under pressure, and assumptions that hold in normal conditions break at scale. In this talk, I will explore the principles of design for failure and show how to build systems that remain resilient when things go wrong.\r\nRather than focusing only on prevention, this session emphasizes preparation, containment, and graceful degradation. \r\n\r\nWe will discuss how to design architectures that assume partial outages, service instability, cascading failures, and operational uncertainty as normal conditions rather than rare exceptions. The talk will cover practical patterns such as redundancy, isolation, timeouts, retries with backoff, circuit breakers, fallback strategies, bulkheads, and observability as a design requirement.\r\n\r\nAttendees will leave with a clearer understanding of how resilience is built into system design, not added after incidents happen. The session is especially relevant for engineers and architects responsible for distributed systems, cloud-native applications, and production environments where reliability is critical.",
+      "sessionUrl": "https://sessionize.com/s/sschonss/design-for-failure-building-systems-that-expect-th/187694",
+      "languageCode": "en",
+      "language": "English"
+    },
+    {
+      "id": 187692,
+      "title": "Building High-Performance PHP Applications with Hyperf",
+      "description": "Hyperf is a modern PHP framework designed for high-performance applications, asynchronous execution, and scalable service architectures. In this talk, I will introduce Hyperf and show how it helps teams build fast, resilient, and maintainable back-end systems in PHP without sacrificing developer productivity.\r\n\r\nThe session will cover the framework’s core concepts, including its coroutine-based architecture, dependency injection, middleware pipeline, configuration model, and support for microservices and distributed systems. I will also discuss where Hyperf fits best, what kinds of workloads benefit most from its design, and the practical considerations teams should keep in mind when adopting it in production.\r\n\r\nBeyond the fundamentals, the talk will focus on real-world engineering decisions: how to structure applications, manage complexity, integrate with existing systems, and build services that can scale under load. Attendees will leave with a clearer understanding of Hyperf’s strengths, trade-offs, and the architectural patterns that make it effective in modern PHP environments.",
+      "sessionUrl": "https://sessionize.com/s/sschonss/building-high-performance-php-applications-with-hy/187692",
+      "languageCode": "en",
+      "language": "English"
+    },
+    {
+      "id": 187691,
+      "title": "Architectural Migration Without Disruption: Evolving Legacy Systems Safely",
+      "description": "Migrating a software architecture is one of the most sensitive and strategic challenges engineering teams face. Done well, it enables long-term scalability, maintainability, and faster delivery. Done poorly, it can introduce instability, delayed releases, and costly rewrites. In this talk, I will present a pragmatic approach to architectural migration that helps teams evolve legacy systems incrementally, safely, and with clear business alignment.\r\n\r\nWe will explore how to assess the current architecture, identify migration drivers, and define a transition strategy that minimizes risk while preserving product continuity. The session will cover proven patterns such as incremental decomposition, strangler-style migration, contract protection, observability, and controlled rollout strategies. I will also discuss common failure modes, including big-bang rewrites, hidden coupling, and lack of migration governance.\r\n\r\nAttendees will leave with a practical framework for modernizing complex systems without stopping delivery. The talk is especially relevant for engineering leaders, staff and senior engineers, and architects responsible for guiding systems through technical evolution while maintaining reliability and organizational momentum.",
+      "sessionUrl": "https://sessionize.com/s/sschonss/architectural-migration-without-disruption-evolvin/187691",
+      "languageCode": "en",
+      "language": "English"
+    },
+    {
+      "id": 187690,
+      "title": "AI-Friendly Architecture: Preparing Real Systems for AI Agents",
+      "description": "AI agents can generate code, but generating code is only a small part of working safely with real software systems. To be useful in production, agents need architectural context, reliable documentation, observability, clear boundaries, and access to the right domain knowledge.\r\nThis talk explores how engineering teams can prepare existing systems for effective collaboration with AI agents without sacrificing reliability, security, maintainability, or human judgment. We will look at practical architectural patterns for making systems easier to understand and navigate, including explicit module boundaries, deterministic workflows, structured documentation, meaningful observability, and guardrails around automated changes.\r\nThe session will also discuss what AI agents should and should not be trusted to do, how to expose system knowledge safely, and how to evaluate AI-assisted changes through testing, review, and operational feedback.\r\nAttendees will leave with a practical framework for assessing whether their systems are ready for AI-assisted engineering, along with concrete steps to improve architecture, documentation, and developer workflows before introducing more automation.",
+      "sessionUrl": "https://sessionize.com/s/sschonss/ai-friendly-architecture-preparing-real-systems-fo/187690",
+      "languageCode": "en",
+      "language": "English"
+    }
+  ],
+  "events": []
+}

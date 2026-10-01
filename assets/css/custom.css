@@ -108,7 +108,11 @@ article img {
 .profile-note { color: #64748b; line-height: 1.7; margin-top: 2.5rem; max-width: 650px; }
 .profile-note a { color: #2563eb; font-weight: 600; }
 .talk-card { align-items: center; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: .8rem; display: flex; gap: 1.2rem; padding: 1.5rem; }
+.talk-grid { display: grid; gap: 1rem; }
+.talk-grid .talk-card { align-items: flex-start; color: inherit; transition: border-color .2s, transform .2s, box-shadow .2s; }
+.talk-grid .talk-card:hover { border-color: #93c5fd; box-shadow: 0 10px 25px rgba(15,23,42,.08); transform: translateY(-2px); }
 .talk-icon { align-items: center; background: #111827; border-radius: 999px; color: #fff; display: flex; flex: 0 0 42px; font-size: 1.3rem; height: 42px; justify-content: center; }
 .talk-card h3 { font-size: 1.1rem; margin: 0; }
 .talk-card p { color: #64748b; font-size: .9rem; margin: .3rem 0 0; }
+.talk-card span { color: #2563eb; display: inline-block; font-size: .82rem; font-weight: 600; margin-top: .8rem; }
 @media (max-width: 640px) { .profile-page { padding-top: 2.5rem; } .contact-grid { grid-template-columns: 1fr; } }
