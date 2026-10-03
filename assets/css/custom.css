@@ -128,3 +128,18 @@ article img {
 .talk-card p { color: #64748b; font-size: .9rem; margin: .3rem 0 0; }
 .talk-card span { color: #2563eb; display: inline-block; font-size: .82rem; font-weight: 600; margin-top: .8rem; }
 @media (max-width: 640px) { .profile-page { padding-top: 2.5rem; } .contact-grid { grid-template-columns: 1fr; } }
+
+/* Comfortable gutters on narrow screens. */
+@media (max-width: 640px) {
+  .home-page,
+  .posts-page,
+  .series-page,
+  .article-page,
+  .profile-page { padding-left: 1.1rem; padding-right: 1.1rem; }
+  .article-content { font-size: 1rem; line-height: 1.75; overflow-wrap: anywhere; }
+  .article-header h1 { font-size: clamp(2.25rem, 11vw, 3.25rem); }
+  .article-content pre { margin-left: 0; margin-right: 0; max-width: 100%; }
+  .article-content img { box-sizing: border-box; }
+  .home-links { gap: .9rem 1.1rem; }
+  .home-section-title { align-items: flex-start; flex-direction: column; gap: .6rem; }
+}
