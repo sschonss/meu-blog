@@ -4,6 +4,7 @@ date: 2026-08-21
 source: https://luizschons.com/skills-specialized-context-for-ai-agents
 series: ['AI-Friendly Architecture']
 draft: false
+aliases: ["/skills-specialized-context-for-ai-agents/"]
 ---
 
 <p>This is the fourth article in a series about AI-friendly architecture. We have already talked about context, documentation, and observability. Now I want to talk about a way to organize knowledge and workflows for agents: skills.</p>

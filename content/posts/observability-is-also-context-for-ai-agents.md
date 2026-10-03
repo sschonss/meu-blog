@@ -4,6 +4,7 @@ date: 2026-08-21
 source: https://luizschons.com/observability-is-also-context-for-ai-agents
 series: ['AI-Friendly Architecture']
 draft: false
+aliases: ["/observability-is-also-context-for-ai-agents/"]
 ---
 
 <p>This is the third article in a series about AI-friendly architecture. We have already talked about how AI is like a new person joining a company and how important it is to connect code, documentation, and architectural decisions.</p>

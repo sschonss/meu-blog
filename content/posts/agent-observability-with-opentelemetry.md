@@ -5,6 +5,7 @@ source: https://luizschons.com/agent-observability-with-opentelemetry
 series: ['AI-Friendly Architecture']
 translationKey: agent-observability-with-opentelemetry
 draft: false
+aliases: ["/agent-observability-with-opentelemetry/"]
 ---
 
 <p>This is the ninth and final article in the series about AI-friendly architecture. Throughout the series, we talked about context, documentation, system observability, skills, agents, tools, MCP, security, and the complete workflow for delivering a feature.</p>
@@ -112,7 +113,7 @@ draft: false
 <li><p>high-cardinality identifiers must be handled carefully.</p>
 </li>
 </ul>
-<p>This connects to the article about <a href="https://luizschons.com/seguran-a-guardrails-e-fitness-functions-para-agentes">security, guardrails, and fitness functions</a>. Deterministic guardrails should not protect only the agent's actions. They must also protect the data created during the agent's work.</p>
+<p>This connects to the article about <a href="https://luizschons.com/posts/guardrails-and-fitness-functions-for-ai-friendly-architecture/">security, guardrails, and fitness functions</a>. Deterministic guardrails should not protect only the agent's actions. They must also protect the data created during the agent's work.</p>
 <h2>The <code>session_id</code> case</h2>
 <p>During an investigation, it can be useful to open one session and understand what happened in it. A local implementation may let you select a <code>session_id</code> in Grafana for this type of analysis.</p>
 <p>This is convenient in a local environment, but each new session may create a new metric series. In an operation with many users and executions, this cardinality growth can be expensive and hard to support.</p>

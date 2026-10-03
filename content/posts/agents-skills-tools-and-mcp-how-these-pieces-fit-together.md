@@ -4,6 +4,7 @@ date: 2026-09-08
 source: https://luizschons.com/agents-skills-tools-and-mcp-how-these-pieces-fit-together
 series: ['AI-Friendly Architecture']
 draft: false
+aliases: ["/agents-skills-tools-and-mcp-how-these-pieces-fit-together/"]
 ---
 
 <p>This is the seventh article in the series about AI-friendly architecture. So far, we have talked about context, documentation, observability, skills, and breaking knowledge into Context Skills.</p>

@@ -104,7 +104,7 @@ Information about all teams
 <h3>Limites</h3>
 <p>Quais ações são somente leitura? O que precisa de aprovação? Quando o agente deve parar e pedir ajuda?</p>
 <p>Esse conjunto de informações dá profundidade ao agente sem exigir que ele carregue o conhecimento da empresa inteira.</p>
-<p>Esses limites devem ser definidos junto com as políticas de segurança da arquitetura. Como vimos no artigo <a href="https://luizschons.com/seguran-a-guardrails-e-fitness-functions-para-agentes">Funções de segurança, guarda-corpos e condicionamento físico para agentes</a>, uma skill pode orientar o agente, mas não deve ser a única proteção contra uma ação insegura. Permissões, escopos e aprovações também precisam ser aplicados pelas ferramentas e pelos recursos protegidos.</p>
+<p>Esses limites devem ser definidos junto com as políticas de segurança da arquitetura. Como vimos no artigo <a href="https://luizschons.com/posts/guardrails-and-fitness-functions-for-ai-friendly-architecture/">Funções de segurança, guarda-corpos e condicionamento físico para agentes</a>, uma skill pode orientar o agente, mas não deve ser a única proteção contra uma ação insegura. Permissões, escopos e aprovações também precisam ser aplicados pelas ferramentas e pelos recursos protegidos.</p>
 <h2>Um agente conecta as skills</h2>
 <p>Dividir o contexto não significa criar agentes isolados que não conseguem se comunicar.</p>
 <p>O agente principal coordena as especializações.</p>

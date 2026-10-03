@@ -4,6 +4,7 @@ date: 2026-09-12
 source: https://luizschons.com/from-epic-to-production-using-agents-to-deliver-features-in-real-systems
 series: ['AI-Friendly Architecture']
 draft: false
+aliases: ["/from-epic-to-production-using-agents-to-deliver-features-in-real-systems/"]
 translationKey: 'from-epic-to-production-using-agents-to-deliver-features-in-real-systems'
 ---
 

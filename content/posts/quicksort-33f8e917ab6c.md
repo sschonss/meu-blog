@@ -3,6 +3,7 @@ title: 'Quicksort'
 date: 2024-02-28
 source: https://luizschons.com/quicksort-33f8e917ab6c
 draft: false
+aliases: ["/quicksort-33f8e917ab6c/"]
 ---
 
 <p>Quicksort é um algoritmo de ordenação muito eficiente, inventado por C.A.R. Hoare em 1960. Ele é amplamente utilizado para ordenação de arrays. O algoritmo que apresentamos a seguir é uma versão recursiva do Quicksort que seleciona um elemento como pivô e particiona o array de forma que todos os elementos menores que o pivô fiquem antes dele e os maiores fiquem depois. Os subarrays são então ordenados recursivamente.</p>

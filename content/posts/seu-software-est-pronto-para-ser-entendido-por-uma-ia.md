@@ -4,6 +4,7 @@ date: 2026-08-20
 source: https://luizschons.com/seu-software-est-pronto-para-ser-entendido-por-uma-ia
 series: ['AI-Friendly Architecture']
 draft: false
+aliases: ["/seu-software-est-pronto-para-ser-entendido-por-uma-ia/"]
 ---
 
 <p>This is the first article in a series about AI-friendly architecture, a way of thinking about systems, context, and tools so that AI agents can work more effectively with real-world software.</p>

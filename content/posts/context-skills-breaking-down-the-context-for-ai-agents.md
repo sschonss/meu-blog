@@ -4,6 +4,7 @@ date: 2026-09-05
 source: https://luizschons.com/context-skills-breaking-down-the-context-for-ai-agents
 series: ['AI-Friendly Architecture']
 draft: false
+aliases: ["/context-skills-breaking-down-the-context-for-ai-agents/"]
 ---
 
 <p>This is the sixth article in the series about AI-friendly architecture. We have already discussed how code, documentation, and observability help agents understand systems. We also saw how skills can provide specialized knowledge for specific problems.</p>
@@ -101,7 +102,7 @@ Information about all teams
 <h3>Limits</h3>
 <p>Which actions are read-only? What needs approval? When should the agent stop and ask for help?</p>
 <p>This set of information gives the agent depth without requiring it to carry the knowledge of the whole company.</p>
-<p>These limits should be defined together with the architecture's security policies. As we saw in the article <a href="https://luizschons.com/seguran-a-guardrails-e-fitness-functions-para-agentes">Security, Guardrails, and Fitness Functions for Agents</a>, a skill can guide the agent, but it should not be the only protection against an unsafe action. Permissions, scopes, and approvals must also be enforced by the tools and protected resources.</p>
+<p>These limits should be defined together with the architecture's security policies. As we saw in the article <a href="https://luizschons.com/posts/guardrails-and-fitness-functions-for-ai-friendly-architecture/">Security, Guardrails, and Fitness Functions for Agents</a>, a skill can guide the agent, but it should not be the only protection against an unsafe action. Permissions, scopes, and approvals must also be enforced by the tools and protected resources.</p>
 <h2>One Agent Connects the Skills</h2>
 <p>Breaking down the context does not mean creating isolated agents that cannot communicate.</p>
 <p>The main agent coordinates the specializations.</p>

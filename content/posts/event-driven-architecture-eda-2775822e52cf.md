@@ -3,6 +3,7 @@ title: 'Event-driven Architecture (EDA)'
 date: 2024-08-03
 source: https://luizschons.com/event-driven-architecture-eda-2775822e52cf
 draft: false
+aliases: ["/event-driven-architecture-eda-2775822e52cf/"]
 ---
 
 Arquitetura de software envolve muitos trade-offs. Uma escolha inadequada pode gerar retrabalho e atrasos, por isso é importante conhecer as opções disponíveis e entender quando cada uma faz sentido.

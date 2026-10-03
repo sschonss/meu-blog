@@ -4,6 +4,9 @@ date: 2026-08-31
 source: https://luizschons.com/guardrails-and-fitness-functions-for-ai-friendly-architecture
 series: ['AI-Friendly Architecture']
 draft: false
+aliases:
+  - "/guardrails-and-fitness-functions-for-ai-friendly-architecture/"
+  - "/seguran-a-guardrails-e-fitness-functions-para-agentes/"
 translationKey: 'guardrails-and-fitness-functions-for-ai-friendly-architecture'
 ---
 
