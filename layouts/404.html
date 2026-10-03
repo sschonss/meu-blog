@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="{{ .Site.Language.Lang }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    <meta http-equiv="refresh" content="0; url={{ "" | absLangURL }}">
+    <title>{{ i18n "pageNotFound" }}</title>
+    <script>
+      window.location.replace('{{ "" | absLangURL }}');
+    </script>
+    <style>
+      body { color: #111827; font-family: system-ui, sans-serif; margin: 0; padding: 4rem 1.5rem; text-align: center; }
+      a { color: #2563eb; }
+    </style>
+  </head>
+  <body>
+    <p>{{ i18n "pageNotFound" }}</p>
+    <p><a href="{{ "" | absLangURL }}">{{ i18n "backToHome" }}</a></p>
+  </body>
+</html>
