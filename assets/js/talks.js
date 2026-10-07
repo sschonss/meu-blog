@@ -10,6 +10,13 @@
   var pt = t.lang === 'pt-br';
   var slot = function (name) { return root.querySelector('[data-slot="' + name + '"]'); };
 
+  // Swap to the live Sessionize photo, reverting to the backup if it fails.
+  function setPhoto(img, url) {
+    var backup = img.getAttribute('data-fallback');
+    img.onerror = function () { img.onerror = null; if (backup) img.src = backup; };
+    img.src = url;
+  }
+
   function el(tag, attrs, children) {
     var node = document.createElement(tag);
     Object.keys(attrs || {}).forEach(function (k) {
@@ -119,6 +126,7 @@
 
     var sp = data.speaker || {};
     if (sp.tagline) slot('tagline').textContent = sp.tagline;
+    if (sp.photoUrl && slot('photo').src !== sp.photoUrl) setPhoto(slot('photo'), sp.photoUrl);
     slot('fallback').hidden = events.length + sessions.length > 0;
   }
 
