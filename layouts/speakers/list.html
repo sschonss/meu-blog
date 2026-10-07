@@ -1,12 +1,14 @@
 {{ define "main" }}
 {{- $pt := eq site.Language.Lang "pt-br" -}}
+{{- $profileUrl := "https://sessionize.com/sschonss/" -}}
+{{- $apiUrl := "https://sessionize.com/api/speaker/json/2n3e2etaad" -}}
 {{- $data := site.Data.sessionize -}}
 {{- $speaker := $data.speaker -}}
 {{- $sessions := $data.sessions | default slice -}}
 {{- $events := $data.events | default slice -}}
 {{- $today := time.AsTime (now.Format "2006-01-02") -}}
 
-{{- /* Split events into upcoming/ongoing and past, using the end date. */ -}}
+{{- /* Build-time render: used for SEO, no-JS visitors, and until the live fetch finishes. */ -}}
 {{- $upcoming := slice -}}
 {{- $past := slice -}}
 {{- $cities := slice -}}
@@ -22,68 +24,94 @@
 {{- $upcoming = sort $upcoming "eventStartDate" "asc" -}}
 {{- $past = sort $past "eventStartDate" "desc" -}}
 
-<div class="profile-page">
+<div class="profile-page" data-talks data-api="{{ $apiUrl }}" data-profile="{{ $profileUrl }}">
   <header class="profile-header">
     <p class="profile-kicker">{{ i18n "talksKicker" }}</p>
     <h1>{{ .Title }}</h1>
     <p>{{ .Description }}</p>
   </header>
 
-  {{- with $speaker }}
   <section class="speaker-intro">
-    {{- with .photoUrl }}<img class="speaker-photo" src="{{ . }}" alt="{{ $speaker.firstName }} {{ $speaker.lastName }}" width="96" height="96" loading="lazy">{{ end }}
+    <img class="speaker-photo" data-slot="photo" src="{{ with $speaker }}{{ .photoUrl }}{{ end }}" alt="Luiz Schons" width="96" height="96" loading="lazy"{{ if not $speaker }} hidden{{ end }}>
     <div>
-      <p class="speaker-tagline">{{ .tagline }}</p>
-      <div class="speaker-bio">{{ with $.Content }}{{ . }}{{ else }}<p>{{ $speaker.bio }}</p>{{ end }}</div>
-      {{- with .speakerProfileUrl }}<a class="speaker-link" href="{{ . }}">{{ i18n "sessionizeProfile" }} ↗</a>{{ end }}
+      <p class="speaker-tagline" data-slot="tagline">{{ with $speaker }}{{ .tagline }}{{ end }}</p>
+      <div class="speaker-bio">{{ with .Content }}{{ . }}{{ else }}{{ with $speaker }}<p>{{ .bio }}</p>{{ end }}{{ end }}</div>
+      <a class="speaker-link" href="{{ $profileUrl }}">{{ i18n "sessionizeProfile" }} ↗</a>
     </div>
   </section>
-  {{- end }}
 
-  <dl class="speaker-stats">
-    <div><dt>{{ i18n "statEvents" }}</dt><dd>{{ len $events }}</dd></div>
-    <div><dt>{{ i18n "statTalks" }}</dt><dd>{{ len $sessions }}</dd></div>
-    <div><dt>{{ i18n "statCities" }}</dt><dd>{{ len $cities }}</dd></div>
-  </dl>
+  <div class="talks-fallback" data-slot="fallback"{{ if $events }} hidden{{ end }}>
+    <p>{{ i18n "talksFallback" }}</p>
+    <a href="{{ $profileUrl }}">{{ i18n "sessionizeProfile" }} ↗</a>
+  </div>
 
-  {{- with $upcoming }}
-  <section class="profile-section">
-    <h2>{{ i18n "upcomingEvents" }}</h2>
-    <ul class="event-list">
-      {{- range . }}{{ partial "event-item.html" (dict "event" . "upcoming" true) }}{{ end }}
-    </ul>
-  </section>
-  {{- end }}
-
-  {{- with $sessions }}
-  <section class="profile-section">
-    <h2>{{ i18n "talksSection" }}</h2>
-    <div class="talk-grid">
-      {{- range . }}
-      <a class="talk-card" href="{{ .sessionUrl }}"><div class="talk-icon">↗</div><div><h3>{{ .title }}</h3><p>{{ .description | plainify | truncate 210 }}</p><span>{{ i18n "viewTalk" }} →</span></div></a>
-      {{- end }}
-    </div>
-    {{- if $pt }}<p class="talk-lang-note">{{ i18n "abstractsNote" }}</p>{{ end }}
-  </section>
-  {{- end }}
-
-  {{- with $past }}
-  <section class="profile-section">
-    <h2>{{ i18n "pastEvents" }}</h2>
-    {{- $years := slice -}}
-    {{- range . }}{{ $years = $years | append (time.AsTime .eventStartDate).Year }}{{ end -}}
-    {{- range ($years | uniq) }}
-      {{- $year := . }}
-      <div class="event-year">
-        <h3>{{ $year }}</h3>
-        <ul class="event-list">
-          {{- range $past }}{{ if eq (time.AsTime .eventStartDate).Year $year }}{{ partial "event-item.html" (dict "event" . "upcoming" false) }}{{ end }}{{ end }}
-        </ul>
-      </div>
+  <div data-slot="live">
+    {{- if or $events $sessions }}
+    <dl class="speaker-stats">
+      <div><dt>{{ i18n "statEvents" }}</dt><dd>{{ len $events }}</dd></div>
+      <div><dt>{{ i18n "statTalks" }}</dt><dd>{{ len $sessions }}</dd></div>
+      <div><dt>{{ i18n "statCities" }}</dt><dd>{{ len $cities }}</dd></div>
+    </dl>
     {{- end }}
-  </section>
-  {{- end }}
+
+    {{- with $upcoming }}
+    <section class="profile-section">
+      <h2>{{ i18n "upcomingEvents" }}</h2>
+      <ul class="event-list">
+        {{- range . }}{{ partial "event-item.html" (dict "event" . "upcoming" true) }}{{ end }}
+      </ul>
+    </section>
+    {{- end }}
+
+    {{- with $sessions }}
+    <section class="profile-section">
+      <h2>{{ i18n "talksSection" }}</h2>
+      <div class="talk-grid">
+        {{- range . }}
+        <a class="talk-card" href="{{ .sessionUrl }}"><div class="talk-icon">↗</div><div><h3>{{ .title }}</h3><p>{{ .description | plainify | truncate 210 }}</p><span>{{ i18n "viewTalk" }} →</span></div></a>
+        {{- end }}
+      </div>
+      {{- if $pt }}<p class="talk-lang-note">{{ i18n "abstractsNote" }}</p>{{ end }}
+    </section>
+    {{- end }}
+
+    {{- with $past }}
+    <section class="profile-section">
+      <h2>{{ i18n "pastEvents" }}</h2>
+      {{- $years := slice -}}
+      {{- range . }}{{ $years = $years | append (time.AsTime .eventStartDate).Year }}{{ end -}}
+      {{- range ($years | uniq) }}
+        {{- $year := . }}
+        <div class="event-year">
+          <h3>{{ $year }}</h3>
+          <ul class="event-list">
+            {{- range $past }}{{ if eq (time.AsTime .eventStartDate).Year $year }}{{ partial "event-item.html" (dict "event" . "upcoming" false) }}{{ end }}{{ end }}
+          </ul>
+        </div>
+      {{- end }}
+    </section>
+    {{- end }}
+  </div>
 
   <p class="profile-note">{{ i18n "talksInvite" }} <a href="https://www.linkedin.com/in/luiz-schons/">LinkedIn ↗</a></p>
 </div>
+
+{{- /* Strings for the live renderer in assets/js/talks.js. */ -}}
+{{- $strings := dict
+  "lang" site.Language.Lang
+  "months" (cond $pt (slice "jan" "fev" "mar" "abr" "mai" "jun" "jul" "ago" "set" "out" "nov" "dez") (slice "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"))
+  "throughoutYear" (i18n "throughoutYear" (dict "Year" "{year}"))
+  "statEvents" (i18n "statEvents")
+  "statTalks" (i18n "statTalks")
+  "statCities" (i18n "statCities")
+  "upcomingEvents" (i18n "upcomingEvents")
+  "pastEvents" (i18n "pastEvents")
+  "talksSection" (i18n "talksSection")
+  "viewTalk" (i18n "viewTalk")
+  "eventSite" (i18n "eventSite")
+  "abstractsNote" (cond $pt (i18n "abstractsNote") "")
+-}}
+<script type="application/json" id="talks-strings">{{ $strings | jsonify | safeJS }}</script>
+{{- $js := resources.Get "js/talks.js" | minify | fingerprint }}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
 {{ end }}

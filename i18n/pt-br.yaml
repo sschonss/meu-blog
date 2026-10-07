@@ -30,3 +30,4 @@ eventSite: Site do evento
 throughoutYear: "Ao longo de {{ .Year }}"
 abstractsNote: Os resumos das palestras estão publicados em inglês no Sessionize.
 talksInvite: Para convites, entre em contato pelo LinkedIn.
+talksFallback: Não consegui carregar a lista atualizada agora. Veja todas as minhas palestras e eventos no meu perfil do Sessionize.

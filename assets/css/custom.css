@@ -136,6 +136,10 @@ article img {
 .speaker-stats > div { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: .8rem; display: flex; flex-direction: column-reverse; padding: 1.1rem 1.2rem; }
 .speaker-stats dd { color: #111827; font-size: 2rem; font-weight: 700; letter-spacing: -.04em; line-height: 1; margin: 0; }
 .speaker-stats dt { color: #64748b; font-size: .78rem; font-weight: 600; letter-spacing: .06em; margin-top: .45rem; text-transform: uppercase; }
+.talks-fallback { align-items: center; background: #fffbeb; border: 1px solid #fde68a; border-radius: .8rem; display: flex; flex-wrap: wrap; gap: .4rem 1rem; justify-content: space-between; margin-top: 2rem; padding: 1rem 1.2rem; }
+.talks-fallback[hidden] { display: none; }
+.talks-fallback p { color: #92400e; font-size: .9rem; margin: 0; }
+.talks-fallback a { color: #2563eb; font-size: .85rem; font-weight: 600; white-space: nowrap; }
 .talk-lang-note { color: #64748b; font-size: .85rem; margin: 1rem 0 0; }
 .event-year { display: grid; gap: 1.5rem; grid-template-columns: 4.5rem 1fr; padding: .4rem 0; }
 .event-year + .event-year { border-top: 1px solid #f1f5f9; padding-top: 1rem; margin-top: .6rem; }

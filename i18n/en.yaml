@@ -30,3 +30,4 @@ eventSite: Event website
 throughoutYear: "Throughout {{ .Year }}"
 abstractsNote: Talk abstracts are published in English on Sessionize.
 talksInvite: For invitations, get in touch on LinkedIn.
+talksFallback: "Couldn't load the latest list right now. See all my talks and events on my Sessionize profile."
