@@ -17,3 +17,16 @@ allArticles: All articles
 seriesLink: Series
 pageNotFound: This page does not exist.
 backToHome: Go to the home page
+talksKicker: TALKS & SPEAKING
+talksSection: Talks
+viewTalk: View talk on Sessionize
+sessionizeProfile: Sessionize profile
+statEvents: events
+statTalks: talks
+statCities: cities
+upcomingEvents: Upcoming & ongoing
+pastEvents: Events I've spoken at
+eventSite: Event website
+throughoutYear: "Throughout {{ .Year }}"
+abstractsNote: Talk abstracts are published in English on Sessionize.
+talksInvite: For invitations, get in touch on LinkedIn.

@@ -42,5 +42,126 @@
       "language": "English"
     }
   ],
-  "events": []
+  "events": [
+    {
+      "id": 1019933,
+      "name": "DevParaná Conference 2026",
+      "eventStartDate": "2026-11-07T00:00:00Z",
+      "eventEndDate": "2026-11-07T00:00:00Z",
+      "location": "Maringá, Brazil",
+      "website": "https://devpr.org"
+    },
+    {
+      "id": 1019926,
+      "name": "PHP Conference Brasil 2026",
+      "eventStartDate": "2026-10-19T00:00:00Z",
+      "eventEndDate": "2026-10-24T00:00:00Z",
+      "location": "Maringá, Brazil",
+      "website": "https://phpconference.com.br/palestras-php-conference-brasil-2026/"
+    },
+    {
+      "id": 1019924,
+      "name": "PHP Velho Oeste 2026",
+      "eventStartDate": "2026-05-29T00:00:00Z",
+      "eventEndDate": "2026-05-30T00:00:00Z",
+      "location": "Chapecó, Brazil",
+      "website": "https://phpvelhoeste.com.br/2026/"
+    },
+    {
+      "id": 1019936,
+      "name": "DevParaná na Estrada 2026",
+      "eventStartDate": "2026-01-01T00:00:00Z",
+      "eventEndDate": "2026-12-31T00:00:00Z",
+      "location": null,
+      "website": "https://devpr.org"
+    },
+    {
+      "id": 1019925,
+      "name": "PHP Conference Brasil 2025",
+      "eventStartDate": "2025-12-05T00:00:00Z",
+      "eventEndDate": "2025-12-06T00:00:00Z",
+      "location": "Maringá, Brazil",
+      "website": "https://phpconference.com.br/palestras-php-conference-brasil-2025/"
+    },
+    {
+      "id": 1019927,
+      "name": "PHPeste 2025",
+      "eventStartDate": "2025-10-03T00:00:00Z",
+      "eventEndDate": "2025-10-04T00:00:00Z",
+      "location": "Parnaíba, Brazil",
+      "website": "https://phppiaui.com.br"
+    },
+    {
+      "id": 1019934,
+      "name": "DevParaná Conference 2025",
+      "eventStartDate": "2025-09-13T00:00:00Z",
+      "eventEndDate": "2025-09-13T00:00:00Z",
+      "location": "Maringá, Brazil",
+      "website": "https://devpr.org"
+    },
+    {
+      "id": 1019938,
+      "name": "TLC Share Day 2025 (Tech Leads Club)",
+      "eventStartDate": "2025-07-12T00:00:00Z",
+      "eventEndDate": "2025-07-12T00:00:00Z",
+      "location": null,
+      "website": "https://youtu.be/eKcSbxl0RPs"
+    },
+    {
+      "id": 1019928,
+      "name": "PHP Velho Oeste 2025",
+      "eventStartDate": "2025-05-30T00:00:00Z",
+      "eventEndDate": "2025-05-31T00:00:00Z",
+      "location": "Chapecó, Brazil",
+      "website": "https://phpvelhoeste.com.br/2025/"
+    },
+    {
+      "id": 1019929,
+      "name": "DevPR na Estrada + GDG Londrina Meetup",
+      "eventStartDate": "2025-03-13T00:00:00Z",
+      "eventEndDate": "2025-03-13T00:00:00Z",
+      "location": "Londrina, Brazil",
+      "website": "https://www.sympla.com.br/evento/devpr-na-estrada-gdg-londrina-meetup-londrina/2830481"
+    },
+    {
+      "id": 1019930,
+      "name": "IngaPHP 2025 (DevParaná)",
+      "eventStartDate": "2025-01-30T00:00:00Z",
+      "eventEndDate": "2025-01-30T00:00:00Z",
+      "location": "Maringá, Brazil",
+      "website": "https://www.meetup.com/developerparana/events/305658193/"
+    },
+    {
+      "id": 1019935,
+      "name": "DevParaná na Estrada 2025",
+      "eventStartDate": "2025-01-01T00:00:00Z",
+      "eventEndDate": "2025-12-31T00:00:00Z",
+      "location": null,
+      "website": "https://devpr.org"
+    },
+    {
+      "id": 1019937,
+      "name": "PHP Conference Brasil 2024",
+      "eventStartDate": "2024-12-06T00:00:00Z",
+      "eventEndDate": "2024-12-06T00:00:00Z",
+      "location": null,
+      "website": "https://phpconference.com.br/historico/"
+    },
+    {
+      "id": 1019931,
+      "name": "Meetup Guarapuava - Encerramento 2024 (DevParaná)",
+      "eventStartDate": "2024-11-21T00:00:00Z",
+      "eventEndDate": "2024-11-21T00:00:00Z",
+      "location": "Guarapuava, Brazil",
+      "website": "https://www.meetup.com/developerparana/events/304384508/"
+    },
+    {
+      "id": 1019932,
+      "name": "PHP Velho Oeste 2024",
+      "eventStartDate": "2024-05-17T00:00:00Z",
+      "eventEndDate": "2024-05-18T00:00:00Z",
+      "location": "Chapecó, Brazil",
+      "website": "https://phpvelhoeste.com.br/2024/"
+    }
+  ]
 }

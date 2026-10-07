@@ -17,3 +17,16 @@ allArticles: Todos os artigos
 seriesLink: Séries
 pageNotFound: Esta página não existe.
 backToHome: Ir para a página inicial
+talksKicker: PALESTRAS
+talksSection: Palestras
+viewTalk: Ver palestra no Sessionize
+sessionizeProfile: Perfil no Sessionize
+statEvents: eventos
+statTalks: palestras
+statCities: cidades
+upcomingEvents: Próximos e em andamento
+pastEvents: Eventos em que palestrei
+eventSite: Site do evento
+throughoutYear: "Ao longo de {{ .Year }}"
+abstractsNote: Os resumos das palestras estão publicados em inglês no Sessionize.
+talksInvite: Para convites, entre em contato pelo LinkedIn.

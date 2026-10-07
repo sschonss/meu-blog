@@ -3,14 +3,4 @@ title: 'Talks & Speaking'
 description: 'Conferences, meetups and conversations about building software.'
 ---
 
-I speak about software engineering, architecture, developer experience and AI-friendly systems.
-
-## Talks
-
-This page is ready for upcoming and past talks. Add each event as a new Markdown page inside `content/speakers/`.
-
-### Coming soon
-
-More talks and recordings will be listed here soon.
-
-For invitations, [get in touch]({{< ref "contact" >}}).
+I am a Senior Software Engineer at PicPay and a Community Manager at DevParaná, where I help organize events and foster knowledge sharing in the technology community. My work focuses on software architecture, backend development and the design of scalable systems, with a strong background in PHP, microservices and event-driven architectures.

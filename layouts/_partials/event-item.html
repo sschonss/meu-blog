@@ -1,0 +1,9 @@
+{{- $e := .event -}}
+{{- $location := $e.location -}}
+{{- if and $location (eq site.Language.Lang "pt-br") }}{{ $location = replace $location ", Brazil" ", Brasil" }}{{ end -}}
+<li class="event-item{{ if .upcoming }} is-upcoming{{ end }}">
+  <a href="{{ $e.website }}" aria-label="{{ $e.name }} — {{ i18n "eventSite" }}">
+    <span class="event-name">{{ $e.name }}</span>
+    <span class="event-meta"><time datetime="{{ $e.eventStartDate }}">{{ partial "event-date.html" $e }}</time>{{ with $location }} · {{ . }}{{ end }}</span>
+  </a>
+</li>

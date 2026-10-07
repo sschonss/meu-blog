@@ -1,7 +1,89 @@
 {{ define "main" }}
+{{- $pt := eq site.Language.Lang "pt-br" -}}
+{{- $data := site.Data.sessionize -}}
+{{- $speaker := $data.speaker -}}
+{{- $sessions := $data.sessions | default slice -}}
+{{- $events := $data.events | default slice -}}
+{{- $today := time.AsTime (now.Format "2006-01-02") -}}
+
+{{- /* Split events into upcoming/ongoing and past, using the end date. */ -}}
+{{- $upcoming := slice -}}
+{{- $past := slice -}}
+{{- $cities := slice -}}
+{{- range $events -}}
+  {{- if ge (time.AsTime (.eventEndDate | default .eventStartDate)).Unix $today.Unix -}}
+    {{- $upcoming = $upcoming | append . -}}
+  {{- else -}}
+    {{- $past = $past | append . -}}
+  {{- end -}}
+  {{- with .location }}{{ $cities = $cities | append . }}{{ end -}}
+{{- end -}}
+{{- $cities = $cities | uniq -}}
+{{- $upcoming = sort $upcoming "eventStartDate" "asc" -}}
+{{- $past = sort $past "eventStartDate" "desc" -}}
+
 <div class="profile-page">
-  <header class="profile-header"><p class="profile-kicker">{{ if eq site.Language.Lang "pt-br" }}PALESTRAS{{ else }}TALKS & SPEAKING{{ end }}</p><h1>{{ .Title }}</h1><p>{{ .Description }}</p></header>
-  <section class="profile-section"><h2>{{ if eq site.Language.Lang "pt-br" }}Palestras{{ else }}Talks{{ end }}</h2><div class="talk-grid">{{ range site.Data.sessionize.sessions }}<a class="talk-card" href="{{ .sessionUrl }}"><div class="talk-icon">↗</div><div><h3>{{ .title }}</h3><p>{{ .description | plainify | truncate 210 }}</p><span>{{ if eq site.Language.Lang "pt-br" }}Ver palestra no Sessionize{{ else }}View talk on Sessionize{{ end }} →</span></div></a>{{ end }}</div></section>
-  <p class="profile-note">{{ if eq site.Language.Lang "pt-br" }}Para convites, entre em contato pelo LinkedIn.{{ else }}For invitations, get in touch on LinkedIn.{{ end }} <a href="https://www.linkedin.com/in/luiz-schons/">LinkedIn ↗</a></p>
+  <header class="profile-header">
+    <p class="profile-kicker">{{ i18n "talksKicker" }}</p>
+    <h1>{{ .Title }}</h1>
+    <p>{{ .Description }}</p>
+  </header>
+
+  {{- with $speaker }}
+  <section class="speaker-intro">
+    {{- with .photoUrl }}<img class="speaker-photo" src="{{ . }}" alt="{{ $speaker.firstName }} {{ $speaker.lastName }}" width="96" height="96" loading="lazy">{{ end }}
+    <div>
+      <p class="speaker-tagline">{{ .tagline }}</p>
+      <div class="speaker-bio">{{ with $.Content }}{{ . }}{{ else }}<p>{{ $speaker.bio }}</p>{{ end }}</div>
+      {{- with .speakerProfileUrl }}<a class="speaker-link" href="{{ . }}">{{ i18n "sessionizeProfile" }} ↗</a>{{ end }}
+    </div>
+  </section>
+  {{- end }}
+
+  <dl class="speaker-stats">
+    <div><dt>{{ i18n "statEvents" }}</dt><dd>{{ len $events }}</dd></div>
+    <div><dt>{{ i18n "statTalks" }}</dt><dd>{{ len $sessions }}</dd></div>
+    <div><dt>{{ i18n "statCities" }}</dt><dd>{{ len $cities }}</dd></div>
+  </dl>
+
+  {{- with $upcoming }}
+  <section class="profile-section">
+    <h2>{{ i18n "upcomingEvents" }}</h2>
+    <ul class="event-list">
+      {{- range . }}{{ partial "event-item.html" (dict "event" . "upcoming" true) }}{{ end }}
+    </ul>
+  </section>
+  {{- end }}
+
+  {{- with $sessions }}
+  <section class="profile-section">
+    <h2>{{ i18n "talksSection" }}</h2>
+    <div class="talk-grid">
+      {{- range . }}
+      <a class="talk-card" href="{{ .sessionUrl }}"><div class="talk-icon">↗</div><div><h3>{{ .title }}</h3><p>{{ .description | plainify | truncate 210 }}</p><span>{{ i18n "viewTalk" }} →</span></div></a>
+      {{- end }}
+    </div>
+    {{- if $pt }}<p class="talk-lang-note">{{ i18n "abstractsNote" }}</p>{{ end }}
+  </section>
+  {{- end }}
+
+  {{- with $past }}
+  <section class="profile-section">
+    <h2>{{ i18n "pastEvents" }}</h2>
+    {{- $years := slice -}}
+    {{- range . }}{{ $years = $years | append (time.AsTime .eventStartDate).Year }}{{ end -}}
+    {{- range ($years | uniq) }}
+      {{- $year := . }}
+      <div class="event-year">
+        <h3>{{ $year }}</h3>
+        <ul class="event-list">
+          {{- range $past }}{{ if eq (time.AsTime .eventStartDate).Year $year }}{{ partial "event-item.html" (dict "event" . "upcoming" false) }}{{ end }}{{ end }}
+        </ul>
+      </div>
+    {{- end }}
+  </section>
+  {{- end }}
+
+  <p class="profile-note">{{ i18n "talksInvite" }} <a href="https://www.linkedin.com/in/luiz-schons/">LinkedIn ↗</a></p>
 </div>
 {{ end }}

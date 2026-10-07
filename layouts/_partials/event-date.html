@@ -1,0 +1,19 @@
+{{- /* Localized date range for a Sessionize event. Context: the event map. */ -}}
+{{- $pt := eq site.Language.Lang "pt-br" -}}
+{{- $months := slice "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec" -}}
+{{- if $pt }}{{ $months = slice "jan" "fev" "mar" "abr" "mai" "jun" "jul" "ago" "set" "out" "nov" "dez" }}{{ end -}}
+{{- $s := time.AsTime .eventStartDate -}}
+{{- $e := time.AsTime (.eventEndDate | default .eventStartDate) -}}
+{{- $sm := index $months (sub (int $s.Month) 1) -}}
+{{- $em := index $months (sub (int $e.Month) 1) -}}
+{{- if and (eq (int $s.Month) 1) (eq $s.Day 1) (eq (int $e.Month) 12) (eq $e.Day 31) (eq $s.Year $e.Year) -}}
+  {{- i18n "throughoutYear" (dict "Year" $s.Year) -}}
+{{- else if eq ($s.Format "2006-01-02") ($e.Format "2006-01-02") -}}
+  {{- printf "%d %s %d" $s.Day $sm $s.Year -}}
+{{- else if and (eq $s.Year $e.Year) (eq $s.Month $e.Month) -}}
+  {{- printf "%d–%d %s %d" $s.Day $e.Day $sm $s.Year -}}
+{{- else if eq $s.Year $e.Year -}}
+  {{- printf "%d %s – %d %s %d" $s.Day $sm $e.Day $em $s.Year -}}
+{{- else -}}
+  {{- printf "%d %s %d – %d %s %d" $s.Day $sm $s.Year $e.Day $em $e.Year -}}
+{{- end -}}
