@@ -216,3 +216,8 @@ article img {
   .home-links { gap: .9rem 1.1rem; }
   .home-section-title { align-items: flex-start; flex-direction: column; gap: .6rem; }
 }
+
+/* Keep the footer at the bottom of the window on short pages. */
+body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
+body > * { flex-shrink: 0; width: 100%; }
+body > .hextra-footer { margin-top: auto; }
