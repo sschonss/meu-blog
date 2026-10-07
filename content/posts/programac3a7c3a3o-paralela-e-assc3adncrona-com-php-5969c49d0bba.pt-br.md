@@ -2,8 +2,9 @@
 title: 'Programação Paralela, e Assíncrona com PHP'
 date: 2024-04-25
 source: https://luizschons.com/programac3a7c3a3o-paralela-e-assc3adncrona-com-php-5969c49d0bba
+translationKey: programac3a7c3a3o-paralela-e-assc3adncrona-com-php-5969c49d0bba
 draft: false
-aliases: ["/programac3a7c3a3o-paralela-e-assc3adncrona-com-php-5969c49d0bba/"]
+aliases: ["/programac3a7c3a3o-paralela-e-assc3adncrona-com-php-5969c49d0bba/", "/posts/programac3a7c3a3o-paralela-e-assc3adncrona-com-php-5969c49d0bba/"]
 ---
 
 <p>Photo by <a target="_blank" href="https://unsplash.com/@benofthenorth?utm_source=medium&utm_medium=referral">Ben Griffiths</a> on <a target="_blank" href="https://unsplash.com?utm_source=medium&utm_medium=referral">Unsplash</a></p>

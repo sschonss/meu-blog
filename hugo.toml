@@ -4,6 +4,7 @@ defaultContentLanguageInSubdir = false
 title = 'Luiz Schons'
 theme = 'hextra'
 enableRobotsTXT = true
+titleCaseStyle = 'none'
 
 [markup.goldmark.renderer]
   unsafe = true

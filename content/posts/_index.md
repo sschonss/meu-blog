@@ -1,4 +1,4 @@
 ---
-title: 'Artigos'
-description: 'Artigos sobre engenharia de software, arquitetura e agentes de IA.'
+title: 'Articles'
+description: 'Articles about software engineering, architecture and AI agents.'
 ---

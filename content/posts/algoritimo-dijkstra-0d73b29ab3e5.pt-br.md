@@ -2,8 +2,9 @@
 title: 'Algoritimo Dijkstra'
 date: 2024-07-29
 source: https://luizschons.com/algoritimo-dijkstra-0d73b29ab3e5
+translationKey: algoritimo-dijkstra-0d73b29ab3e5
 draft: false
-aliases: ["/algoritimo-dijkstra-0d73b29ab3e5/"]
+aliases: ["/algoritimo-dijkstra-0d73b29ab3e5/", "/posts/algoritimo-dijkstra-0d73b29ab3e5/"]
 ---
 
 <p>Edsger W. Dijkstra foi um cientista da computação holandês que fez contribuições significativas para a ciência da computação. Ele é mais conhecido por desenvolver o algoritmo de Dijkstra, que resolve o problema do caminho menos custoso em um grafo direcionado ou não direcionado com arestas não negativas.</p>

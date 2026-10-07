@@ -45,6 +45,13 @@ draft: false
 - **Imagens:** ficam em `static/images/posts/`.
 - **URLs antigas:** os `aliases` no front matter redirecionam endereços antigos para o novo. Páginas inexistentes caem no `404.html`, que leva para a home.
 
+Cada artigo ganha automaticamente:
+
+- **Índice ("Neste artigo"):** gerado no navegador a partir dos títulos `h2`/`h3`, quando há 3 ou mais (`assets/js/article.js`). Fica fixo na lateral em telas largas e recolhível no topo em telas menores.
+- **Bloco da série:** mostra "Parte N de M" com todas as partes em ordem. O nome da série precisa ser idêntico em todos os artigos de cada idioma.
+- **Anterior / próximo:** outros artigos do mesmo idioma, por data.
+- **Link para a tradução:** "Read in English" / "Ler em português", quando existe a outra versão.
+
 > `scripts/sync_hashnode.py` foi usado para importar os artigos antigos do Hashnode. Ele não roda no deploy.
 
 ## Palestras e integração com o Sessionize
@@ -61,7 +68,7 @@ A página de palestras (`/speakers/` e `/pt-br/speakers/`) é montada a partir d
 | Eventos, palestras, números, tagline | O navegador busca o JSON ao abrir a página (`assets/js/talks.js`) | Na hora (o Sessionize faz cache de ~4 min) |
 | Versão base da página (SEO, sem JS) | `scripts/sync_sessionize.py` no deploy grava `data/sessionize.json` | A cada deploy, pelo menos 1x por dia |
 | Foto na home e nas palestras | Usa o `photoUrl` do Sessionize (`assets/js/sessionize-photo.js` na home) | Na hora |
-| Favicon e ícones do celular | `scripts/build_favicons.py` gera a partir da foto do Sessionize | A cada deploy |
+| Favicon, ícones do celular e foto das imagens de prévia | `scripts/build_favicons.py` gera a partir da foto do Sessionize | A cada deploy |
 
 A página separa os eventos assim:
 
@@ -79,15 +86,23 @@ A **bio** do topo não vem do Sessionize. Ela fica em `content/speakers/_index.m
 - **Foto:** se a imagem do Sessionize não carregar, entra o backup `static/images/profile-fallback.jpg`, que é atualizado a cada deploy.
 - **No deploy:** os scripts falham sem quebrar o build, e ficam valendo os arquivos já commitados (`data/sessionize.json`, favicons e foto de backup).
 
+## SEO e prévias de link
+
+- **Imagem de prévia (`og:image`):** cada página ganha uma imagem 1200×630 gerada pelo Hugo no build (`layouts/_partials/og-image.html`). Ela traz o título, a série, sua foto do Sessionize e o seu nome, e é usada no LinkedIn, no WhatsApp e no X (`summary_large_image`). A foto vem de `assets/images/profile.jpg`, que o deploy atualiza a partir do Sessionize.
+- **`hreflang`:** liga as versões EN e PT da mesma página, com `x-default` em inglês (`layouts/_partials/custom/head-end.html`).
+- **JSON-LD:** `BlogPosting` nos artigos, `WebSite` + `Person` na home e `ProfilePage` nas palestras.
+
 ## Estrutura
 
 ```
 content/            artigos, palestras, contato (EN + PT)
 data/               sessionize.json (cópia dos dados do Sessionize)
 layouts/            layouts próprios (home, posts, séries, palestras, contato, 404)
-  _partials/        datas, eventos, favicons
+  _partials/        datas, eventos, favicons, imagem de prévia, SEO
 assets/css/         custom.css (estilos do site)
-assets/js/          talks.js, sessionize-photo.js
+assets/js/          talks.js, sessionize-photo.js, article.js
+assets/og/          fontes Inter, fundo e máscara das imagens de prévia
+assets/images/      profile.jpg (foto usada nas imagens de prévia)
 i18n/               textos em EN e PT
 scripts/            sync_sessionize.py, build_favicons.py, sync_hashnode.py
 static/             favicons, imagens, site.webmanifest

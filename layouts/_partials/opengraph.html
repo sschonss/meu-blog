@@ -1,0 +1,23 @@
+{{- /* Overrides the theme's Open Graph tags to add a generated preview image. */ -}}
+{{- $description := partial "utils/page-description.html" . | plainify | htmlUnescape | replaceRE `\s+` " " | strings.TrimSpace | truncate 200 -}}
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:title" content="{{ .Title }}">
+<meta property="og:description" content="{{ $description }}">
+<meta property="og:type" content="{{ if and .IsPage (eq .Section "posts") }}article{{ else }}website{{ end }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:locale" content="{{ cond (eq .Language.Lang "pt-br") "pt_BR" "en_US" }}">
+{{- range .Translations }}
+<meta property="og:locale:alternate" content="{{ cond (eq .Language.Lang "pt-br") "pt_BR" "en_US" }}">
+{{- end }}
+{{- with partialCached "og-image.html" . .RelPermalink }}
+<meta property="og:image" content="{{ .Permalink }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ $.Title }}">
+{{- end }}
+{{- if and .IsPage (eq .Section "posts") }}
+<meta property="article:published_time" {{ .PublishDate.Format "2006-01-02T15:04:05-07:00" | printf "content=%q" | safeHTMLAttr }}>
+<meta property="article:modified_time" {{ .Lastmod.Format "2006-01-02T15:04:05-07:00" | printf "content=%q" | safeHTMLAttr }}>
+<meta property="article:author" content="Luiz Schons">
+{{- with .Params.series }}<meta property="article:section" content="{{ index . 0 }}">{{ end }}
+{{- end }}

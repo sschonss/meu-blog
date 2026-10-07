@@ -1,13 +1,63 @@
 {{ define "main" }}
 {{ partial "sidebar.html" (dict "context" . "disableSidebar" true) }}{{/* mobile menu (hamburger) */}}
+{{- $page := . -}}
 <article class="article-page">
   <a class="article-back" href="{{ "posts" | relURL }}">← {{ i18n "backToArticles" }}</a>
   <header class="article-header">
     <p class="article-kicker">{{ i18n "article" }}</p>
     <h1>{{ .Title }}</h1>
-    <div class="article-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "post-date.html" .Date }}</time><span>{{ i18n "readingTime" .ReadingTime }}</span>{{ with .Params.series }}<a href="{{ (printf "/series/%s/" (index . 0 | urlize)) | relURL }}">{{ i18n "series" }} {{ index . 0 }}</a>{{ end }}</div>
+    <div class="article-meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "post-date.html" .Date }}</time>
+      <span>{{ i18n "readingTime" .ReadingTime }}</span>
+      {{- with .Params.series }}<a href="{{ (printf "/series/%s/" (index . 0 | urlize)) | relURL }}">{{ i18n "series" }} {{ index . 0 }}</a>{{ end }}
+      {{- range .Translations }}<a class="article-translation" href="{{ .RelPermalink }}" hreflang="{{ .Language.LanguageCode | lower }}" lang="{{ .Language.LanguageCode | lower }}">{{ i18n "readTranslation" }} →</a>{{ end }}
+    </div>
   </header>
-  <div class="article-content">{{ .Content }}</div>
+
+  {{- /* Table of contents: filled by assets/js/article.js from the article headings. */}}
+  <nav class="article-toc" data-toc hidden aria-label="{{ i18n "onThisPage" }}">
+    <details open>
+      <summary>{{ i18n "onThisPage" }}</summary>
+      <ol data-toc-list></ol>
+    </details>
+  </nav>
+
+  <div class="article-content" data-article-content>{{ .Content }}</div>
+
+  {{- /* Series: every part in order, current one highlighted. */}}
+  {{- with .GetTerms "series" }}
+  {{- $term := index . 0 }}
+  {{- $parts := $term.Pages.ByDate }}
+  {{- $current := 0 }}
+  {{- range $i, $p := $parts }}{{ if eq $p.RelPermalink $page.RelPermalink }}{{ $current = add $i 1 }}{{ end }}{{ end }}
+  {{- if gt (len $parts) 1 }}
+  <aside class="article-series">
+    <p class="article-series-kicker">{{ i18n "seriesPart" (dict "N" $current "Total" (len $parts)) }}</p>
+    <h2><a href="{{ $term.RelPermalink }}">{{ $term.LinkTitle }}</a></h2>
+    <ol>
+      {{- range $parts }}
+      <li{{ if eq .RelPermalink $page.RelPermalink }} class="is-current" aria-current="page"{{ end }}>{{ if eq .RelPermalink $page.RelPermalink }}<span>{{ .Title }}</span>{{ else }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}</li>
+      {{- end }}
+    </ol>
+  </aside>
+  {{- end }}
+  {{- end }}
+
+  {{- /* Previous / next article in this language, by date. */}}
+  {{- $posts := (where site.RegularPages "Section" "posts").ByDate }}
+  {{- $idx := -1 }}
+  {{- range $i, $p := $posts }}{{ if eq $p.RelPermalink $page.RelPermalink }}{{ $idx = $i }}{{ end }}{{ end }}
+  {{- $prev := cond (gt $idx 0) (index $posts (sub $idx 1)) false }}
+  {{- $next := cond (and (ge $idx 0) (lt (add $idx 1) (len $posts))) (index $posts (add $idx 1)) false }}
+  {{- if or $prev $next }}
+  <nav class="article-pager" aria-label="{{ i18n "articles" }}">
+    {{- with $prev }}<a class="is-prev" href="{{ .RelPermalink }}"><span>← {{ i18n "previousArticle" }}</span><strong>{{ .Title }}</strong></a>{{ else }}<span></span>{{ end }}
+    {{- with $next }}<a class="is-next" href="{{ .RelPermalink }}"><span>{{ i18n "nextArticle" }} →</span><strong>{{ .Title }}</strong></a>{{ end }}
+  </nav>
+  {{- end }}
+
   <footer class="article-footer"><a href="{{ "posts" | relURL }}">← {{ i18n "articles" }}</a><a href="https://www.linkedin.com/in/luiz-schons/">LinkedIn ↗</a></footer>
 </article>
+{{- $js := resources.Get "js/article.js" | minify | fingerprint }}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
 {{ end }}

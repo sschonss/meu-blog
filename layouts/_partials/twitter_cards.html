@@ -1,0 +1,7 @@
+{{- /* Large preview card on X/Twitter, using the generated Open Graph image. */ -}}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ .Title }}">
+<meta name="twitter:description" content="{{ partial "utils/page-description.html" . | plainify | htmlUnescape | replaceRE `\s+` " " | strings.TrimSpace | truncate 200 }}">
+{{- with partialCached "og-image.html" . .RelPermalink }}
+<meta name="twitter:image" content="{{ .Permalink }}">
+{{- end }}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the site icons and backup photo from the Sessionize profile photo.
+"""Generate the site icons, backup photo and preview-image photo from Sessionize.
 
 Runs in the deploy workflow after sync_sessionize.py, so changing the photo on
 Sessionize updates the favicon on the next deploy (at least daily). If the
@@ -19,6 +19,7 @@ from PIL import Image, ImageDraw
 DATA = "data/sessionize.json"
 OUT = "static"
 FALLBACK = "images/profile-fallback.jpg"
+OG_PHOTO = "assets/images/profile.jpg"
 
 
 def load_source():
@@ -61,7 +62,9 @@ def main():
     photo.resize((180, 180), Image.LANCZOS).save(f"{OUT}/apple-touch-icon.png", optimize=True)
     # Backup copy shown on the site if the Sessionize image can't be loaded.
     photo.resize((256, 256), Image.LANCZOS).save(f"{OUT}/{FALLBACK}", quality=88, optimize=True)
-    print("Generated favicons from the Sessionize photo")
+    # Photo used by Hugo to draw the social preview images (layouts/_partials/og-image.html).
+    photo.resize((512, 512), Image.LANCZOS).save(OG_PHOTO, quality=88, optimize=True)
+    print("Generated favicons and photos from the Sessionize photo")
 
 
 if __name__ == "__main__":

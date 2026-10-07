@@ -1,0 +1,51 @@
+{{- /* Alternate-language links: tell search engines EN and PT versions are the same page. */ -}}
+{{- if .IsTranslated }}
+<link rel="alternate" hreflang="{{ .Language.LanguageCode | lower }}" href="{{ .Permalink }}">
+{{- range .Translations }}
+<link rel="alternate" hreflang="{{ .Language.LanguageCode | lower }}" href="{{ .Permalink }}">
+{{- end }}
+{{- $en := cond (eq .Language.Lang "en") . (index (where .Translations "Language.Lang" "en") 0) }}
+<link rel="alternate" hreflang="x-default" href="{{ $en.Permalink }}">
+{{- end }}
+
+{{- /* Structured data (JSON-LD). */ -}}
+{{- $speaker := site.Data.sessionize.speaker | default dict -}}
+{{- $person := dict
+  "@type" "Person"
+  "name" "Luiz Schons"
+  "url" site.Home.Permalink
+  "jobTitle" "Senior Software Engineer"
+  "worksFor" (dict "@type" "Organization" "name" "PicPay")
+  "sameAs" (slice "https://www.linkedin.com/in/luiz-schons/" "https://github.com/sschonss" "https://sessionize.com/sschonss/")
+-}}
+{{- with $speaker.photoUrl }}{{ $person = merge $person (dict "image" .) }}{{ end -}}
+{{- $lang := cond (eq .Language.Lang "pt-br") "pt-BR" "en" -}}
+
+{{- if .IsHome }}
+<script type="application/ld+json">{{ dict
+  "@context" "https://schema.org"
+  "@graph" (slice
+    (dict "@type" "WebSite" "name" site.Title "url" .Permalink "inLanguage" $lang "author" $person)
+    $person)
+  | jsonify | safeJS }}</script>
+{{- else if and .IsPage (eq .Section "posts") }}
+{{- $post := dict
+  "@context" "https://schema.org"
+  "@type" "BlogPosting"
+  "headline" .Title
+  "description" (partial "utils/page-description.html" . | plainify | htmlUnescape | replaceRE `\s+` " " | strings.TrimSpace | truncate 200)
+  "datePublished" (.PublishDate.Format "2006-01-02T15:04:05Z07:00")
+  "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+  "inLanguage" $lang
+  "url" .Permalink
+  "mainEntityOfPage" .Permalink
+  "author" $person
+  "publisher" $person
+  "wordCount" .WordCount
+-}}
+{{- with partialCached "og-image.html" . .RelPermalink }}{{ $post = merge $post (dict "image" .Permalink) }}{{ end -}}
+{{- with .Params.series }}{{ $post = merge $post (dict "isPartOf" (dict "@type" "CreativeWorkSeries" "name" (index . 0))) }}{{ end -}}
+<script type="application/ld+json">{{ $post | jsonify | safeJS }}</script>
+{{- else if eq .Section "speakers" }}
+<script type="application/ld+json">{{ dict "@context" "https://schema.org" "@type" "ProfilePage" "url" .Permalink "inLanguage" $lang "mainEntity" $person | jsonify | safeJS }}</script>
+{{- end }}

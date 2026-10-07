@@ -2,7 +2,7 @@
 title: 'Observabilidade de Agentes com OpenTelemetry'
 date: 2026-09-16
 source: https://luizschons.com/agent-observability-with-opentelemetry
-series: ['Arquitetura Amigável para IA']
+series: ['Arquitetura Amigável à IA']
 translationKey: agent-observability-with-opentelemetry
 draft: false
 ---

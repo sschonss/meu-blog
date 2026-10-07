@@ -1,0 +1,66 @@
+{{- /*
+  Builds the 1200x630 social preview image for a page and returns it.
+  Articles show the title; other pages show the page title (home: site description).
+  The photo is assets/images/profile.jpg, refreshed from Sessionize on each deploy.
+*/ -}}
+{{- $page := . -}}
+{{- $pt := eq $page.Language.Lang "pt-br" -}}
+{{- $bold := resources.Get "og/Inter-Bold.ttf" -}}
+{{- $medium := resources.Get "og/Inter-Medium.ttf" -}}
+
+{{- $kicker := "" -}}
+{{- $title := $page.Title -}}
+{{- if $page.IsHome -}}
+  {{- $kicker = cond $pt "BLOG" "BLOG" -}}
+  {{- $title = cond $pt "Engenharia de software, arquitetura e IA" "Software engineering, architecture and AI" -}}
+{{- else if and $page.IsPage (eq $page.Section "posts") -}}
+  {{- $kicker = cond $pt "ARTIGO" "ARTICLE" -}}
+  {{- with $page.Params.series }}{{ $kicker = printf "%s · %s" $kicker (upper (index . 0)) }}{{ end -}}
+{{- else -}}
+  {{- $kicker = upper site.Title -}}
+{{- end -}}
+
+{{- /* Pick a size by length, then wrap by an estimated character width. */ -}}
+{{- $n := len $title -}}
+{{- $size := 80 -}}
+{{- if gt $n 95 }}{{ $size = 50 }}{{ else if gt $n 70 }}{{ $size = 58 }}{{ else if gt $n 45 }}{{ $size = 68 }}{{ end -}}
+{{- $maxChars := int (div 1040.0 (mul (float $size) 0.56)) -}}
+{{- $lines := slice -}}
+{{- $line := "" -}}
+{{- range split $title " " -}}
+  {{- $try := cond (eq $line "") . (printf "%s %s" $line .) -}}
+  {{- if and (gt (len $try) $maxChars) (ne $line "") -}}
+    {{- $lines = $lines | append $line -}}
+    {{- $line = . -}}
+  {{- else -}}
+    {{- $line = $try -}}
+  {{- end -}}
+{{- end -}}
+{{- $lines = $lines | append $line -}}
+{{- if gt (len $lines) 4 -}}
+  {{- $last := printf "%s…" (index $lines 3) -}}
+  {{- $lines = (first 3 $lines) | append $last -}}
+{{- end -}}
+
+{{- $lineHeight := int (mul (float $size) 1.18) -}}
+{{- $blockTop := 110 -}}
+{{- $filters := slice
+  (images.Text $kicker (dict "font" $medium "size" 24 "color" "#64748b" "x" 80 "y" 62))
+-}}
+{{- range $i, $l := $lines -}}
+  {{- $filters = $filters | append (images.Text $l (dict "font" $bold "size" $size "color" "#111827" "x" 78 "y" (add $blockTop (mul $i $lineHeight)))) -}}
+{{- end -}}
+
+{{- with resources.Get "images/profile.jpg" -}}
+  {{- $mask := resources.Get "og/avatar-mask.png" -}}
+  {{- $avatar := .Fill "96x96 Center q90" | images.Filter (images.Mask $mask) -}}
+  {{- $filters = $filters | append (images.Overlay $avatar 80 502) -}}
+{{- end -}}
+{{- $filters = $filters | append
+  (images.Text "Luiz Schons" (dict "font" $bold "size" 30 "color" "#111827" "x" 196 "y" 512))
+  (images.Text "luizschons.com" (dict "font" $medium "size" 24 "color" "#64748b" "x" 196 "y" 554))
+-}}
+
+{{- $img := resources.Get "og/base.png" | images.Filter $filters -}}
+{{- $name := printf "og/%s-%s.png" $page.Language.Lang (md5 (printf "%s|%s" $kicker $title)) -}}
+{{- return ($img | resources.Copy $name) -}}
