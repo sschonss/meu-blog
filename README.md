@@ -43,7 +43,7 @@ draft: false
 - **Tradução:** crie `meu-artigo.pt-br.md` com o mesmo `translationKey`.
 - **Séries:** são uma taxonomia (`series`) e ganham páginas próprias em `/series/`.
 - **Imagens:** ficam em `static/images/posts/`.
-- **URLs antigas:** os `aliases` no front matter redirecionam endereços antigos para o novo. Páginas inexistentes caem no `404.html`, que leva para a home.
+- **URLs antigas:** os `aliases` no front matter redirecionam endereços antigos para o novo. Os 11 artigos antigos em português, que antes ficavam na raiz do site, também têm páginas de redirect fixas em `static/<slug>/` e `static/posts/<slug>/`. Elas não dependem da versão do Hugo, que nas versões novas coloca os aliases de páginas PT dentro de `/pt-br/`. Páginas inexistentes caem no `404.html`, que leva para a home.
 
 Cada artigo ganha automaticamente:
 

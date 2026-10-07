@@ -4,7 +4,7 @@ date: 2024-12-06
 source: https://luizschons.com/microservices-sao-debitos-tecnicos
 translationKey: microservices-sao-debitos-tecnicos
 draft: false
-aliases: ["/microservices-sao-debitos-tecnicos/", "/posts/microservices-sao-debitos-tecnicos/"]
+aliases: ["/microservices-sao-debitos-tecnicos/"]
 ---
 
 <p>Desenvolver software nunca esteve tão complexo e ao mesmo tempo tão simples. A complexidade está na quantidade de tecnologias, frameworks, linguagens e padrões que temos disponíveis para desenvolver software. A simplicidade está na facilidade de acesso a essas tecnologias e na facilidade de desenvolver software.</p>

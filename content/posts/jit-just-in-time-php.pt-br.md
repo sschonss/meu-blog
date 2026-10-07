@@ -4,7 +4,7 @@ date: 2024-05-28
 source: https://luizschons.com/jit-just-in-time-php
 translationKey: jit-just-in-time-php
 draft: false
-aliases: ["/jit-just-in-time-php/", "/posts/jit-just-in-time-php/"]
+aliases: ["/jit-just-in-time-php/"]
 ---
 
 <p>Se você ainda não atualizou para o PHP 8.0 ou maior, está na hora de fazer isso. O PHP 8.0 foi lançado em 26 de novembro de 2020 e trouxe o JIT (Just In Time) e é sobre ele que vamos falar hoje.</p>

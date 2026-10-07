@@ -4,7 +4,7 @@ date: 2024-10-11
 source: https://luizschons.com/acoplamento-estatico-e-dinamico-em-microservices
 translationKey: acoplamento-estatico-e-dinamico-em-microservices
 draft: false
-aliases: ["/acoplamento-estatico-e-dinamico-em-microservices/", "/posts/acoplamento-estatico-e-dinamico-em-microservices/"]
+aliases: ["/acoplamento-estatico-e-dinamico-em-microservices/"]
 ---
 
 <p>Aplicações monolíticas são aquelas que possuem um único código fonte, um único executável e um único processo. Muitas vezes, essas aplicações são construídas em uma única linguagem de programação e são implantadas em um único servidor.</p>

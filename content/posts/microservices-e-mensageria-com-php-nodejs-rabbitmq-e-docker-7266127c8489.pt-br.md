@@ -4,7 +4,7 @@ date: 2024-06-29
 source: https://luizschons.com/microservices-e-mensageria-com-php-nodejs-rabbitmq-e-docker-7266127c8489
 translationKey: microservices-e-mensageria-com-php-nodejs-rabbitmq-e-docker-7266127c8489
 draft: false
-aliases: ["/microservices-e-mensageria-com-php-nodejs-rabbitmq-e-docker-7266127c8489/", "/posts/microservices-e-mensageria-com-php-nodejs-rabbitmq-e-docker-7266127c8489/"]
+aliases: ["/microservices-e-mensageria-com-php-nodejs-rabbitmq-e-docker-7266127c8489/"]
 ---
 
 <p>O desenvolvimento de microserviços é uma abordagem arquitetural que estrutura uma aplicação como um conjunto de serviços pequenos e independentes, que são executados em seu próprio processo e se comunicam por meio de protocolos leves, como HTTP, WebSockets ou AMQP.</p>

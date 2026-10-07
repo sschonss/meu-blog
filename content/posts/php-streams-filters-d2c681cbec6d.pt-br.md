@@ -4,7 +4,7 @@ date: 2024-06-04
 source: https://luizschons.com/php-streams-filters-d2c681cbec6d
 translationKey: php-streams-filters-d2c681cbec6d
 draft: false
-aliases: ["/php-streams-filters-d2c681cbec6d/", "/posts/php-streams-filters-d2c681cbec6d/"]
+aliases: ["/php-streams-filters-d2c681cbec6d/"]
 ---
 
 <p>Se você já trabalhou com arquivos em PHP, provavelmente já usou funções como <code>fopen</code>, <code>fwrite</code>, <code>fread</code>, <code>fclose</code>, entre outras. Streams são uma abstração muito poderosa e flexível para trabalhar com arquivos e outros recursos de I/O.</p>
