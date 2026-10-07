@@ -1,4 +1,5 @@
 {{ define "main" }}
+{{ partial "sidebar.html" (dict "context" . "disableSidebar" true) }}{{/* mobile menu (hamburger) */}}
 <article class="article-page">
   <a class="article-back" href="{{ "posts" | relURL }}">← {{ i18n "backToArticles" }}</a>
   <header class="article-header">

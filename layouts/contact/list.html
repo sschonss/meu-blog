@@ -1,4 +1,5 @@
 {{ define "main" }}
+{{ partial "sidebar.html" (dict "context" . "disableSidebar" true) }}{{/* mobile menu (hamburger) */}}
 <div class="profile-page">
   <header class="profile-header"><p class="profile-kicker">{{ if eq site.Language.Lang "pt-br" }}CONTATO{{ else }}CONTACT{{ end }}</p><h1>{{ .Title }}</h1><p>{{ .Description }}</p></header>
   <section class="profile-section"><h2>{{ if eq site.Language.Lang "pt-br" }}Encontre-me online{{ else }}Find me online{{ end }}</h2><div class="contact-grid">

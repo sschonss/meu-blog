@@ -1,4 +1,5 @@
 {{ define "main" }}
+{{ partial "sidebar.html" (dict "context" . "disableSidebar" true) }}{{/* mobile menu (hamburger) */}}
 <div class="posts-page">
   <header class="posts-header">
     <p class="posts-kicker">{{ i18n "archive" }}</p>
