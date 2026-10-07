@@ -5,7 +5,7 @@
   <header class="article-header">
     <p class="article-kicker">{{ i18n "article" }}</p>
     <h1>{{ .Title }}</h1>
-    <div class="article-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time><span>{{ i18n "readingTime" .ReadingTime }}</span>{{ with .Params.series }}<a href="{{ (printf "/series/%s/" (index . 0 | urlize)) | relURL }}">{{ i18n "series" }} {{ index . 0 }}</a>{{ end }}</div>
+    <div class="article-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "post-date.html" .Date }}</time><span>{{ i18n "readingTime" .ReadingTime }}</span>{{ with .Params.series }}<a href="{{ (printf "/series/%s/" (index . 0 | urlize)) | relURL }}">{{ i18n "series" }} {{ index . 0 }}</a>{{ end }}</div>
   </header>
   <div class="article-content">{{ .Content }}</div>
   <footer class="article-footer"><a href="{{ "posts" | relURL }}">← {{ i18n "articles" }}</a><a href="https://www.linkedin.com/in/luiz-schons/">LinkedIn ↗</a></footer>

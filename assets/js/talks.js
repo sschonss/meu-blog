@@ -119,7 +119,6 @@
 
     var sp = data.speaker || {};
     if (sp.tagline) slot('tagline').textContent = sp.tagline;
-    if (sp.photoUrl) { slot('photo').src = sp.photoUrl; slot('photo').hidden = false; }
     slot('fallback').hidden = events.length + sessions.length > 0;
   }
 

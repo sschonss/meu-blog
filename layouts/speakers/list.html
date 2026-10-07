@@ -33,7 +33,7 @@
   </header>
 
   <section class="speaker-intro">
-    <img class="speaker-photo" data-slot="photo" src="{{ with $speaker }}{{ .photoUrl }}{{ end }}" alt="Luiz Schons" width="96" height="96" loading="lazy"{{ if not $speaker }} hidden{{ end }}>
+    <img class="speaker-photo" src="{{ "images/avatar.jpg" | relURL }}" alt="Luiz Schons" width="96" height="96" loading="lazy">
     <div>
       <p class="speaker-tagline" data-slot="tagline">{{ with $speaker }}{{ .tagline }}{{ end }}</p>
       <div class="speaker-bio">{{ with .Content }}{{ . }}{{ else }}{{ with $speaker }}<p>{{ .bio }}</p>{{ end }}{{ end }}</div>

@@ -9,7 +9,7 @@
   <div class="posts-list">
     {{ range .Pages.ByDate.Reverse }}
     <article class="post-row">
-      <div class="post-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time><span>{{ i18n "readingTime" .ReadingTime }}</span></div>
+      <div class="post-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "post-date.html" .Date }}</time><span>{{ i18n "readingTime" .ReadingTime }}</span></div>
       <div class="post-main"><h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2><p>{{ .Summary | plainify | truncate 220 }}</p>
         {{ with .Params.series }}<div class="post-tags"><a href="{{ (printf "/series/%s/" (index . 0 | urlize)) | relURL }}">série: {{ index . 0 }}</a></div>{{ end }}
       </div>

@@ -1,0 +1,4 @@
+{{- /* Localized "02 Jan 2006" date. Context: a time.Time. */ -}}
+{{- $months := slice "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec" -}}
+{{- if eq site.Language.Lang "pt-br" }}{{ $months = slice "jan" "fev" "mar" "abr" "mai" "jun" "jul" "ago" "set" "out" "nov" "dez" }}{{ end -}}
+{{- printf "%s %s %d" (.Format "02") (index $months (sub (int .Month) 1)) .Year -}}

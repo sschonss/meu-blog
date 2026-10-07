@@ -9,7 +9,7 @@
   </header>
   <div class="series-posts">
     {{ range $index, $post := .Pages.ByDate }}
-    <article class="series-post"><div class="series-post-number">{{ add $index 1 }}</div><div><p class="series-post-date">{{ $post.Date.Format "02 Jan 2006" }} · {{ i18n "readingTime" $post.ReadingTime }}</p><h2><a href="{{ $post.RelPermalink }}">{{ $post.Title }}</a></h2><p>{{ $post.Summary | plainify | truncate 180 }}</p></div></article>
+    <article class="series-post"><div class="series-post-number">{{ add $index 1 }}</div><div><p class="series-post-date">{{ partial "post-date.html" $post.Date }} · {{ i18n "readingTime" $post.ReadingTime }}</p><h2><a href="{{ $post.RelPermalink }}">{{ $post.Title }}</a></h2><p>{{ $post.Summary | plainify | truncate 180 }}</p></div></article>
     {{ end }}
   </div>
 </div>

@@ -10,7 +10,7 @@
   <section class="home-recent">
     <div class="home-section-title"><h2>{{ i18n "recentArticles" }}</h2><a href="{{ "posts" | relURL }}">{{ i18n "viewArchive" }} <span>→</span></a></div>
     {{ range first 8 (where site.RegularPages "Section" "posts") }}
-    <article class="home-post"><div class="home-post-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time><span>{{ i18n "readingTime" .ReadingTime }}</span></div><div><h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3><p>{{ .Summary | plainify | truncate 210 }}</p></div></article>
+    <article class="home-post"><div class="home-post-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "post-date.html" .Date }}</time><span>{{ i18n "readingTime" .ReadingTime }}</span></div><div><h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3><p>{{ .Summary | plainify | truncate 210 }}</p></div></article>
     {{ end }}
   </section>
 </div>
