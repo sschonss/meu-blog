@@ -13,23 +13,7 @@ permissions:
   id-token: write
 
 jobs:
-  sync-hashnode:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - name: Sync Sessionize talks
-        run: python3 scripts/sync_sessionize.py
-      - name: Commit synchronized posts
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add content/posts static/images/posts data/sessionize.json
-          git diff --cached --quiet || (git commit -m 'Sync posts from Hashnode' && git push)
-
   deploy:
-    needs: sync-hashnode
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -38,6 +22,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
+      - name: Refresh Sessionize data
+        # Fetched at build time so the workflow never needs to push to main.
+        # Falls back to the committed data/sessionize.json if Sessionize is down.
+        run: python3 scripts/sync_sessionize.py || echo "Sessionize sync failed; using committed data"
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
