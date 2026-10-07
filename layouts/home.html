@@ -2,7 +2,7 @@
 {{ partial "sidebar.html" (dict "context" . "disableSidebar" true) }}{{/* mobile menu (hamburger) */}}
 <div class="home-page">
   <section class="home-hero">
-    <div class="home-avatar">LS</div>
+    <img class="home-avatar" src="{{ "images/avatar.jpg" | relURL }}" alt="Luiz Schons" width="72" height="72">
     <h1>Luiz Schons</h1>
     <p class="home-role">Senior Software Engineer @ PicPay</p>
     <div class="home-links"><a href="https://www.linkedin.com/in/luiz-schons/">LinkedIn <span>↗</span></a><a href="{{ "posts" | relURL }}">{{ i18n "allArticles" }} <span>→</span></a><a href="{{ "series" | relURL }}">{{ i18n "seriesLink" }} <span>→</span></a></div>

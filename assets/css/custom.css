@@ -35,7 +35,7 @@ article img {
 
 .home-page { max-width: 820px; margin: 0 auto; padding: 4.5rem 0 6rem; }
 .home-hero { border-bottom: 1px solid #e5e7eb; padding-bottom: 3.5rem; }
-.home-avatar { align-items: center; background: #111827; border-radius: 999px; color: #fff; display: flex; font-size: 1.1rem; font-weight: 700; height: 58px; justify-content: center; letter-spacing: -.05em; margin-bottom: 1.8rem; width: 58px; }
+.home-avatar { border: 1px solid #e5e7eb; border-radius: 999px; display: block; height: 72px; margin-bottom: 1.8rem; object-fit: cover; width: 72px; }
 .home-kicker { color: #64748b; font-size: .7rem; font-weight: 700; letter-spacing: .13em; margin: 0 0 .8rem; }
 .home-hero h1 { font-size: clamp(2.8rem, 7vw, 4.8rem); letter-spacing: -.07em; line-height: 1; margin: 0; }
 .home-role { font-size: 1.15rem; margin: .85rem 0 0; }
