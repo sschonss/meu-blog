@@ -5,6 +5,7 @@ description: 'Como saí do Hashnode para um blog em Hugo, em dois idiomas, com p
 translationKey: hugo-sessionize-cron-blog-setup
 draft: false
 tags: ['Hugo', 'GitHub Actions']
+lastmod: 2026-10-08
 ---
 
 Durante um bom tempo meu blog morou no Hashnode, e funcionava bem. O problema apareceu quando comecei a escrever em inglês e português: o Hashnode não tem suporte de verdade a dois idiomas, então eu publicava cada artigo duas vezes, como se fossem posts diferentes, sem nada ligando um ao outro.
@@ -12,6 +13,8 @@ Durante um bom tempo meu blog morou no Hashnode, e funcionava bem. O problema ap
 Comentei isso com o [Leo Cavalcante](https://leocavalcante.dev), e ele me apresentou o Hugo. Fica aqui o meu agradecimento, Leo: essa conversa virou o blog que você está lendo agora.
 
 Com o Hugo eu ganhei bem mais flexibilidade. Neste post eu conto como montei tudo: os dois idiomas, as palestras que se atualizam sozinhas, as imagens de prévia geradas automaticamente e o deploy que roda todo dia sem eu encostar em nada.
+
+> **Atualizado em 8 de outubro de 2026:** de lá pra cá entraram os artigos antigos traduzidos, um aviso de idioma, temas, "Leia também", comentários e a medição de cliques. Está tudo nas seções novas abaixo.
 
 ## Um lugar só para os dois idiomas
 
@@ -23,7 +26,8 @@ Na prática, a pasta de artigos fica assim:
 content/posts/
 ├── agent-observability-with-opentelemetry.md        # inglês
 ├── agent-observability-with-opentelemetry.pt-br.md  # português
-└── microservices-sao-debitos-tecnicos.pt-br.md      # só em português
+├── hash-tables.md                                   # inglês
+└── tabelas-hash.pt-br.md                            # português
 ```
 
 O que liga as duas versões é o `translationKey` no front matter, e no `hugo.toml` basta declarar os idiomas:
@@ -49,6 +53,41 @@ defaultContentLanguage = 'en'
 ```
 
 Isso resolveu o que me incomodava no Hashnode. Um artigo, duas versões, tudo no mesmo lugar, e o Google entende que são a mesma página em idiomas diferentes. O visual veio de um tema chamado Hextra, que eu fui adaptando com layouts próprios até ficar com a minha cara.
+
+Os nomes dos arquivos não precisam ser iguais: `hash-tables.md` e `tabelas-hash.pt-br.md` são o mesmo artigo porque têm o mesmo `translationKey`. Assim cada idioma ganha uma URL que faz sentido nele.
+
+### Um aviso, não um redirect
+
+Muita gente chega pelo Google ou por um link compartilhado na versão "errada" para ela. Eu não quis redirecionar ninguém automaticamente, porque isso atrapalha o Google e irrita quem prefere ler no outro idioma. Em vez disso, quando existe a tradução, aparece um aviso discreto no rodapé: "Esta página também está disponível em português".
+
+O aviso só aparece quando o idioma preferido do navegador, entre português e inglês, é o da outra versão. Se a pessoa fecha o aviso ou troca de idioma pelo menu, isso fica guardado no navegador e ele não volta mais:
+
+```javascript
+var langs = navigator.languages.map(function (l) { return l.toLowerCase(); });
+// a primeira preferência entre os dois idiomas que o site tem
+var top = langs.filter(function (l) { return l.startsWith('pt') || l.startsWith('en'); })[0] || '';
+var wants = target === 'pt-br' ? top.startsWith('pt') : !top.startsWith('pt');
+if (wants && !localStorage.getItem('langSuggestDismissed')) box.hidden = false;
+```
+
+## Trazendo os artigos antigos
+
+Os artigos que vieram do Hashnode tinham três problemas. Muitos existiam só em português. As URLs tinham um hash no fim, como `quicksort-33f8e917ab6c`. E o código aparecia como parágrafo comum, sem cor e com quebra de linha manual.
+
+**Traduções com a data original.** Cada artigo que só existia em português ganhou a versão em inglês com a **mesma data** do original. Assim a tradução entra no lugar certo da lista, e não aparece como se eu tivesse publicado onze artigos num dia só. Hoje todos os artigos existem nos dois idiomas.
+
+**URLs limpas sem quebrar links.** Renomear um arquivo muda a URL, e quem tinha o link antigo (inclusive o Google) cairia num 404. Para cada endereço antigo existe uma página fixa em `static/` que só redireciona para o novo:
+
+```html
+<!-- static/posts/quicksort-33f8e917ab6c/index.html -->
+<link rel="canonical" href="https://luizschons.com/pt-br/posts/quicksort/">
+<meta name="robots" content="noindex">
+<meta http-equiv="refresh" content="0; url=https://luizschons.com/pt-br/posts/quicksort/">
+```
+
+O Hugo tem `aliases` no front matter para isso, mas as versões novas colocam os aliases de páginas em português dentro de `/pt-br/`, e os links antigos ficavam na raiz. Páginas fixas não dependem da versão do Hugo.
+
+**Código de verdade.** Os blocos que vieram como `<p>` com `<br />` viraram blocos de código com a linguagem marcada. Aí o Hugo colore o código no build, sem JavaScript, e o tema põe o botão de copiar. Aproveitei para dar uma descrição (`alt`) a todas as imagens e para trocar as tabelas que eram imagem por tabelas de verdade, que agora aparecem traduzidas na versão em inglês.
 
 ## Palestras direto do Sessionize
 
@@ -142,6 +181,44 @@ O título é quebrado em linhas antes (`$lines`), com o tamanho da fonte escolhi
 {{- end }}
 ```
 
+## Temas, "Leia também" e comentários
+
+Cada artigo tem alguns temas no front matter, como `tags: ['PHP', 'Performance']`, nos nomes do idioma do arquivo. O Hugo gera sozinho uma página por tema ([PHP](https://luizschons.com/pt-br/tags/php/), por exemplo), e eles aparecem como filtros no topo da [lista de artigos](https://luizschons.com/pt-br/posts/).
+
+No fim de cada artigo, o bloco "Leia também" sugere até três artigos parecidos. Quem escolhe é o próprio Hugo, com a função `.Related`, que dá pontos para o que os artigos têm em comum:
+
+```toml
+[related]
+  includeNewer = true
+  threshold = 20
+  [[related.indices]]
+    name = 'tags'     # temas em comum pesam mais
+    weight = 100
+  [[related.indices]]
+    name = 'series'
+    weight = 60
+  [[related.indices]]
+    name = 'date'     # desempate: artigos de épocas próximas
+    weight = 5
+```
+
+```go-html-template
+{{- with first 3 (site.RegularPages.Related . | complement (slice .)) }}
+  {{- range . }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}
+{{- end }}
+```
+
+Os comentários usam o [giscus](https://giscus.app), que guarda cada conversa como uma Discussion no repositório do blog. Não tem banco de dados nem anúncio, e para comentar basta uma conta no GitHub. O detalhe que eu mais gostei: as versões em inglês e português de um artigo dividem a mesma conversa, porque a chave da conversa é o `translationKey`, e não a URL:
+
+```html
+<script src="https://giscus.app/client.js"
+  data-repo="sschonss/meu-blog"
+  data-mapping="specific"
+  data-term="posts/{{ .Params.translationKey }}"
+  data-lang="{{ if eq site.Language.Lang "pt-br" }}pt{{ else }}en{{ end }}"
+  data-loading="lazy" async></script>
+```
+
 ## O blog se atualiza todo dia
 
 O site é estático e fica no GitHub Pages. Quem monta e publica é um workflow do GitHub Actions, que roda em três situações: quando eu faço push, todo dia de madrugada e quando eu clico em "Run workflow".
@@ -200,9 +277,9 @@ Uma escolha que eu gostei: o workflow nunca faz commit no repositório. Os dados
 
 A proteção é um ruleset na `main` com três regras (restringir updates, restringir exclusão e bloquear force push) e um único bypass: o papel de admin do repositório, que só eu tenho. Como o GitHub Actions não pode ser exceção num ruleset de repositório pessoal, esse desenho só funciona porque o workflow não precisa commitar nada.
 
-## O que vem agora
+## Medindo sem cookies
 
-Hoje eu escrevo em um lugar só, nos dois idiomas, e o resto se ajeita sozinho: palestras, foto, imagens de prévia e deploy. As visitas eu acompanho com o [Umami](https://umami.is), que não usa cookies e por isso dispensa aquele banner chato.
+Hoje eu escrevo em um lugar só, nos dois idiomas, e o resto se ajeita sozinho: palestras, foto, imagens de prévia, temas e deploy. As visitas eu acompanho com o [Umami](https://umami.is), que não usa cookies e por isso dispensa aquele banner chato.
 
 O script só entra no build de produção e só conta o domínio real, então rodar o `hugo server` localmente não suja os números:
 
@@ -212,5 +289,23 @@ O script só entra no build de produção e só conta o domínio real, então ro
         data-website-id="..." data-domains="luizschons.com"></script>
 {{ end }}
 ```
+
+Além das visitas, o Umami recebe eventos de clique: palestras e eventos abertos, troca de idioma, navegação entre artigos e links externos. Um único arquivo escuta os cliques da página toda e reconhece o tipo de link. A chamada para o Umami fica protegida, porque ele pode não ter carregado ou estar bloqueado, e medir nunca pode quebrar a página:
+
+```javascript
+function track(name, props) {
+  try { if (window.umami) window.umami.track(name, props); } catch (e) {}
+}
+
+document.addEventListener('click', function (e) {
+  var a = e.target.closest('a[href]');
+  if (a && a.hostname !== location.hostname)
+    track('outbound', { host: a.hostname, from: location.pathname });
+});
+```
+
+Com isso eu sei, por exemplo, quantas pessoas trocam de idioma pelo aviso e quais palestras recebem mais cliques.
+
+## Para fechar
 
 O código está aberto em [github.com/sschonss/meu-blog](https://github.com/sschonss/meu-blog), com um README explicando cada parte. Se você também escreve em mais de um idioma e está cansado de publicar tudo duas vezes, dá uma olhada e me chama no [LinkedIn](https://www.linkedin.com/in/luiz-schons/) se quiser trocar ideia.

@@ -5,6 +5,7 @@ description: 'How I moved from Hashnode to a bilingual Hugo blog, with talks pul
 translationKey: hugo-sessionize-cron-blog-setup
 draft: false
 tags: ['Hugo', 'GitHub Actions']
+lastmod: 2026-10-08
 ---
 
 For a good while my blog lived on Hashnode, and it worked fine. The problem showed up when I started writing in both English and Portuguese: Hashnode has no real support for two languages, so I published every article twice, as if they were unrelated posts, with nothing linking one to the other.
@@ -12,6 +13,8 @@ For a good while my blog lived on Hashnode, and it worked fine. The problem show
 I mentioned this to [Leo Cavalcante](https://leocavalcante.dev), and he introduced me to Hugo. Thank you, Leo: that conversation turned into the blog you are reading now.
 
 Hugo gave me a lot more flexibility. In this post I walk through how I put it all together: the two languages, the talks page that updates itself, the automatically generated preview images, and the deploy that runs every day without me touching anything.
+
+> **Updated on October 8, 2026:** since then I added the translated older articles, a language notice, topics, "Keep reading", comments and click tracking. It is all in the new sections below.
 
 ## One place for both languages
 
@@ -23,7 +26,8 @@ In practice, the articles folder looks like this:
 content/posts/
 ├── agent-observability-with-opentelemetry.md        # English
 ├── agent-observability-with-opentelemetry.pt-br.md  # Portuguese
-└── microservices-sao-debitos-tecnicos.pt-br.md      # Portuguese only
+├── hash-tables.md                                   # English
+└── tabelas-hash.pt-br.md                            # Portuguese
 ```
 
 What links the two versions is the `translationKey` in the front matter, and in `hugo.toml` you only need to declare the languages:
@@ -49,6 +53,41 @@ defaultContentLanguage = 'en'
 ```
 
 That solved what bothered me on Hashnode. One article, two versions, all in one place, and Google understands they are the same page in different languages. The look came from a theme called Hextra, which I kept adapting with my own layouts until it felt like mine.
+
+The file names do not have to match: `hash-tables.md` and `tabelas-hash.pt-br.md` are the same article because they share the same `translationKey`. That way each language gets a URL that makes sense in it.
+
+### A notice, not a redirect
+
+Plenty of people land on the "wrong" version for them, from Google or from a shared link. I did not want to redirect anyone automatically, because that confuses Google and annoys people who prefer the other language. Instead, when a translation exists, a small notice shows up at the bottom: "This page is also available in English".
+
+The notice only appears when the browser's preferred language, between Portuguese and English, is the other version's. If the visitor closes it or switches language from the menu, that is stored in the browser and it does not come back:
+
+```javascript
+var langs = navigator.languages.map(function (l) { return l.toLowerCase(); });
+// the top preference between the two languages the site has
+var top = langs.filter(function (l) { return l.startsWith('pt') || l.startsWith('en'); })[0] || '';
+var wants = target === 'pt-br' ? top.startsWith('pt') : !top.startsWith('pt');
+if (wants && !localStorage.getItem('langSuggestDismissed')) box.hidden = false;
+```
+
+## Bringing the old articles along
+
+The articles that came from Hashnode had three problems. Many existed only in Portuguese. Their URLs ended with a hash, like `quicksort-33f8e917ab6c`. And code showed up as plain paragraphs, with no colors and manual line breaks.
+
+**Translations with the original date.** Every article that only existed in Portuguese got an English version with the **same date** as the original. That way the translation lands in the right spot of the list, instead of looking like I published eleven articles in one day. Today every article exists in both languages.
+
+**Clean URLs without breaking links.** Renaming a file changes its URL, and anyone with the old link (Google included) would hit a 404. For each old address there is a fixed page in `static/` that just redirects to the new one:
+
+```html
+<!-- static/posts/quicksort-33f8e917ab6c/index.html -->
+<link rel="canonical" href="https://luizschons.com/pt-br/posts/quicksort/">
+<meta name="robots" content="noindex">
+<meta http-equiv="refresh" content="0; url=https://luizschons.com/pt-br/posts/quicksort/">
+```
+
+Hugo has `aliases` in the front matter for this, but newer versions put the aliases of Portuguese pages under `/pt-br/`, while the old links lived at the root. Fixed pages do not depend on the Hugo version.
+
+**Real code blocks.** The blocks that came in as `<p>` with `<br />` became code blocks tagged with their language. Hugo then colors the code at build time, with no JavaScript, and the theme adds the copy button. I also gave every image a description (`alt`) and swapped the tables that were images for real tables, which now show up translated in the English version.
 
 ## Talks straight from Sessionize
 
@@ -142,6 +181,44 @@ The title is broken into lines beforehand (`$lines`), with the font size picked 
 {{- end }}
 ```
 
+## Topics, "Keep reading" and comments
+
+Each article has a few topics in its front matter, like `tags: ['PHP', 'Performance']`, named in the file's language. Hugo builds a page per topic on its own ([PHP](https://luizschons.com/tags/php/), for example), and the topics show up as filters at the top of the [article list](https://luizschons.com/posts/).
+
+At the end of each article, the "Keep reading" block suggests up to three similar articles. Hugo picks them itself with `.Related`, which scores what the articles have in common:
+
+```toml
+[related]
+  includeNewer = true
+  threshold = 20
+  [[related.indices]]
+    name = 'tags'     # shared topics weigh the most
+    weight = 100
+  [[related.indices]]
+    name = 'series'
+    weight = 60
+  [[related.indices]]
+    name = 'date'     # tiebreaker: articles from around the same time
+    weight = 5
+```
+
+```go-html-template
+{{- with first 3 (site.RegularPages.Related . | complement (slice .)) }}
+  {{- range . }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}
+{{- end }}
+```
+
+Comments use [giscus](https://giscus.app), which stores each conversation as a Discussion in the blog's repository. No database, no ads, and all you need to comment is a GitHub account. The part I like the most: the English and Portuguese versions of an article share the same conversation, because the conversation is keyed by the `translationKey`, not by the URL:
+
+```html
+<script src="https://giscus.app/client.js"
+  data-repo="sschonss/meu-blog"
+  data-mapping="specific"
+  data-term="posts/{{ .Params.translationKey }}"
+  data-lang="{{ if eq site.Language.Lang "pt-br" }}pt{{ else }}en{{ end }}"
+  data-loading="lazy" async></script>
+```
+
 ## The blog updates itself every day
 
 The site is static and hosted on GitHub Pages. A GitHub Actions workflow builds and publishes it, and it runs in three situations: when I push, every day at night, and when I click "Run workflow".
@@ -200,9 +277,9 @@ A choice I am happy with: the workflow never commits to the repository. The Sess
 
 The protection is a ruleset on `main` with three rules (restrict updates, restrict deletions and block force pushes) and a single bypass: the repository admin role, which only I have. Since GitHub Actions cannot be an exception in a personal repository's ruleset, this setup only works because the workflow never needs to commit anything.
 
-## What's next
+## Measuring without cookies
 
-Today I write in one place, in both languages, and everything else takes care of itself: talks, photo, preview images and deploy. I track visits with [Umami](https://umami.is), which does not use cookies and so needs no annoying consent banner.
+Today I write in one place, in both languages, and everything else takes care of itself: talks, photo, preview images, topics and deploy. I track visits with [Umami](https://umami.is), which does not use cookies and so needs no annoying consent banner.
 
 The script is only included in the production build and only counts the real domain, so running `hugo server` locally does not skew the numbers:
 
@@ -212,5 +289,23 @@ The script is only included in the production build and only counts the real dom
         data-website-id="..." data-domains="luizschons.com"></script>
 {{ end }}
 ```
+
+Besides visits, Umami gets click events: talks and events opened, language switches, moving between articles and outbound links. A single file listens to clicks on the whole page and recognizes the kind of link. The call to Umami is guarded, because it may not have loaded or may be blocked, and measuring must never break the page:
+
+```javascript
+function track(name, props) {
+  try { if (window.umami) window.umami.track(name, props); } catch (e) {}
+}
+
+document.addEventListener('click', function (e) {
+  var a = e.target.closest('a[href]');
+  if (a && a.hostname !== location.hostname)
+    track('outbound', { host: a.hostname, from: location.pathname });
+});
+```
+
+That tells me, for example, how many people switch language from the notice and which talks get the most clicks.
+
+## Wrapping up
 
 The code is open at [github.com/sschonss/meu-blog](https://github.com/sschonss/meu-blog), with a README explaining each part. If you also write in more than one language and are tired of publishing everything twice, take a look, and reach out on [LinkedIn](https://www.linkedin.com/in/luiz-schons/) if you want to chat.
