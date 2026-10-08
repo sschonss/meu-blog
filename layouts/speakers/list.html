@@ -69,7 +69,7 @@
       <h2>{{ i18n "talksSection" }}</h2>
       <div class="talk-grid">
         {{- range . }}
-        <a class="talk-card" href="{{ .sessionUrl }}"><div class="talk-icon">↗</div><div><h3>{{ .title }}</h3><p>{{ .description | plainify | truncate 210 }}</p><span>{{ i18n "viewTalk" }} →</span></div></a>
+        {{ partial "talk-card.html" . }}
         {{- end }}
       </div>
       {{- if $pt }}<p class="talk-lang-note">{{ i18n "abstractsNote" }}</p>{{ end }}
@@ -111,7 +111,20 @@
   "viewTalk" (i18n "viewTalk")
   "eventSite" (i18n "eventSite")
   "abstractsNote" (cond $pt (i18n "abstractsNote") "")
+  "readAboutIt" (i18n "readAboutIt")
+  "series" (i18n "series")
 -}}
+{{- /* Article links per talk, so the live renderer can keep them. */ -}}
+{{- $related := dict -}}
+{{- range $sessions -}}
+  {{- $id := string .id -}}
+  {{- $rel := partial "talk-articles.html" .id -}}
+  {{- $links := slice -}}
+  {{- with $rel.series }}{{ $links = $links | append (dict "title" (printf "%s %s (%d)" (i18n "series") .LinkTitle (len .Pages)) "url" .RelPermalink) }}{{ end -}}
+  {{- range $rel.posts }}{{ $links = $links | append (dict "title" .Title "url" .RelPermalink) }}{{ end -}}
+  {{- if $links }}{{ $related = merge $related (dict $id $links) }}{{ end -}}
+{{- end -}}
+{{- $strings = merge $strings (dict "related" $related) -}}
 <script type="application/json" id="talks-strings">{{ $strings | jsonify | safeJS }}</script>
 {{- $js := resources.Get "js/talks.js" | minify | fingerprint }}
 <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>

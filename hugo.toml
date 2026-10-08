@@ -98,6 +98,11 @@ titleCaseStyle = 'none'
     type = 'language-switch'
     icon = 'translate'
 
+[outputs]
+  home = ['html', 'rss', 'llms']
+  page = ['html', 'markdown']
+  section = ['html', 'rss']
+
 [taxonomies]
   series = 'series'
   tag = 'tags'

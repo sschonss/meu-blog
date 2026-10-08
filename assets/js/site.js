@@ -61,7 +61,10 @@
       var to = url.pathname.indexOf('/pt-br/') === 0 ? 'pt-br' : 'en';
       return ['translation-click', { via: a.classList.contains('article-translation') ? 'article' : 'menu', to: to, from: from }];
     }
-    if (a.classList.contains('talk-card')) return ['talk-click', { talk: text(a, 'h3'), from: from }];
+    if (a.classList.contains('talk-link')) return ['talk-click', { talk: text(a), from: from }];
+    if (a.closest('.talk-related')) return ['talk-article-click', { talk: text(a.closest('.talk-card'), 'h3'), to: url.pathname, from: from }];
+    if (a.closest('.article-talk')) return ['article-talk-click', { talk: text(a), from: from }];
+    if (a.closest('.home-events')) return ['event-click', { event: text(a, '.home-event-name'), via: 'home', from: from }];
     if (a.closest('.event-item')) return ['event-click', { event: text(a, '.event-name'), from: from }];
     if (a.closest('.article-series')) return ['series-click', { to: url.pathname, from: from }];
     if (a.closest('.article-pager')) return ['pager-click', { dir: a.classList.contains('is-prev') ? 'prev' : 'next', to: url.pathname, from: from }];

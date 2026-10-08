@@ -54,3 +54,8 @@
 {{- if hugo.IsProduction }}
 <script defer src="https://cloud.umami.is/script.js" data-website-id="79e23081-6e80-4be5-af4c-d15e5568e2cd" data-domains="luizschons.com" data-performance="true"></script>
 {{- end }}
+
+{{- /* Plain Markdown version of articles, for AI agents (see /llms.txt). */ -}}
+{{- with .OutputFormats.Get "markdown" }}
+<link rel="alternate" type="text/markdown" href="{{ .Permalink }}" title="Markdown">
+{{- end }}

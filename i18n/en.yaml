@@ -44,3 +44,14 @@ tagArticles: "{{ .Count }} articles about this topic."
 relatedArticles: Keep reading
 comments: Comments
 viewTopic: View articles
+readAboutIt: Read more on the blog
+becameTalk: This idea became a talk
+seeTalk: "See the talk →"
+share: Share
+copyLink: Copy link
+linkCopied: Link copied ✓
+suggestFix: Suggest a fix on GitHub
+readingProgress: Reading progress
+closeImage: Close
+whereToFindMe: Where to find me
+allTalks: All talks

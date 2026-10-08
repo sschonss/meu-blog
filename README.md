@@ -56,6 +56,10 @@ Cada artigo ganha automaticamente:
 - **Leia também:** até 3 artigos relacionados, escolhidos pelo Hugo a partir dos temas em comum, depois da série e da data (bloco `[related]` em `hugo.toml`).
 - **Comentários:** feitos com o [giscus](https://giscus.app), que guarda cada conversa como uma Discussion deste repositório. As versões EN e PT de um artigo dividem a mesma conversa (a chave é o `translationKey`). A configuração fica em `[params.giscus]` no `hugo.toml` e o bloco em `layouts/_partials/comments.html`; ele só aparece quando o `categoryId` está preenchido.
 - **Anterior / próximo:** outros artigos do mesmo idioma, por data.
+- **Compartilhar:** LinkedIn, WhatsApp, X e "copiar link" logo depois do texto (`layouts/_partials/article-share.html`), com os cliques contados no Umami como `share`.
+- **"Essa ideia virou palestra":** quando o artigo está ligado a uma palestra do Sessionize (veja abaixo), aparece um bloco com link para ela.
+- **Sugerir correção:** link no rodapé que abre o arquivo do artigo para edição no GitHub.
+- **Barra de progresso e imagem ampliável:** uma linha fina no topo acompanha a leitura, e clicar numa imagem abre ela em tela cheia (`assets/js/article.js`).
 - **Link para a tradução:** "Read in English" / "Ler em português", quando existe a outra versão.
 
 > `scripts/sync_hashnode.py` foi usado para importar os artigos antigos do Hashnode. Ele não roda no deploy.
@@ -116,6 +120,19 @@ Cliques são enviados como eventos do Umami por `assets/js/site.js`, que reconhe
 | `lang-suggest-shown` / `lang-suggest-dismiss` | Aviso de idioma exibido ou fechado | `to` |
 
 Todos levam `from` com a página de origem. Para um link específico, `data-track="nome"` e `data-track-chave="valor"` no `<a>` sobrescrevem a detecção automática.
+
+### Palestras ligadas a artigos
+
+`data/talk_articles.yaml` liga cada palestra do Sessionize (pelo id da sessão) a artigos do blog, pelo `translationKey`, ou a uma série inteira (`series_from`). Na página de palestras, cada card ganha "Leia mais no blog" com esses artigos; nos artigos, aparece "Essa ideia virou palestra". Para uma palestra nova, basta acrescentar o id dela no arquivo (o id está no JSON do Sessionize, em `data/sessionize.json`).
+
+### Onde me encontrar
+
+A home mostra os próximos eventos do Sessionize (até 3), sem os que duram o ano todo. A lista vem do build e é atualizada no navegador junto com a foto (`assets/js/sessionize-photo.js`); quando não há evento futuro, o bloco some.
+
+## Para agentes de IA
+
+- `/llms.txt` (e `/pt-br/llms.txt`) segue o formato do [llmstxt.org](https://llmstxt.org): descreve o blog e lista todos os artigos dos dois idiomas, com link para a versão em Markdown.
+- Cada artigo tem uma versão em Markdown ao lado da página, por exemplo `/posts/quicksort.md`, anunciada no `<head>` com `<link rel="alternate" type="text/markdown">`. O template (`layouts/posts/page.markdown.md`) converte o HTML dos artigos antigos para Markdown, sem mexer nos blocos de código.
 
 ## Aviso de idioma
 

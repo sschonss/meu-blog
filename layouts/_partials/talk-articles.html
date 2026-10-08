@@ -1,0 +1,17 @@
+{{- /* Articles linked to a Sessionize talk (data/talk_articles.yaml), in the
+     current language. Context: the session id. Returns dict "posts" "series". */ -}}
+{{- $entry := index (site.Data.talk_articles | default dict) (string .) -}}
+{{- $posts := slice -}}
+{{- $series := false -}}
+{{- with $entry -}}
+  {{- $all := where site.RegularPages "Section" "posts" -}}
+  {{- range .posts -}}
+    {{- $k := . -}}
+    {{- range $all }}{{ if eq (partial "post-key.html" .) $k }}{{ $posts = $posts | append . }}{{ end }}{{ end -}}
+  {{- end -}}
+  {{- with .series_from -}}
+    {{- $k := . -}}
+    {{- range $all }}{{ if eq (partial "post-key.html" .) $k }}{{ with .GetTerms "series" }}{{ $series = index . 0 }}{{ end }}{{ end }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+{{- return (dict "posts" $posts "series" $series) -}}

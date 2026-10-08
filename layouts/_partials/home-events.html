@@ -1,0 +1,25 @@
+{{- /* Next events on the home page, from Sessionize. Built with the data from the
+     last deploy and refreshed in the browser by assets/js/sessionize-photo.js.
+     Year-long entries (1 Jan – 31 Dec) are left out: they are not a date to meet. */ -}}
+{{- $pt := eq site.Language.Lang "pt-br" -}}
+{{- $today := time.AsTime (now.Format "2006-01-02") -}}
+{{- $next := slice -}}
+{{- range sort (site.Data.sessionize.events | default slice) "eventStartDate" -}}
+  {{- $s := time.AsTime .eventStartDate -}}
+  {{- $e := time.AsTime (.eventEndDate | default .eventStartDate) -}}
+  {{- $yearLong := and (eq (int $s.Month) 1) (eq $s.Day 1) (eq (int $e.Month) 12) (eq $e.Day 31) -}}
+  {{- if and (ge $e.Unix $today.Unix) (not $yearLong) }}{{ $next = $next | append . }}{{ end -}}
+{{- end -}}
+{{- $strings := dict
+  "months" (cond $pt (slice "jan" "fev" "mar" "abr" "mai" "jun" "jul" "ago" "set" "out" "nov" "dez") (slice "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"))
+  "lang" site.Language.Lang
+-}}
+<section class="home-events" data-home-events{{ if not $next }} hidden{{ end }}>
+  <div class="home-section-title"><h2>{{ i18n "whereToFindMe" }}</h2><a href="{{ "speakers/" | relLangURL }}">{{ i18n "allTalks" }} <span>→</span></a></div>
+  <ul data-home-events-list>
+    {{- range first 3 $next }}
+    <li><a href="{{ .website | default "https://sessionize.com/sschonss/" }}"><span class="home-event-date">{{ partial "event-date.html" . }}</span><span class="home-event-name">{{ .name }}</span>{{ with .location }}<span class="home-event-place">{{ cond $pt (replaceRE ", Brazil$" ", Brasil" .) . }}</span>{{ end }}</a></li>
+    {{- end }}
+  </ul>
+  <script type="application/json" data-home-events-strings>{{ $strings | jsonify | safeJS }}</script>
+</section>

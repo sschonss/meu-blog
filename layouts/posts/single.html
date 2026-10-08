@@ -1,4 +1,5 @@
 {{ define "main" }}
+<div class="reading-progress" data-reading-progress aria-hidden="true"><span></span></div>
 {{ partial "sidebar.html" (dict "context" . "disableSidebar" true) }}{{/* mobile menu (hamburger) */}}
 {{- $page := . -}}
 <article class="article-page">
@@ -23,7 +24,10 @@
     </details>
   </nav>
 
-  <div class="article-content" data-article-content>{{ .Content }}</div>
+  <div class="article-content" data-article-content data-close-label="{{ i18n "closeImage" }}">{{ .Content }}</div>
+
+  {{- partial "article-share.html" . }}
+  {{- partial "article-talks.html" . }}
 
   {{- /* Series: every part in order, current one highlighted. */}}
   {{- with .GetTerms "series" }}
@@ -71,7 +75,7 @@
   </nav>
   {{- end }}
 
-  <footer class="article-footer"><a href="{{ "posts" | relURL }}">← {{ i18n "articles" }}</a><a href="https://www.linkedin.com/in/luiz-schons/">LinkedIn ↗</a></footer>
+  <footer class="article-footer"><a href="{{ "posts" | relURL }}">← {{ i18n "articles" }}</a><span>{{ with .File }}<a class="article-edit" href="https://github.com/sschonss/meu-blog/edit/main/content/{{ .Path }}" data-track="suggest-fix">{{ i18n "suggestFix" }} ↗</a>{{ end }}<a href="https://www.linkedin.com/in/luiz-schons/">LinkedIn ↗</a></span></footer>
 </article>
 {{- $js := resources.Get "js/article.js" | minify | fingerprint }}
 <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>

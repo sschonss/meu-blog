@@ -44,3 +44,14 @@ tagArticles: "{{ .Count }} artigos sobre este tema."
 relatedArticles: Leia também
 comments: Comentários
 viewTopic: Ver artigos
+readAboutIt: Leia mais no blog
+becameTalk: Essa ideia virou palestra
+seeTalk: "Ver a palestra →"
+share: Compartilhar
+copyLink: Copiar link
+linkCopied: Link copiado ✓
+suggestFix: Sugerir correção no GitHub
+readingProgress: Progresso da leitura
+closeImage: Fechar
+whereToFindMe: Onde me encontrar
+allTalks: Todas as palestras

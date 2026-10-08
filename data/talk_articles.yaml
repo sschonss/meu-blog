@@ -1,0 +1,20 @@
+# Links each Sessionize talk (by session id) to articles on the blog.
+# posts:       translationKey of each article (or its file name when it has none)
+# series_from: any article of a series; the talk links to that whole series
+# Used on the talks page ("Read more on the blog") and on the articles
+# ("This idea became a talk"). Talks not listed here simply show no links.
+"187690":   # AI-Friendly Architecture: Preparing Real Systems for AI Agents
+  series_from: agent-observability-with-opentelemetry
+"187691":   # Architectural Migration Without Disruption
+  posts:
+    - microservices-sao-debitos-tecnicos
+    - acoplamento-estatico-e-dinamico-em-microservices
+    - arquitetura-hexagonal-e-mensageria-com-php
+"187692":   # Building High-Performance PHP Applications with Hyperf
+  posts:
+    - programacao-paralela-e-assincrona-com-php
+    - jit-just-in-time-php
+"187694":   # Design for Failure
+  posts:
+    - microservices-e-mensageria-com-php-nodejs-rabbitmq-e-docker
+    - event-driven-architecture-eda

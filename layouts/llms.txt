@@ -1,0 +1,15 @@
+{{- /* /llms.txt (https://llmstxt.org): what this site is and where the plain
+     Markdown version of every article lives, in both languages. */ -}}
+# Luiz Schons
+
+> Personal blog of Luiz Schons, Senior Software Engineer at PicPay, about software engineering, architecture, PHP and AI-friendly systems. Every article is available in English and Brazilian Portuguese, and each one has a plain Markdown version (index.md).
+
+- Talks and events: {{ "speakers/" | absLangURL }}
+- Source code of the blog: https://github.com/sschonss/meu-blog
+- RSS: {{ "index.xml" | absLangURL }}
+{{ range .AllTranslations }}
+## {{ if eq .Language.Lang "pt-br" }}Artigos (Português){{ else }}Articles (English){{ end }}
+{{ range (where .Site.RegularPages "Section" "posts").ByDate.Reverse }}
+- [{{ .Title }}]({{ with .OutputFormats.Get "markdown" }}{{ .Permalink }}{{ end }}): {{ .Description | default (.Summary | plainify) | truncate 140 | strings.TrimSpace }} ({{ .Date.Format "2006-01-02" }})
+{{- end }}
+{{ end }}

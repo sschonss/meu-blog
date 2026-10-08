@@ -1,0 +1,11 @@
+{{- /* Share buttons at the end of an article. Clicks are counted in Umami
+     (data-track); "copy link" is handled by assets/js/article.js. */ -}}
+{{- $url := .Permalink -}}
+{{- $title := .Title -}}
+<div class="article-share">
+  <span class="article-share-label">{{ i18n "share" }}</span>
+  <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ $url | urlquery }}" target="_blank" rel="noopener" data-track="share" data-track-network="linkedin">LinkedIn</a>
+  <a href="https://wa.me/?text={{ printf "%s %s" $title $url | urlquery }}" target="_blank" rel="noopener" data-track="share" data-track-network="whatsapp">WhatsApp</a>
+  <a href="https://x.com/intent/post?text={{ $title | urlquery }}&amp;url={{ $url | urlquery }}" target="_blank" rel="noopener" data-track="share" data-track-network="x">X</a>
+  <button type="button" data-copy-link="{{ $url }}" data-copied="{{ i18n "linkCopied" }}">{{ i18n "copyLink" }}</button>
+</div>

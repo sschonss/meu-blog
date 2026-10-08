@@ -97,12 +97,16 @@
     if (sessions.length) {
       out.push(section(t.talksSection, [
         el('div', { 'class': 'talk-grid' }, sessions.map(function (s) {
-          return el('a', { 'class': 'talk-card', href: s.sessionUrl || t.profile }, [
+          // Articles about this talk come from the build (data/talk_articles.yaml).
+          var links = (t.related || {})[String(s.id)] || [];
+          return el('article', { 'class': 'talk-card', id: 'talk-' + s.id }, [
             el('div', { 'class': 'talk-icon', text: '↗' }),
             el('div', {}, [
-              el('h3', { text: s.title }),
+              el('h3', {}, [el('a', { 'class': 'talk-link', href: s.sessionUrl || t.profile, text: s.title })]),
               el('p', { text: plain(s.description, 210) }),
-              el('span', { text: t.viewTalk + ' →' })
+              el('span', { 'class': 'talk-view', text: t.viewTalk + ' →' }),
+              links.length ? el('div', { 'class': 'talk-related' }, [el('span', { text: t.readAboutIt })].concat(
+                links.map(function (l) { return el('a', { href: l.url, text: l.title }); }))) : null
             ])
           ]);
         })),
@@ -123,6 +127,11 @@
 
     var live = slot('live');
     live.replaceChildren.apply(live, out);
+    // Re-rendering replaced the element a #talk-… link pointed to.
+    if (/^#talk-/.test(location.hash)) {
+      var target = document.getElementById(location.hash.slice(1));
+      if (target) { target.classList.add('is-target'); target.scrollIntoView({ block: 'center' }); }
+    }
 
     var sp = data.speaker || {};
     if (sp.tagline) slot('tagline').textContent = sp.tagline;

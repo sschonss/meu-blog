@@ -7,6 +7,7 @@
     <p class="home-role">Senior Software Engineer @ PicPay</p>
     <div class="home-links"><a href="https://www.linkedin.com/in/luiz-schons/">LinkedIn <span>↗</span></a><a href="{{ "posts" | relURL }}">{{ i18n "allArticles" }} <span>→</span></a><a href="{{ "series" | relURL }}">{{ i18n "seriesLink" }} <span>→</span></a></div>
   </section>
+  {{ partial "home-events.html" . }}
   <section class="home-recent">
     <div class="home-section-title"><h2>{{ i18n "recentArticles" }}</h2><a href="{{ "posts" | relURL }}">{{ i18n "viewArchive" }} <span>→</span></a></div>
     {{ range first 8 (where site.RegularPages "Section" "posts") }}

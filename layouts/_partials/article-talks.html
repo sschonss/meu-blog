@@ -1,0 +1,23 @@
+{{- /* "This idea became a talk": Sessionize talks linked to this article in
+     data/talk_articles.yaml, directly or through the article's series. */ -}}
+{{- $page := . -}}
+{{- $key := partial "post-key.html" . -}}
+{{- $talks := slice -}}
+{{- range $id, $entry := site.Data.talk_articles | default dict -}}
+  {{- $match := in ($entry.posts | default slice) $key -}}
+  {{- with $entry.series_from -}}
+    {{- $rel := partial "talk-articles.html" $id -}}
+    {{- with $rel.series }}{{ range $page.GetTerms "series" }}{{ if eq .RelPermalink $rel.series.RelPermalink }}{{ $match = true }}{{ end }}{{ end }}{{ end -}}
+  {{- end -}}
+  {{- if $match -}}
+    {{- range site.Data.sessionize.sessions }}{{ if eq (string .id) (string $id) }}{{ $talks = $talks | append . }}{{ end }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+{{- with $talks }}
+<aside class="article-talk">
+  <p class="article-talk-kicker">{{ i18n "becameTalk" }}</p>
+  {{- range . }}
+  <a href="{{ printf "speakers/#talk-%v" .id | relLangURL }}"><strong>{{ .title }}</strong><span>{{ i18n "seeTalk" }}</span></a>
+  {{- end }}
+</aside>
+{{- end }}

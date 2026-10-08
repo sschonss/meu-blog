@@ -1,0 +1,18 @@
+{{- /* One talk on the talks page. The title link covers the whole card; the
+     article links sit above it. Context: the Sessionize session. */ -}}
+{{- $rel := partial "talk-articles.html" .id -}}
+<article class="talk-card" id="talk-{{ .id }}">
+  <div class="talk-icon">↗</div>
+  <div>
+    <h3><a class="talk-link" href="{{ .sessionUrl }}">{{ .title }}</a></h3>
+    <p>{{ .description | plainify | truncate 210 }}</p>
+    <span class="talk-view">{{ i18n "viewTalk" }} →</span>
+    {{- if or $rel.posts $rel.series }}
+    <div class="talk-related">
+      <span>{{ i18n "readAboutIt" }}</span>
+      {{- with $rel.series }}<a href="{{ .RelPermalink }}">{{ i18n "series" }} {{ .LinkTitle }} ({{ len .Pages }})</a>{{ end }}
+      {{- range $rel.posts }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}
+    </div>
+    {{- end }}
+  </div>
+</article>
