@@ -225,7 +225,7 @@ class FilterPHP extends php_user_filter
 <li>We create a class called <code>FilterPHP</code> that extends <code>php_user_filter</code>. This class is used to create a custom stream filter.</li>
 </ol>
 <p>If you have worked with classes in PHP, extending a class with such an odd name may look strange. That is because <code>php_user_filter</code> is an internal PHP class that predates the class naming conventions the community established over the years.</p>
-<ol>
+<ol start="2">
 <li>The <code>FilterPHP</code> class has two properties: <code>$stream</code> and <code>$filter</code>. <code>$stream</code> holds a temporary stream where the filtered data will be written. <code>$filter</code> holds the filter that will be applied to the data.</li>
 <li>The <code>onCreate</code> method is called when the filter is created. In it, we open a temporary stream with <code>fopen('php://temp', 'w+')</code> and store the stream resource in <code>$stream</code>. If the stream cannot be opened, we return <code>false</code>.</li>
 </ol>
@@ -233,7 +233,7 @@ class FilterPHP extends php_user_filter
 <p>The <code>onCreate</code> method acts as a constructor for the filter, and custom stream filters typically implement it to set up their resources.</p>
 <p>But what is <code>php://temp</code>? <code>php://temp</code> is a wrapper for creating temporary streams in PHP. Temporary streams are kept in memory or in a temporary file, depending on the size of the data.</p>
 </blockquote>
-<p>3. The <code>filter</code> method is called to filter the stream's data. It receives the following parameters:</p>
+<p>4. The <code>filter</code> method is called to filter the stream's data. It receives the following parameters:</p>
 <ul>
 <li><code>$in</code>: the input bucket brigade, from which the original data is read. It is read-only and is passed to the filter.</li>
 <li><code>$out</code>: the output bucket brigade, to which the filtered data is written. It is write-only and is passed to the filter.</li>
@@ -243,9 +243,9 @@ class FilterPHP extends php_user_filter
 <blockquote>
 <p><strong><em>Note</em></strong>: the <code>&</code> in front of a variable in PHP means it is passed by reference, so changes made inside the function are reflected outside it.</p>
 </blockquote>
-<p>4. In the <code>filter</code> method, we read the input data with <code>stream_bucket_make_writeable</code>. Then we split it into lines with <code>explode("\n", $bucket->data)</code> and check whether each line contains the word "PHP" with <code>str_contains($l, $this->filter)</code>.</p>
-<p>5. If the line contains the word “PHP”, it is added to <code>$out_data</code>. Then we create a new output bucket with <code>stream_bucket_new</code> and append it to the output with <code>stream_bucket_append</code>.</p>
-<p>6. Finally, we return <code>PSFS_PASS_ON</code> to indicate that the filter should keep passing data on to the next filter or to the output stream.</p>
+<p>5. In the <code>filter</code> method, we read the input data with <code>stream_bucket_make_writeable</code>. Then we split it into lines with <code>explode("\n", $bucket->data)</code> and check whether each line contains the word "PHP" with <code>str_contains($l, $this->filter)</code>.</p>
+<p>6. If the line contains the word “PHP”, it is added to <code>$out_data</code>. Then we create a new output bucket with <code>stream_bucket_new</code> and append it to the output with <code>stream_bucket_append</code>.</p>
+<p>7. Finally, we return <code>PSFS_PASS_ON</code> to indicate that the filter should keep passing data on to the next filter or to the output stream.</p>
 <p>Now that we have created the stream filter, let's attach it to an input stream.</p>
 
 ```php

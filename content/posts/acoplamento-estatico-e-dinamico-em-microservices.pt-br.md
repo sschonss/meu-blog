@@ -10,7 +10,7 @@ tags: ['Arquitetura', 'Microservices']
 
 <p>Aplicações monolíticas são aquelas que possuem um único código fonte, um único executável e um único processo. Muitas vezes, essas aplicações são construídas em uma única linguagem de programação e são implantadas em um único servidor.</p>
 <p>Quando começamos a desenvolver, monolitos são a nossa primeira experiência na maioria das vezes. Eles são fáceis de desenvolver, testar e implantar. No entanto, à medida que a aplicação cresce, o monolito começa a se tornar um problema.</p>
-<p>A escalabilidade de um software é a uma das coisas mais importantes a serem consideradas hoje. Saber lidar de forma dinâmica com o crescimento de usuários e dados é essencial para o sucesso de um software.</p>
+<p>A escalabilidade de um software é uma das coisas mais importantes a serem consideradas hoje. Saber lidar de forma dinâmica com o crescimento de usuários e dados é essencial para o sucesso de um software.</p>
 <p>Sistemas monolíticos são difíceis de escalar. Eles são construídos como um único bloco de código, o que significa que, para escalar a aplicação, você precisa replicar todo o código ou escalar verticalmente o servidor. Isso pode ser caro e ineficiente.</p>
 <blockquote>
 <p><strong>Escalabilidade vertical</strong> é a capacidade de aumentar a capacidade de um servidor, adicionando mais recursos, como CPU, RAM e disco. Isso é feito para melhorar o desempenho de um servidor.</p>
@@ -32,7 +32,7 @@ tags: ['Arquitetura', 'Microservices']
 </li>
 <li><p>Recebe requisições HTTP dos clientes e as encaminha para os serviços internos apropriados (como ProductCatalogService, OrderService, e UserService).</p>
 </li>
-<li><p>Manter o controle de acesso, autenticação, roteamento de requisições, e agregação de respostas.</p>
+<li><p>Mantém o controle de acesso, autenticação, roteamento de requisições, e agregação de respostas.</p>
 </li>
 </ul>
 </li>
@@ -103,7 +103,7 @@ tags: ['Arquitetura', 'Microservices']
 </li>
 <li><p><strong>Nginx</strong>:</p>
 <ul>
-<li>Pode representar um servidor web reverso ou balançador de carga que distribui requisições entre várias instâncias do API Gateway, melhorando a capacidade e a disponibilidade.</li>
+<li>Pode representar um servidor web reverso ou balanceador de carga que distribui requisições entre várias instâncias do API Gateway, melhorando a capacidade e a disponibilidade.</li>
 </ul>
 </li>
 </ol>

@@ -7,7 +7,7 @@ draft: false
 tags: ['Arquitetura', 'Mensageria', 'PHP']
 ---
 
-<h3 id="heading-arquiteura-hexagonal-ports-and-adapters">Arquiteura Hexagonal (Ports and Adapters)</h3>
+<h3 id="heading-arquiteura-hexagonal-ports-and-adapters">Arquitetura Hexagonal (Ports and Adapters)</h3>
 <p>Link para o projeto: <a target="_blank" href="https://github.com/sschonss/microservices-hexagonal">https://github.com/sschonss/microservices-hexagonal</a></p>
 <p>Existem diversas formas de se organizar um projeto, e uma das formas mais conhecidas é a arquitetura hexagonal. A arquitetura hexagonal é uma forma de organizar o projeto de forma que ele seja independente de frameworks, banco de dados, UI, etc. O objetivo é que o projeto seja independente de qualquer tecnologia, e que possa ser facilmente substituído.</p>
 <p>Neste projeto, a arquitetura hexagonal foi implementada utilizando a linguagem de programação PHP e o framework Laravel. A ideia é que o projeto seja independente do Laravel, e dessa maneira, usamos somente o Laravel para criar rotas e controladores, e o restante do projeto é independente do Laravel.</p>
@@ -32,7 +32,7 @@ tags: ['Arquitetura', 'Mensageria', 'PHP']
 <li><p><strong>RabbitMQAdapter</strong>: Adapter responsável por enviar mensagens para o RabbitMQ.</p>
 </li>
 </ul>
-<p>Neles contém as classes que adaptam a comunicação com o serviço de e-mail e com o RabbitMQ.</p>
+<p>Eles contêm as classes que adaptam a comunicação com o serviço de e-mail e com o RabbitMQ.</p>
 <p>Tudo isso somente usando PHP sem Laravel, para que o projeto seja independente e possa ser facilmente substituído.</p>
 <h3 id="heading-core">Core</h3>
 <p>O core é a camada responsável por conter as regras de negócio do projeto. Dentro do core, iremos trabalhar com Domain Driven Design (DDD).</p>

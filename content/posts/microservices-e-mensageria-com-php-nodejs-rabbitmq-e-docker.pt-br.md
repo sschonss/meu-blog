@@ -103,22 +103,22 @@ $channel->close();
 $connection->close();
 ```
 
-<p>Neste arquivo, criamos uma conexão com o RabbitMQ, declaramos uma fila chamada `hello` e enviamos uma mensagem para essa fila. Em seguida, fechamos a conexão com o RabbitMQ. Perceba que estamos tentando conectar ao RabbitMQ várias vezes, com um intervalo de 5 segundos entre as tentativas.</p>
-<p>Isso é importante para garantir que a aplicação consiga se conectar ao RabbitMQ mesmo que ele não esteja disponível imediatamente. Isso é uma prática comum em aplicações distribuídas, onde a disponibilidade dos serviços pode variar ao longo do tempo, pesquise mais sobre `circuit breaker` e `retry pattern`.</p>
-<p>Mas para instalar as dependências do RabbitMQ e do Composer, precisamos criar o arquivo `composer.json` na raiz do projeto:</p>
+<p>Neste arquivo, criamos uma conexão com o RabbitMQ, declaramos uma fila chamada <code>hello</code> e enviamos uma mensagem para essa fila. Em seguida, fechamos a conexão com o RabbitMQ. Perceba que estamos tentando conectar ao RabbitMQ várias vezes, com um intervalo de 5 segundos entre as tentativas.</p>
+<p>Isso é importante para garantir que a aplicação consiga se conectar ao RabbitMQ mesmo que ele não esteja disponível imediatamente. Isso é uma prática comum em aplicações distribuídas, onde a disponibilidade dos serviços pode variar ao longo do tempo. Pesquise mais sobre <code>circuit breaker</code> e <code>retry pattern</code>.</p>
+<p>Mas para instalar as dependências do RabbitMQ e do Composer, precisamos criar o arquivo <code>composer.json</code> na raiz do projeto:</p>
 
 ```json
 { "require": { "php-amqplib/php-amqplib": "^3.1", "phpseclib/phpseclib": "^3.0" } }
 ```
 
 <h2 id="heading-criando-o-consumidor-com-nodejs">Criando o consumidor com Node.js</h2>
-<p>Agora, vamos criar o diretório `node-app` e o arquivo `Dockerfile` dentro dele:</p>
+<p>Agora, vamos criar o diretório <code>node-app</code> e o arquivo <code>Dockerfile</code> dentro dele:</p>
 
 ```bash
 mkdir node-app && touch node-app/Dockerfile
 ```
 
-<p>No arquivo `Dockerfile`, vamos definir a imagem base e copiar os arquivos da aplicação:</p>
+<p>No arquivo <code>Dockerfile</code>, vamos definir a imagem base e copiar os arquivos da aplicação:</p>
 
 ```dockerfile
 FROM node:14 
@@ -129,8 +129,8 @@ COPY . .
 CMD \["node", "subscriber.js"\]
 ```
 
-<p>Neste arquivo, definimos a imagem base `node:14`, copiamos os arquivos da aplicação para o diretório `/usr/src/app`, instalamos as dependências do Node.js e executamos o script `subscriber.js`.</p>
-<p>Agora, vamos criar o arquivo `subscriber.js` na raiz do projeto:</p>
+<p>Neste arquivo, definimos a imagem base <code>node:14</code>, copiamos os arquivos da aplicação para o diretório <code>/usr/src/app</code>, instalamos as dependências do Node.js e executamos o script <code>subscriber.js</code>.</p>
+<p>Agora, vamos criar o arquivo <code>subscriber.js</code> na raiz do projeto:</p>
 
 ```javascript
 const amqp = require('amqplib');
@@ -176,9 +176,9 @@ async function receiveMessages() {
 receiveMessages();
 ```
 
-<p>Neste arquivo, criamos uma conexão com o RabbitMQ, declaramos uma fila chamada `hello` e consumimos as mensagens dessa fila.</p>
+<p>Neste arquivo, criamos uma conexão com o RabbitMQ, declaramos uma fila chamada <code>hello</code> e consumimos as mensagens dessa fila.</p>
 <p>Em seguida, exibimos as mensagens no terminal. Assim como no produtor, estamos tentando conectar ao RabbitMQ várias vezes, com um intervalo de 5 segundos entre as tentativas. Isso é importante para garantir que o consumidor consiga se conectar ao RabbitMQ mesmo que ele não esteja disponível imediatamente.</p>
-<p>E para instalar as dependências do RabbitMQ, precisamos criar o arquivo `package.json` na raiz do projeto:</p>
+<p>E para instalar as dependências do RabbitMQ, precisamos criar o arquivo <code>package.json</code> na raiz do projeto:</p>
 
 ```json
 { "name": "node-app", "version": "1.0.0", "description": "", "main": "subscriber.js", "dependencies": { "amqplib": "^0.8.0" }, "author": "", "license": "ISC" }

@@ -69,7 +69,7 @@ fclose($stream);
 <h3 id="heading-resource">Resource</h3>
 <p>Vamos nos aprofundar um pouco mais no conceito de recurso (resource) em PHP.</p>
 <p>Um stream é representado por um recurso (resource) em PHP. Um recurso é uma variável especial que contém uma referência interna para um recurso externo, como um arquivo, uma conexão de rede, etc. Você pode criar um recurso com a função <code>fopen</code> e fechá-lo com a função <code>fclose</code>.</p>
-<p>Um <code>resource</code> em PHP é indentificador interno para recursos externos, e a função <code>get_resource_type</code> pode ser usada para obter o tipo de recurso.</p>
+<p>Um <code>resource</code> em PHP é um identificador interno para recursos externos, e a função <code>get_resource_type</code> pode ser usada para obter o tipo de recurso.</p>
 
 ```php
 $stream = fopen('data.txt', 'r');
@@ -186,7 +186,7 @@ fclose($stream);
 <p>Veja a <a target="_blank" href="https://www.php.net/manual/en/filters.php">documentação oficial</a> para mais informações sobre filtros de stream em PHP.</p>
 <h3 id="heading-filterphp">FilterPHP</h3>
 <p>Mas eu preparei um exemplo para você entender melhor como funciona um filtro de stream.</p>
-<p>No primeiro exemplo, vamos criar um filtro de stream que filtrará somente para linhas que contém a palavra “PHP”.</p>
+<p>No primeiro exemplo, vamos criar um filtro de stream que filtrará somente para linhas que contêm a palavra “PHP”.</p>
 
 ```php
 <?php
@@ -225,16 +225,16 @@ class FilterPHP extends php_user_filter
 <ol>
 <li>Criamos uma classe chamada <code>FilterPHP</code> que estende a classe <code>php_user_filter</code>. Esta classe é usada para criar um filtro de stream personalizado.</li>
 </ol>
-<p>Se você já trabalhou com classes em PHP, deve estar estranhando o fato de extender uma classe com um nome tão estranho. Isso acontece porque a classe <code>php_user_filter</code> é uma classe interna do PHP que não segue as convenções de nomenclatura de classes em PHP que foram estabelecidas pela comunidade ao longo dos anos.</p>
-<ol>
+<p>Se você já trabalhou com classes em PHP, deve estar estranhando o fato de estender uma classe com um nome tão estranho. Isso acontece porque a classe <code>php_user_filter</code> é uma classe interna do PHP que não segue as convenções de nomenclatura de classes em PHP que foram estabelecidas pela comunidade ao longo dos anos.</p>
+<ol start="2">
 <li>A classe <code>FilterPHP</code> possui duas propriedades: <code>$stream</code> e <code>$filter</code>. A propriedade <code>$stream</code> é usada para armazenar um stream temporário onde os dados filtrados serão escritos. A propriedade <code>$filter</code> é usada para armazenar o filtro que será aplicado aos dados.</li>
 <li>O método <code>onCreate</code> é chamado quando o filtro é criado. Neste método, abrimos um stream temporário com <code>fopen('php://temp', 'w+')</code> e armazenamos o recurso do stream na propriedade <code>$stream</code>. Se o stream não puder ser aberto, retornamos <code>false</code>.</li>
 </ol>
 <blockquote>
 <p>O método <code>onCreate</code> é um método obrigatório que deve ser implementado em todos os filtros de stream personalizados, funcionando como um construtor para o filtro.</p>
-<p>Mas o que é <code>php://temp</code>? <code>php://temp</code> é um wrapper que permite a criação de streams temporários em PHP. Os streams temporários são armazenados na memória ou em um arquivo temporário, dependendo do tamanho dos dado</p>
+<p>Mas o que é <code>php://temp</code>? <code>php://temp</code> é um wrapper que permite a criação de streams temporários em PHP. Os streams temporários são armazenados na memória ou em um arquivo temporário, dependendo do tamanho dos dados.</p>
 </blockquote>
-<p>3. O método <code>filter</code> é chamado para filtrar os dados do stream. Neste método, lemos os dados de entrada das seguintes variáveis:</p>
+<p>4. O método <code>filter</code> é chamado para filtrar os dados do stream. Neste método, lemos os dados de entrada das seguintes variáveis:</p>
 <ul>
 <li><code>$in</code>: stream de entrada, onde os dados originais são lidos. Este stream é somente leitura, vem de <code>input</code> e é passado para o filtro.</li>
 <li><code>$out</code>: stream de saída, onde os dados filtrados são escritos. Este stream é somente escrita, vem de <code>output</code> e é passado para o filtro.</li>
@@ -244,9 +244,9 @@ class FilterPHP extends php_user_filter
 <blockquote>
 <p><strong><em>Nota</em></strong>: O <code>&</code> na frente de uma variável em PHP indica que a variável é passada por referência, ou seja, o valor da variável pode ser alterado dentro da função e refletido fora dela.</p>
 </blockquote>
-<p>4. No método <code>filter</code>, lemos os dados de entrada do stream com <code>stream_bucket_make_writeable</code> e os armazenamos na variável <code>$out_data</code>. Em seguida, dividimos os dados em linhas com <code>explode("\n", $bucket->data)</code> e verificamos se cada linha contém a palavra "PHP" com <code>str_contains($l, $this->filter)</code>.</p>
-<p>5. Se a linha contiver a palavra “PHP”, a linha é adicionada à variável <code>$out_data</code>. Em seguida, criamos um novo bucket de saída com <code>stream_bucket_new</code> e o adicionamos ao stream de saída com <code>stream_bucket_append</code>.</p>
-<p>6. Por fim, retornamos <code>PSFS_PASS_ON</code> para indicar que o filtro deve continuar a passar os dados para o próximo filtro ou para o stream de saída.</p>
+<p>5. No método <code>filter</code>, lemos os dados de entrada do stream com <code>stream_bucket_make_writeable</code> e os armazenamos na variável <code>$out_data</code>. Em seguida, dividimos os dados em linhas com <code>explode("\n", $bucket->data)</code> e verificamos se cada linha contém a palavra "PHP" com <code>str_contains($l, $this->filter)</code>.</p>
+<p>6. Se a linha contiver a palavra “PHP”, a linha é adicionada à variável <code>$out_data</code>. Em seguida, criamos um novo bucket de saída com <code>stream_bucket_new</code> e o adicionamos ao stream de saída com <code>stream_bucket_append</code>.</p>
+<p>7. Por fim, retornamos <code>PSFS_PASS_ON</code> para indicar que o filtro deve continuar a passar os dados para o próximo filtro ou para o stream de saída.</p>
 <p>Agora que criamos o filtro de stream, vamos aplicá-lo a um stream de entrada.</p>
 
 ```php

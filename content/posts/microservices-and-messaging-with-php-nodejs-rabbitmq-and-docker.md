@@ -102,22 +102,22 @@ $channel->close();
 $connection->close();
 ```
 
-<p>In this file, we open a connection to RabbitMQ, declare a queue called `hello` and send a message to it. Then we close the connection. Notice that we try to connect to RabbitMQ several times, waiting 5 seconds between attempts.</p>
-<p>This matters to make sure the application can connect to RabbitMQ even if it is not available right away. It is a common practice in distributed applications, where service availability can vary over time; look up the `circuit breaker` and `retry pattern` patterns to learn more.</p>
-<p>To install the RabbitMQ dependencies with Composer, we need to create a `composer.json` file at the project root:</p>
+<p>In this file, we open a connection to RabbitMQ, declare a queue called <code>hello</code> and send a message to it. Then we close the connection. Notice that we try to connect to RabbitMQ several times, waiting 5 seconds between attempts.</p>
+<p>This matters to make sure the application can connect to RabbitMQ even if it is not available right away. It is a common practice in distributed applications, where service availability can vary over time; look up the <code>circuit breaker</code> and <code>retry pattern</code> patterns to learn more.</p>
+<p>To install the RabbitMQ dependencies with Composer, we need to create a <code>composer.json</code> file at the project root:</p>
 
 ```json
 { "require": { "php-amqplib/php-amqplib": "^3.1", "phpseclib/phpseclib": "^3.0" } }
 ```
 
 <h2 id="heading-building-the-consumer-with-nodejs">Building the consumer with Node.js</h2>
-<p>Now let's create the `node-app` directory and a `Dockerfile` inside it:</p>
+<p>Now let's create the <code>node-app</code> directory and a <code>Dockerfile</code> inside it:</p>
 
 ```bash
 mkdir node-app && touch node-app/Dockerfile
 ```
 
-<p>In the `Dockerfile`, we define the base image and copy the application files:</p>
+<p>In the <code>Dockerfile</code>, we define the base image and copy the application files:</p>
 
 ```dockerfile
 FROM node:14 
@@ -128,8 +128,8 @@ COPY . .
 CMD \["node", "subscriber.js"\]
 ```
 
-<p>In this file, we use the `node:14` base image, copy the application files into `/usr/src/app`, install the Node.js dependencies and run the `subscriber.js` script.</p>
-<p>Now let's create the `subscriber.js` file at the project root:</p>
+<p>In this file, we use the <code>node:14</code> base image, copy the application files into <code>/usr/src/app</code>, install the Node.js dependencies and run the <code>subscriber.js</code> script.</p>
+<p>Now let's create the <code>subscriber.js</code> file at the project root:</p>
 
 ```javascript
 const amqp = require('amqplib');
@@ -175,9 +175,9 @@ async function receiveMessages() {
 receiveMessages();
 ```
 
-<p>In this file, we open a connection to RabbitMQ, declare a queue called `hello` and consume the messages from it.</p>
+<p>In this file, we open a connection to RabbitMQ, declare a queue called <code>hello</code> and consume the messages from it.</p>
 <p>Then we print the messages to the terminal. Just like in the producer, we try to connect to RabbitMQ several times, waiting 5 seconds between attempts. This makes sure the consumer can connect to RabbitMQ even if it is not available right away.</p>
-<p>And to install the RabbitMQ dependencies, we need to create a `package.json` file at the project root:</p>
+<p>And to install the RabbitMQ dependencies, we need to create a <code>package.json</code> file at the project root:</p>
 
 ```json
 { "name": "node-app", "version": "1.0.0", "description": "", "main": "subscriber.js", "dependencies": { "amqplib": "^0.8.0" }, "author": "", "license": "ISC" }

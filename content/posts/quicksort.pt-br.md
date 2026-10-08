@@ -24,8 +24,8 @@ tags: ['Algoritmos']
 <p>Esse é um caso simples de DC e muitos algoritmos utilizam esse conceito para resolver problemas.</p>
 <h3 id="heading-por-que-nao-usar-um-loop">Por que não usar um loop?</h3>
 <p>Você pode estar se perguntando por que não usar um loop para resolver esse problema. E a resposta é: você pode! Mas, em alguns casos, a solução utilizando DC é mais simples e mais fácil de entender.</p>
-<p>Outro ponto importante é que, em algumas linguagens, principalmente as funcionais, não existe a estrutura de repetição (for, while, etc). Então, a única forma de resolver um problema é utilizando DC.</p>
-<p>Entendendo esse algoritimo, você consegue trabalhar com outras linguagens de programação e entender como elas funcionam.</p>
+<p>Outro ponto importante é que, em algumas linguagens, principalmente as funcionais, não existe a estrutura de repetição (for, while, etc.). Então, a única forma de resolver um problema é utilizando DC.</p>
+<p>Entendendo esse algoritmo, você consegue trabalhar com outras linguagens de programação e entender como elas funcionam.</p>
 <p>Caso tenha alguma dúvida, busque por mais exemplos e tente resolver problemas utilizando DC.</p>
 <h3 id="heading-quicksort">Quicksort</h3>
 <p>Agora que você entendeu o que é DC, vamos falar sobre o Quicksort.</p>
@@ -66,6 +66,6 @@ tags: ['Algoritmos']
 <p>Mas como escolher o pivô? Existem várias formas de escolher o pivô e a escolha do pivô vai depender do seu problema. Uma forma de escolher o pivô é escolher o elemento do meio do array.</p>
 <p>Dessa forma, eu fiz um repositório no github com a implementação do Quicksort em Go. Caso você queira ver a implementação, clique <a target="_blank" href="https://github.com/sschonss/quicksort">aqui</a>.</p>
 <p>Esse artigo é uma introdução ao Quicksort e espero que você tenha entendido como o algoritmo funciona, e agora se você escutar alguém falando sobre Quicksort, você vai entender do que se trata.</p>
-<p>Lembre-se que a prática leva a perfeição e, quanto mais você praticar, mais você vai entender sobre o assunto.</p>
+<p>Lembre-se que a prática leva à perfeição e, quanto mais você praticar, mais você vai entender sobre o assunto.</p>
 <p>Caso tenha alguma dúvida, busque por mais exemplos e tente resolver problemas utilizando Quicksort.</p>
 <p>Espero que você tenha gostado do artigo e até a próxima!</p>

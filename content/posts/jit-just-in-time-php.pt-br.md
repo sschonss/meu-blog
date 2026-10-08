@@ -105,6 +105,6 @@ Encrypted: 46d37684d6032ef0167c00d29f3358d5a180438d3e8604e4c11728699d78fdb0a3228
 <p>Com o JIT habilitado, o script PHP rodou 3 segundos mais rápido. Isso é um ganho de performance muito considerável.</p>
 <p>Mas lembre-se, o JIT não é uma bala de prata. Ele pode não fazer muita diferença para scripts PHP que rodam na Web. Mas para scripts PHP que rodam na linha de comando, o JIT pode trazer um grande ganho de performance.</p>
 <h1 id="heading-conclusao"><strong>Conclusão</strong></h1>
-<p>Esse foi um breve resumo sobre o JIT no PHP 8.0. Se você quiser saber mais sobre o JIT, recomendo a leitura da <a target="_blank" href="https://www.php.net/manual/en/intro.opcache.php">documentação oficial</a></p>
-<p>Trouxe somente exemplos básicos e didáticos para que você entenda o que é o JIT e como habilitá-lo. Acho que era importante trazer esse conteúdo para o prefil para que possamos falar sobre assuntos mais complexos e avançados.</p>
+<p>Esse foi um breve resumo sobre o JIT no PHP 8.0. Se você quiser saber mais sobre o JIT, recomendo a leitura da <a target="_blank" href="https://www.php.net/manual/en/intro.opcache.php">documentação oficial</a>.</p>
+<p>Trouxe somente exemplos básicos e didáticos para que você entenda o que é o JIT e como habilitá-lo. Acho que era importante trazer esse conteúdo para o perfil para que possamos falar sobre assuntos mais complexos e avançados.</p>
 <p>Se você gostou do conteúdo, deixe um comentário e compartilhe com seus amigos. Até a próxima!</p>
