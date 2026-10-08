@@ -30,4 +30,5 @@ jobs:
         run: python3 scripts/check_site.py links
       - name: Scheduled articles
         # Not an error: just lists what the daily deploy will publish later.
-        run: hugo list future | tail -n +2 | cut -d, -f1 | sed 's/^/scheduled: /' || true
+        run: |
+          hugo list future | tail -n +2 | cut -d, -f1 | sed 's/^/scheduled -> /' || true
