@@ -221,13 +221,13 @@ Comments use [giscus](https://giscus.app), which stores each conversation as a D
 
 ## The blog updates itself every day
 
-The site is static and hosted on GitHub Pages. A GitHub Actions workflow builds and publishes it, and it runs in three situations: when I push, every day at night, and when I click "Run workflow".
+The site is static and hosted on GitHub Pages. A GitHub Actions workflow builds and publishes it, and it runs in three situations: when I push, every morning, and when I click "Run workflow".
 
-On every run it fetches the data from Sessionize, generates the icon and the preview images, builds the site with Hugo and publishes it. The daily run is what keeps talks and photo up to date, even in weeks when I write nothing.
+On every run it fetches the data from Sessionize, generates the icon and the preview images, builds the site with Hugo and publishes it. The daily run is what keeps talks and photo up to date, even in weeks when I write nothing. It also publishes scheduled articles: if I leave an article ready with a future date, Hugo ignores it until that day comes, and that morning's run puts it live.
 
 ![Blog architecture: GitHub Actions combines the repository and Sessionize, publishes to GitHub Pages, and the browser fetches Sessionize again](/images/posts/hugo-sessionize-cron-blog-setup/architecture-en.svg)
 
-The whole workflow fits on one screen. The `cron` runs at 03:17 UTC (00:17 in Brasília), and every step that depends on Sessionize has an `|| echo` so it never takes the deploy down:
+The whole workflow fits on one screen. The `cron` runs at 10:17 UTC (07:17 in Brasília), and every step that depends on Sessionize has an `|| echo` so it never takes the deploy down:
 
 ```yaml
 on:
@@ -235,7 +235,7 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    - cron: '17 3 * * *'
+    - cron: '17 10 * * *'
 
 permissions:
   contents: read

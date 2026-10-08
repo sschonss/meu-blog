@@ -1,0 +1,33 @@
+name: Check site
+
+# Runs on every push and pull request. A failure does not block the deploy,
+# but GitHub shows a red X on the commit and sends an email with the problems.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Articles and translations
+        run: python3 scripts/check_site.py content
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'
+          extended: true
+      - name: Build
+        run: hugo --minify
+      - name: Links and images
+        run: python3 scripts/check_site.py links
+      - name: Scheduled articles
+        # Not an error: just lists what the daily deploy will publish later.
+        run: hugo list future | tail -n +2 | cut -d, -f1 | sed 's/^/scheduled: /' || true

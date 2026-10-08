@@ -5,6 +5,11 @@ title = 'Luiz Schons'
 theme = 'hextra'
 enableRobotsTXT = true
 titleCaseStyle = 'none'
+# Dates without a time (date: 2026-10-20) mean midnight in Brasília. Articles with
+# a future date are left out of the build until that day; the daily deploy
+# (.github/workflows/hugo.yml) then publishes them on their own.
+timeZone = 'America/Sao_Paulo'
+buildFuture = false
 
 [markup.goldmark.renderer]
   unsafe = true

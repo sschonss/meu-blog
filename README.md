@@ -7,7 +7,7 @@ Feito com [Hugo](https://gohugo.io) e o tema [Hextra](https://github.com/imfing/
 ## Como funciona
 
 ```
-push na main / todo dia 00:17 (BRT) / execução manual
+push na main / todo dia 07:17 (BRT) / execução manual
         │
         ▼
 GitHub Actions (.github/workflows/hugo.yml)
@@ -150,12 +150,31 @@ assets/js/          talks.js, sessionize-photo.js, article.js, site.js
 assets/og/          fontes Inter, fundo e máscara das imagens de prévia
 assets/images/      profile.jpg (foto usada nas imagens de prévia)
 i18n/               textos em EN e PT
-scripts/            sync_sessionize.py, build_favicons.py, sync_hashnode.py
+scripts/            sync_sessionize.py, build_favicons.py, check_site.py, sync_hashnode.py
 static/             favicons, imagens, site.webmanifest
 themes/hextra/      tema (submódulo git)
 ```
 
 O menu de celular (hambúrguer) usa a barra lateral do Hextra. Por isso todo layout próprio inclui `{{ partial "sidebar.html" ... }}`, que fica escondida no desktop.
+
+## Agendando artigos
+
+Para publicar um artigo num dia específico, coloque a data futura no front matter (`date: 2026-10-20`, sem hora) e faça o push normalmente. O Hugo deixa artigos com data futura fora do site, do RSS, do sitemap e do `llms.txt` (`buildFuture = false`, com `timeZone = 'America/Sao_Paulo'`), e o deploy diário das 07:17 publica o artigo na manhã daquele dia. Lembre de dar a mesma data às duas versões.
+
+Para ver o que está agendado: `hugo list future`. Para visualizar um artigo agendado localmente: `hugo server --buildFuture`.
+
+## Checagens automáticas
+
+A cada push, o workflow `.github/workflows/check.yml` roda `scripts/check_site.py`, que falha quando encontra:
+
+- artigo sem versão no outro idioma (mesmo `translationKey`), a não ser que tenha `translation: false`;
+- tradução com data diferente do original;
+- artigo sem `title`, `date` ou `tags`;
+- nome de arquivo terminando em hash, como os que vieram do Hashnode;
+- imagem que não existe em `static/` ou sem `alt`;
+- link interno, imagem, script ou redirect que aponta para uma página que não existe (verificado no site gerado).
+
+A checagem não bloqueia o deploy, mas o commit ganha um X vermelho no GitHub e chega um e-mail com a lista de problemas. Para rodar localmente: `python3 scripts/check_site.py content`, depois `hugo` e `python3 scripts/check_site.py links`.
 
 ## Rodando localmente
 

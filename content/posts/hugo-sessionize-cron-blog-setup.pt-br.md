@@ -221,13 +221,13 @@ Os comentários usam o [giscus](https://giscus.app), que guarda cada conversa co
 
 ## O blog se atualiza todo dia
 
-O site é estático e fica no GitHub Pages. Quem monta e publica é um workflow do GitHub Actions, que roda em três situações: quando eu faço push, todo dia de madrugada e quando eu clico em "Run workflow".
+O site é estático e fica no GitHub Pages. Quem monta e publica é um workflow do GitHub Actions, que roda em três situações: quando eu faço push, todo dia de manhã e quando eu clico em "Run workflow".
 
-A cada execução ele busca os dados no Sessionize, gera o ícone e as imagens de prévia, monta o site com o Hugo e publica. A rodada diária é o que mantém palestras e foto em dia, mesmo nas semanas em que eu não escrevo nada.
+A cada execução ele busca os dados no Sessionize, gera o ícone e as imagens de prévia, monta o site com o Hugo e publica. A rodada diária é o que mantém palestras e foto em dia, mesmo nas semanas em que eu não escrevo nada. Ela também publica artigos agendados: se eu deixo um artigo pronto com uma data futura, o Hugo o ignora até o dia chegar, e a rodada daquela manhã coloca ele no ar.
 
 ![Arquitetura do blog: o GitHub Actions junta repositório e Sessionize, publica no GitHub Pages, e o navegador busca o Sessionize de novo](/images/posts/hugo-sessionize-cron-blog-setup/architecture-pt.svg)
 
-O workflow inteiro cabe numa tela. O `cron` roda às 3:17 UTC, que é 00:17 em Brasília, e cada passo que depende do Sessionize tem um `|| echo` para não derrubar o deploy:
+O workflow inteiro cabe numa tela. O `cron` roda às 10:17 UTC, que é 7:17 em Brasília, e cada passo que depende do Sessionize tem um `|| echo` para não derrubar o deploy:
 
 ```yaml
 on:
@@ -235,7 +235,7 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    - cron: '17 3 * * *'
+    - cron: '17 10 * * *'
 
 permissions:
   contents: read

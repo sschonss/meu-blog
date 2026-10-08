@@ -5,7 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    - cron: '17 3 * * *'
+    # Every day at 07:17 in Brasília (10:17 UTC): refreshes Sessionize data and
+    # publishes articles scheduled for today (a future `date` in the front matter).
+    - cron: '17 10 * * *'
 
 permissions:
   contents: read

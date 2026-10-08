@@ -10,7 +10,7 @@
     <div class="article-meta">
       <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "post-date.html" .Date }}</time>
       <span>{{ i18n "readingTime" .ReadingTime }}</span>
-      {{- with .Params.series }}<a href="{{ (printf "/series/%s/" (index . 0 | urlize)) | relURL }}">{{ i18n "series" }} {{ index . 0 }}</a>{{ end }}
+      {{- with .GetTerms "series" }}{{ with index . 0 }}<a href="{{ .RelPermalink }}">{{ i18n "series" }} {{ .LinkTitle }}</a>{{ end }}{{ end }}
       {{- with .GetTerms "tags" }}<span class="article-tags">{{ range . }}<a href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}</span>{{ end }}
       {{- range .Translations }}<a class="article-translation" href="{{ .RelPermalink }}" hreflang="{{ .Language.LanguageCode | lower }}" lang="{{ .Language.LanguageCode | lower }}">{{ i18n "readTranslation" }} →</a>{{ end }}
     </div>
