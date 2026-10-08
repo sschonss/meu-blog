@@ -150,12 +150,20 @@ assets/js/          talks.js, sessionize-photo.js, article.js, site.js
 assets/og/          fontes Inter, fundo e máscara das imagens de prévia
 assets/images/      profile.jpg (foto usada nas imagens de prévia)
 i18n/               textos em EN e PT
-scripts/            sync_sessionize.py, build_favicons.py, check_site.py, sync_hashnode.py
+scripts/            sync_sessionize.py, build_favicons.py, check_site.py, send_newsletter.py, sync_hashnode.py
 static/             favicons, imagens, site.webmanifest
 themes/hextra/      tema (submódulo git)
 ```
 
 O menu de celular (hambúrguer) usa a barra lateral do Hextra. Por isso todo layout próprio inclui `{{ partial "sidebar.html" ... }}`, que fica escondida no desktop.
+
+## Newsletter
+
+A newsletter usa o [Buttondown](https://buttondown.com) (usuário `schons`, configurado em `[params.newsletter]` no `hugo.toml`). O plano grátis vai até 100 inscritos.
+
+- **Inscrição:** a caixa "Receba os novos artigos por e-mail" aparece no fim dos artigos e na home (`layouts/_partials/newsletter.html`). O formulário vai direto para o Buttondown, sem chave, e o Buttondown pede confirmação por e-mail. As inscrições são contadas no Umami como `newsletter-subscribe`.
+- **Envio:** depois de publicar o site, o deploy roda `scripts/send_newsletter.py`. Para cada artigo publicado nos últimos 2 dias, ele cria um e-mail no Buttondown com as duas versões (português primeiro, inglês embaixo), usando o secret `BUTTONDOWN_API_KEY`. Se já existe um e-mail com o mesmo assunto, não cria de novo. Com artigos agendados, o e-mail sai na manhã em que o artigo é publicado.
+- **Rascunho ou envio direto:** com `NEWSLETTER_MODE: draft` no `.github/workflows/hugo.yml`, o e-mail fica como rascunho no Buttondown para você revisar e enviar. Trocando para `send`, ele é enviado sozinho.
 
 ## Agendando artigos
 

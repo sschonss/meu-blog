@@ -50,3 +50,11 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Newsletter for new articles
+        # After the site is live: creates a Buttondown email for articles
+        # published in the last 2 days (never twice for the same article).
+        # NEWSLETTER_MODE: "draft" waits for review in Buttondown; "send" sends it.
+        env:
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+          NEWSLETTER_MODE: draft
+        run: python3 scripts/send_newsletter.py || echo "Newsletter step failed; the site is already published"

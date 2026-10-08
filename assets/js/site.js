@@ -76,6 +76,11 @@
     return null;
   }
 
+  // Newsletter sign-ups (the form opens Buttondown in a new tab).
+  document.addEventListener('submit', function (ev) {
+    if (ev.target.closest && ev.target.closest('[data-newsletter-form]')) track('newsletter-subscribe', { from: location.pathname });
+  }, true);
+
   document.addEventListener('click', function (ev) {
     var a = ev.target.closest && ev.target.closest('a[href]');
     if (!a) return;

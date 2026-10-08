@@ -1,0 +1,15 @@
+{{- /* "Get new articles by email" box. The form posts straight to Buttondown
+     (no API key needed); Buttondown asks the reader to confirm by email. */ -}}
+{{- with site.Params.newsletter }}{{ if .username }}
+<section class="newsletter" aria-labelledby="newsletter-title">
+  <h2 id="newsletter-title">{{ i18n "newsletterTitle" }}</h2>
+  <p>{{ i18n "newsletterText" }}</p>
+  <form action="https://buttondown.com/api/emails/embed-subscribe/{{ .username }}" method="post" target="_blank" class="newsletter-form" data-newsletter-form>
+    <label class="visually-hidden" for="newsletter-email">{{ i18n "newsletterEmail" }}</label>
+    <input type="email" name="email" id="newsletter-email" placeholder="{{ i18n "newsletterEmail" }}" autocomplete="email" required>
+    <input type="hidden" name="embed" value="1">
+    <button type="submit">{{ i18n "newsletterButton" }}</button>
+  </form>
+  <p class="newsletter-note">{{ i18n "newsletterNote" }} <a href="{{ "index.xml" | relLangURL }}">RSS</a>.</p>
+</section>
+{{- end }}{{ end }}

@@ -133,3 +133,9 @@ buildFuture = false
   repoId = 'R_kgDOU3qW3A'
   category = 'Announcements'
   categoryId = 'DIC_kwDOU3qW3M4DHVRu'
+
+# Newsletter (Buttondown). The subscribe form only needs the username; the
+# deploy sends new articles with the BUTTONDOWN_API_KEY repository secret
+# (scripts/send_newsletter.py).
+[params.newsletter]
+  username = 'schons'

@@ -335,3 +335,17 @@ html.img-zoom-open { overflow: hidden; }
 .home-event-date { color: #2563eb; display: block; font-size: .75rem; font-weight: 700; letter-spacing: .02em; }
 .home-event-name { color: #111827; display: block; font-size: 1rem; font-weight: 600; letter-spacing: -.01em; margin-top: .3rem; }
 .home-event-place { color: #64748b; display: block; font-size: .8rem; margin-top: .2rem; }
+
+/* Newsletter */
+.newsletter { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: .9rem; margin: 0 0 2.5rem; padding: 1.5rem 1.6rem; }
+.home-page .newsletter { margin: 3.5rem 0 0; }
+.newsletter h2 { color: #111827; font-size: 1.15rem; font-weight: 700; letter-spacing: -.02em; margin: 0; }
+.newsletter > p { color: #64748b; font-size: .92rem; margin: .4rem 0 0; }
+.newsletter-form { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+.newsletter-form input[type=email] { background: #fff; border: 1px solid #cbd5e1; border-radius: .6rem; flex: 1 1 220px; font: inherit; font-size: .95rem; padding: .6rem .8rem; }
+.newsletter-form input[type=email]:focus { border-color: #2563eb; outline: 2px solid #dbeafe; }
+.newsletter-form button { background: #111827; border: 0; border-radius: .6rem; color: #fff; cursor: pointer; font: inherit; font-size: .9rem; font-weight: 600; padding: .6rem 1.1rem; }
+.newsletter-form button:hover { background: #2563eb; }
+.newsletter .newsletter-note { font-size: .78rem; margin-top: .7rem; }
+.newsletter-note a { color: #2563eb; }
+.visually-hidden { clip: rect(0 0 0 0); height: 1px; overflow: hidden; position: absolute; white-space: nowrap; width: 1px; }

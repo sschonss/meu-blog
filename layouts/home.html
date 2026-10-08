@@ -14,6 +14,7 @@
     <article class="home-post"><div class="home-post-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "post-date.html" .Date }}</time><span>{{ i18n "readingTime" .ReadingTime }}</span></div><div><h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3><p>{{ .Summary | plainify | truncate 210 }}</p></div></article>
     {{ end }}
   </section>
+  {{ partial "newsletter.html" . }}
 </div>
 {{- $js := resources.Get "js/sessionize-photo.js" | minify | fingerprint }}
 <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
