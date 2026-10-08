@@ -221,3 +221,26 @@ article img {
 body { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
 body > * { flex-shrink: 0; width: 100%; }
 body > .hextra-footer { margin-top: auto; }
+
+/* Syntax highlighting tuned for the dark code blocks (Chroma classes). */
+.article-content .highlight .chroma .w { color: inherit; }
+.article-content .highlight .chroma .k, .article-content .highlight .chroma .kc, .article-content .highlight .chroma .kd, .article-content .highlight .chroma .kn,
+.article-content .highlight .chroma .kp, .article-content .highlight .chroma .kr, .article-content .highlight .chroma .kt,
+.article-content .highlight .chroma .o, .article-content .highlight .chroma .ow { color: #ff7b72; font-weight: 400; }
+.article-content .highlight .chroma .s, .article-content .highlight .chroma .s1, .article-content .highlight .chroma .s2, .article-content .highlight .chroma .sa,
+.article-content .highlight .chroma .sb, .article-content .highlight .chroma .sc, .article-content .highlight .chroma .sd, .article-content .highlight .chroma .se,
+.article-content .highlight .chroma .sh, .article-content .highlight .chroma .si, .article-content .highlight .chroma .sx, .article-content .highlight .chroma .sr,
+.article-content .highlight .chroma .ss, .article-content .highlight .chroma .dl { color: #a5d6ff; }
+.article-content .highlight .chroma .m, .article-content .highlight .chroma .mi, .article-content .highlight .chroma .mf, .article-content .highlight .chroma .mh,
+.article-content .highlight .chroma .mo, .article-content .highlight .chroma .il, .article-content .highlight .chroma .l, .article-content .highlight .chroma .ld { color: #79c0ff; }
+.article-content .highlight .chroma .c, .article-content .highlight .chroma .c1, .article-content .highlight .chroma .cm, .article-content .highlight .chroma .cs,
+.article-content .highlight .chroma .ch, .article-content .highlight .chroma .cpf { color: #8b949e; font-style: italic; }
+.article-content .highlight .chroma .cp { color: #8b949e; font-style: normal; font-weight: 400; }
+.article-content .highlight .chroma .nt { color: #7ee787; }
+.article-content .highlight .chroma .na, .article-content .highlight .chroma .nv, .article-content .highlight .chroma .vi, .article-content .highlight .chroma .vg { color: #79c0ff; }
+.article-content .highlight .chroma .nb, .article-content .highlight .chroma .bp, .article-content .highlight .chroma .nc, .article-content .highlight .chroma .nn,
+.article-content .highlight .chroma .no, .article-content .highlight .chroma .ne { color: #ffa657; }
+.article-content .highlight .chroma .nf, .article-content .highlight .chroma .fm, .article-content .highlight .chroma .nd { color: #d2a8ff; }
+.article-content .highlight .chroma .gd { color: #ffa198; }
+.article-content .highlight .chroma .gi { color: #7ee787; }
+.article-content .highlight .chroma .err { color: #ffa198; background: none; }
