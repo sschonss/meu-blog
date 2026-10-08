@@ -76,6 +76,21 @@
     return null;
   }
 
+  // External links open in a new tab, so readers keep the blog open. This covers
+  // every link, including the ones in old imported articles and the talk cards
+  // drawn in the browser. Links inside the blog stay in the same tab.
+  document.addEventListener('click', function (ev) {
+    var a = ev.target.closest && ev.target.closest('a[href]');
+    if (!a || a.hasAttribute('download')) return;
+    var url;
+    try { url = new URL(a.getAttribute('href'), location.href); } catch (e) { return; }
+    if (!/^https?:$/.test(url.protocol) || url.host === location.host) return;
+    a.target = '_blank';
+    var rel = (a.getAttribute('rel') || '').split(/\s+/).filter(Boolean);
+    if (rel.indexOf('noopener') < 0) rel.push('noopener');
+    a.setAttribute('rel', rel.join(' '));
+  }, true);
+
   // Newsletter sign-ups (the form opens Buttondown in a new tab).
   document.addEventListener('submit', function (ev) {
     if (ev.target.closest && ev.target.closest('[data-newsletter-form]')) track('newsletter-subscribe', { from: location.pathname });

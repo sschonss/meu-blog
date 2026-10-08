@@ -119,7 +119,7 @@ Cliques são enviados como eventos do Umami por `assets/js/site.js`, que reconhe
 | `outbound` | Qualquer outro link externo | `host`, `url` |
 | `lang-suggest-shown` / `lang-suggest-dismiss` | Aviso de idioma exibido ou fechado | `to` |
 
-Todos levam `from` com a página de origem. Para um link específico, `data-track="nome"` e `data-track-chave="valor"` no `<a>` sobrescrevem a detecção automática.
+Links para fora do blog abrem em nova aba (também em `site.js`), para quem está lendo não perder a página; links internos continuam na mesma aba. Todos levam `from` com a página de origem. Para um link específico, `data-track="nome"` e `data-track-chave="valor"` no `<a>` sobrescrevem a detecção automática.
 
 ### Palestras ligadas a artigos
 
