@@ -94,7 +94,7 @@ A **bio** do topo não vem do Sessionize. Ela fica em `content/speakers/_index.m
 
 ## Analytics
 
-As visitas são medidas com o [Umami](https://cloud.umami.is), que não usa cookies e por isso dispensa banner de consentimento. O script fica em `layouts/_partials/custom/head-end.html`. Ele só entra no build de produção e só conta acessos em `luizschons.com`, então `hugo server` e previews locais não sujam os números.
+As visitas são medidas com o [Umami](https://cloud.umami.is), que não usa cookies e por isso dispensa banner de consentimento. O script fica em `layouts/_partials/custom/head-end.html`. Ele só entra no build de produção e só conta acessos em `luizschons.com`, então `hugo server` e previews locais não sujam os números. O atributo `data-performance="true"` liga a coleta de Core Web Vitals (aba Performance do Umami).
 
 ## Estrutura
 
