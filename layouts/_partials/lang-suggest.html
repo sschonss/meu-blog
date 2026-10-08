@@ -1,0 +1,14 @@
+{{- /*
+  Suggests the other language version of this page. Hidden by default; assets/js/site.js
+  shows it only when the browser's language matches the translation and the visitor
+  hasn't dismissed it or picked a language before. Text is written in the target language.
+*/ -}}
+{{- with .Translations -}}
+{{- $t := index . 0 -}}
+{{- $toPT := eq $t.Language.Lang "pt-br" -}}
+<div class="lang-suggest" data-lang-suggest data-target="{{ $t.Language.Lang }}" hidden lang="{{ $t.Language.LanguageCode | lower }}" role="region" aria-label="{{ cond $toPT "Versão em português" "English version" }}">
+  <p>{{ cond $toPT "Esta página também está em português." "This page is also available in English." }}</p>
+  <a href="{{ $t.RelPermalink }}" hreflang="{{ $t.Language.LanguageCode | lower }}" data-track="translation-click" data-track-via="suggest" data-track-to="{{ $t.Language.Lang }}">{{ cond $toPT "Ler em português" "Read in English" }} →</a>
+  <button type="button" data-lang-suggest-close aria-label="{{ cond $toPT "Fechar" "Close" }}">×</button>
+</div>
+{{- end -}}

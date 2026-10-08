@@ -8,3 +8,6 @@
     </div>
   {{- end -}}
 </footer>
+{{ partial "lang-suggest.html" . }}
+{{- $siteJS := resources.Get "js/site.js" | minify | fingerprint }}
+<script src="{{ $siteJS.RelPermalink }}" integrity="{{ $siteJS.Data.Integrity }}" defer></script>

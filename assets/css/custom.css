@@ -244,3 +244,16 @@ body > .hextra-footer { margin-top: auto; }
 .article-content .highlight .chroma .gd { color: #ffa198; }
 .article-content .highlight .chroma .gi { color: #7ee787; }
 .article-content .highlight .chroma .err { color: #ffa198; background: none; }
+
+/* "Also available in your language" suggestion (shown by assets/js/site.js). */
+.lang-suggest { align-items: center; background: #fff; border: 1px solid #e5e7eb; border-radius: .9rem; bottom: calc(1rem + env(safe-area-inset-bottom)); box-shadow: 0 12px 32px rgba(15,23,42,.14); display: flex; gap: .4rem 1rem; left: 50%; max-width: min(560px, calc(100% - 2rem)); padding: .85rem 1rem .85rem 1.2rem; position: fixed; transform: translateX(-50%); width: max-content; z-index: 30; }
+.lang-suggest[hidden] { display: none; }
+.lang-suggest p { color: #475569; font-size: .9rem; margin: 0; }
+.lang-suggest a { color: #2563eb; font-size: .9rem; font-weight: 650; white-space: nowrap; }
+.lang-suggest button { background: none; border: 0; border-radius: .4rem; color: #94a3b8; cursor: pointer; font-size: 1.3rem; line-height: 1; margin-left: .2rem; padding: .2rem .4rem; }
+.lang-suggest button:hover { background: #f1f5f9; color: #111827; }
+@media (max-width: 640px) {
+  .lang-suggest { flex-wrap: wrap; padding-right: 2.6rem; width: calc(100% - 2rem); }
+  .lang-suggest p { flex-basis: 100%; }
+  .lang-suggest button { position: absolute; right: .5rem; top: .5rem; }
+}

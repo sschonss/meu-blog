@@ -96,6 +96,25 @@ A **bio** do topo não vem do Sessionize. Ela fica em `content/speakers/_index.m
 
 As visitas são medidas com o [Umami](https://cloud.umami.is), que não usa cookies e por isso dispensa banner de consentimento. O script fica em `layouts/_partials/custom/head-end.html`. Ele só entra no build de produção e só conta acessos em `luizschons.com`, então `hugo server` e previews locais não sujam os números. O atributo `data-performance="true"` liga a coleta de Core Web Vitals (aba Performance do Umami).
 
+Cliques são enviados como eventos do Umami por `assets/js/site.js`, que reconhece os links sozinho (inclusive nos cards de palestra desenhados no navegador):
+
+| Evento | Quando | Propriedades |
+| --- | --- | --- |
+| `talk-click` | Clique num card de palestra | `talk` |
+| `event-click` | Clique num evento | `event` |
+| `sessionize-profile` | Link do perfil no Sessionize | — |
+| `social-click` | LinkedIn, GitHub ou RSS | `network` |
+| `translation-click` | Troca de idioma | `via` (`article`, `menu`, `suggest`), `to` |
+| `series-click` / `pager-click` | Navegação entre artigos | `to`, `dir` |
+| `outbound` | Qualquer outro link externo | `host`, `url` |
+| `lang-suggest-shown` / `lang-suggest-dismiss` | Aviso de idioma exibido ou fechado | `to` |
+
+Todos levam `from` com a página de origem. Para um link específico, `data-track="nome"` e `data-track-chave="valor"` no `<a>` sobrescrevem a detecção automática.
+
+## Aviso de idioma
+
+Páginas com tradução trazem um aviso escondido (`layouts/_partials/lang-suggest.html`). O `site.js` só o mostra quando o idioma do navegador é o da outra versão (português numa página em inglês, ou qualquer outro idioma numa página em português). Ele some de vez quando a pessoa fecha o aviso ou troca de idioma por conta própria, o que fica guardado no `localStorage`. Não há redirecionamento automático, para não atrapalhar o Google nem quem prefere o outro idioma.
+
 ## Estrutura
 
 ```
