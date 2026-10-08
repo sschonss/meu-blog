@@ -2,9 +2,8 @@
 title: 'Tabelas Hash'
 date: 2024-03-06
 source: https://luizschons.com/tabelas-hash-1f1a85a83795
-translationKey: tabelas-hash-1f1a85a83795
+translationKey: tabelas-hash
 draft: false
-aliases: ["/tabelas-hash-1f1a85a83795/"]
 ---
 
 <p>Uma tabela hash é uma estrutura de dados que associa chaves de pesquisa a valores.</p>

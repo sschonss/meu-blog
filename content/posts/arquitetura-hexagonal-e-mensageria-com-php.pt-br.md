@@ -2,9 +2,8 @@
 title: 'Arquitetura Hexagonal e Mensageria com PHP'
 date: 2024-07-04
 source: https://luizschons.com/arquitetura-hexagonal-e-mensageria-com-php-aa10a2148257
-translationKey: arquitetura-hexagonal-e-mensageria-com-php-aa10a2148257
+translationKey: arquitetura-hexagonal-e-mensageria-com-php
 draft: false
-aliases: ["/arquitetura-hexagonal-e-mensageria-com-php-aa10a2148257/"]
 ---
 
 <h3 id="heading-arquiteura-hexagonal-ports-and-adapters">Arquiteura Hexagonal (Ports and Adapters)</h3>
