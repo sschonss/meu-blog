@@ -7,26 +7,6 @@
     <p class="home-role">Senior Software Engineer @ PicPay</p>
     <div class="home-links"><a href="https://www.linkedin.com/in/luiz-schons/">LinkedIn <span>↗</span></a><a href="{{ "posts" | relURL }}">{{ i18n "allArticles" }} <span>→</span></a><a href="{{ "series" | relURL }}">{{ i18n "seriesLink" }} <span>→</span></a></div>
   </section>
-  {{- /* Most read: data/popular.json is written at deploy time by scripts/sync_umami.py.
-       Views of both language versions are summed per translation key. */}}
-  {{- with site.Data.popular }}{{ with .posts }}
-  {{- $posts := where site.RegularPages "Section" "posts" }}
-  {{- $picked := slice }}
-  {{- range . }}
-    {{- $key := .key }}
-    {{- range $posts }}{{ if eq (.Params.translationKey | default .File.ContentBaseName) $key }}{{ $picked = $picked | append . }}{{ end }}{{ end }}
-  {{- end }}
-  {{- if ge (len $picked) 3 }}
-  <section class="home-popular">
-    <div class="home-section-title"><h2>{{ i18n "mostRead" }}</h2><span class="home-popular-note">{{ i18n "mostReadNote" }}</span></div>
-    <ol>
-      {{- range first 5 $picked }}
-      <li><a href="{{ .RelPermalink }}"><strong>{{ .Title }}</strong><span>{{ partial "post-date.html" .Date }} · {{ i18n "readingTime" .ReadingTime }}</span></a></li>
-      {{- end }}
-    </ol>
-  </section>
-  {{- end }}
-  {{- end }}{{ end }}
   <section class="home-recent">
     <div class="home-section-title"><h2>{{ i18n "recentArticles" }}</h2><a href="{{ "posts" | relURL }}">{{ i18n "viewArchive" }} <span>→</span></a></div>
     {{ range first 8 (where site.RegularPages "Section" "posts") }}

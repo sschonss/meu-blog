@@ -281,16 +281,3 @@ body > .hextra-footer { margin-top: auto; }
 .article-comments { border-top: 1px solid #e5e7eb; margin: 1rem 0 2.5rem; padding-top: 1.8rem; }
 .article-comments h2 { color: #64748b; font-size: .7rem; font-weight: 700; letter-spacing: .14em; margin: 0 0 1rem; text-transform: uppercase; }
 
-
-/* Most read (home) */
-.home-popular { border-bottom: 1px solid #e5e7eb; padding: 3rem 0 2.6rem; }
-.home-popular .home-section-title { align-items: baseline; }
-.home-popular-note { color: #94a3b8; font-size: .78rem; }
-.home-popular ol { counter-reset: popular; display: grid; gap: .2rem; list-style: none; margin: 1.2rem 0 0; padding: 0; }
-.home-popular li { counter-increment: popular; }
-.home-popular a { align-items: baseline; border-radius: .6rem; display: grid; gap: .1rem 1rem; grid-template-columns: 1.6rem 1fr; padding: .7rem .5rem; transition: background .15s; }
-.home-popular a::before { color: #cbd5e1; content: counter(popular, decimal-leading-zero); font-size: .85rem; font-variant-numeric: tabular-nums; font-weight: 700; grid-row: span 2; }
-.home-popular a:hover { background: #f8fafc; }
-.home-popular a:hover strong { color: #2563eb; }
-.home-popular strong { color: #111827; font-size: 1.02rem; font-weight: 600; letter-spacing: -.01em; }
-.home-popular span { color: #64748b; font-size: .78rem; grid-column: 2; }

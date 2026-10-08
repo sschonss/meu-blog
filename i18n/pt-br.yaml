@@ -44,5 +44,3 @@ tagArticles: "{{ .Count }} artigos sobre este tema."
 relatedArticles: Leia também
 comments: Comentários
 viewTopic: Ver artigos
-mostRead: Mais lidos
-mostReadNote: últimos 30 dias

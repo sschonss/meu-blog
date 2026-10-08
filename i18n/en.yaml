@@ -44,5 +44,3 @@ tagArticles: "{{ .Count }} articles about this topic."
 relatedArticles: Keep reading
 comments: Comments
 viewTopic: View articles
-mostRead: Most read
-mostReadNote: last 30 days
