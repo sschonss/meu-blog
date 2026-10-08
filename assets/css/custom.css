@@ -357,4 +357,4 @@ html.img-zoom-open { overflow: hidden; }
 .article-content :is(h2, h3, h4):hover .heading-anchor, .heading-anchor:focus { opacity: 1; }
 .article-content .heading-anchor:hover { color: #2563eb; text-decoration: none; }
 .heading-anchor[data-copied]::after { background: #111827; border-radius: .4rem; color: #fff; content: attr(data-copied); font-size: .72rem; font-weight: 600; letter-spacing: 0; margin-left: .5rem; padding: .2rem .5rem; position: absolute; white-space: nowrap; }
-@media (hover: none) { .heading-anchor { opacity: .45; } }
+@media (hover: none) { .article-content .heading-anchor { opacity: .45; } }
