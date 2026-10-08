@@ -11,15 +11,15 @@ tags: ['Algoritmos']
 <p>Mas antes de falar sobre o algoritmo de Dijkstra, vamos falar sobre o algoritmo de <code>Pesquisa em Largura</code>.</p>
 <h3 id="heading-pesquisa-em-largura">Pesquisa em Largura</h3>
 <p>Trabalhar com grafos é uma tarefa comum em computação. Um dos problemas mais comuns é encontrar o menor caminho entre dois vértices em um grafo. O algoritmo de <code>Pesquisa em Largura</code> mostra como encontrar o menor caminho em um grafo, como por exemplo, o caminho mais curto entre duas cidades em um mapa que tem cidades como vértices e estradas como arestas.</p>
-<p><img src="/images/posts/algoritmo-dijkstra/graph.svg" alt="Grafo sem pesos com os vértices A a G" /></p>
+<p><img loading="lazy" decoding="async" src="/images/posts/algoritmo-dijkstra/graph.svg" alt="Grafo sem pesos com os vértices A a G" /></p>
 <p>Imagine que precisamos sair de A para chegar em G. O algoritmo de <code>Pesquisa em Largura</code> nos ajuda a encontrar o menor caminho. O algoritmo começa visitando o vértice de origem (A) e então explora todos os vértices vizinhos. Depois disso, explora os vértices que estão a dois passos de distância e assim por diante.</p>
 <p>No nosso caso o menor caminho é <code>A -> B -> E -> G</code>.</p>
-<p><img src="/images/posts/algoritmo-dijkstra/graph-bfs-path.svg" alt="Grafo com o caminho mais curto A → B → E → G destacado" /></p>
+<p><img loading="lazy" decoding="async" src="/images/posts/algoritmo-dijkstra/graph-bfs-path.svg" alt="Grafo com o caminho mais curto A → B → E → G destacado" /></p>
 <p>Nesse caso, temos somente 3 <code>passos</code> para chegar em G.</p>
 <h3 id="heading-algoritmo-de-dijkstra">Algoritmo de Dijkstra</h3>
 <p>Mas e se as arestas tiverem pesos? O algoritmo de <code>Pesquisa em Largura</code> não funciona mais. O algoritmo de Dijkstra é um algoritmo que encontra o caminho mais <code>barato</code> em um grafo direcionado ou não direcionado, com arestas que possuem pesos. O algoritmo de Dijkstra mantém duas listas: uma lista de vértices visitados e uma lista de vértices não visitados. Ele seleciona o vértice não visitado mais próximo do vértice de origem, marca-o como visitado e atualiza os pesos dos vértices vizinhos.</p>
 <p>Vamos adaptar o exemplo anterior para incluir pesos nas arestas.</p>
-<p><img src="/images/posts/algoritmo-dijkstra/graph-weighted.svg" alt="Grafo com pesos nas arestas e vértices A a G" /></p>
+<p><img loading="lazy" decoding="async" src="/images/posts/algoritmo-dijkstra/graph-weighted.svg" alt="Grafo com pesos nas arestas e vértices A a G" /></p>
 <p>Agora temos pesos em cada aresta, e nosso desafio é encontrar o caminho em que a soma dos pesos seja menor.</p>
 <p>Vamos aplicar o algoritmo de Dijkstra para encontrar o menor caminho de A para G.</p>
 <ol>
@@ -37,7 +37,7 @@ tags: ['Algoritmos']
 </li>
 </ol>
 <p>O menor caminho de A para G é <code>A -> C -> D -> E -> G</code>, com custo total 10.</p>
-<p><img src="/images/posts/algoritmo-dijkstra/graph-weighted-path.svg" alt="Grafo com pesos e o caminho mais barato A → C → D → E → G destacado" /></p>
+<p><img loading="lazy" decoding="async" src="/images/posts/algoritmo-dijkstra/graph-weighted-path.svg" alt="Grafo com pesos e o caminho mais barato A → C → D → E → G destacado" /></p>
 <h3 id="heading-aplicando-isso-com-php">Aplicando isso com PHP</h3>
 <p>Vamos criar um exemplo prático em PHP para aplicar o algoritmo de Dijkstra.</p>
 

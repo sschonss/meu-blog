@@ -19,7 +19,7 @@ Os eventos são mensagens assíncronas geradas por um produtor e consumidas por 
 
 No exemplo deste artigo, vamos simular o seguinte cenário:
 
-![Fluxo da arquitetura orientada a eventos](/images/posts/event-driven-architecture-eda/fc4eed68-02f7-4b90-9ff9-8eb40d9c2fd0.png)
+![Fluxo da arquitetura orientada a eventos](/images/posts/event-driven-architecture-eda/fc4eed68-02f7-4b90-9ff9-8eb40d9c2fd0.webp)
 
 ### Exemplo prático
 
@@ -30,7 +30,7 @@ O sistema é composto por quatro serviços.
 - Frontend de um e-commerce que permite adicionar produtos ao carrinho.
 - Usa React para criar a interface do usuário.
 
-![Frontend do e-commerce](/images/posts/event-driven-architecture-eda/735c553b-591e-4b72-92dc-a186c441bae4.png)
+![Frontend do e-commerce](/images/posts/event-driven-architecture-eda/735c553b-591e-4b72-92dc-a186c441bae4.webp)
 
 #### `stock-service`
 
@@ -66,7 +66,7 @@ def process_payment(order):
 - Servidor de mensageria que permite a comunicação entre os serviços.
 - Recebe os eventos publicados e os encaminha para os consumidores interessados.
 
-![Comunicação entre os serviços](/images/posts/event-driven-architecture-eda/f89afcd2-0cc9-4390-837c-6fafa44d770a.png)
+![Comunicação entre os serviços](/images/posts/event-driven-architecture-eda/f89afcd2-0cc9-4390-837c-6fafa44d770a.webp)
 
 O código completo está disponível no [repositório do projeto](https://github.com/sschonss/event-driver).
 

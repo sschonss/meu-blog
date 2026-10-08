@@ -31,12 +31,12 @@ tags: ['IA', 'Arquitetura']
 <p>Aprendemos que sistemas grandes são mais fáceis de mudar quando são separados por responsabilidade e contexto de negócio. Cada contexto pode ter vocabulário, regras, dados, contratos e responsabilidades mais claros.</p>
 <p>Podemos usar uma ideia semelhante para o contexto que oferecemos aos agentes.</p>
 <p>Em vez de criar um agente que sabe um pouco sobre cada domínio, podemos criar contextos especializados com limites claros:</p>
-<img src="/images/posts/skills-specialized-context-for-ai-agents/e98f98b4-fb9b-45f6-92fc-df22073ed217.png" alt="Agente de engenharia" style="display:block;margin:0 auto" />
+<img width="1600" height="900" loading="lazy" decoding="async" src="/images/posts/skills-specialized-context-for-ai-agents/e98f98b4-fb9b-45f6-92fc-df22073ed217.webp" alt="Agente de engenharia" style="display:block;margin:0 auto" />
 <p>O agente ainda tem uma visão geral do sistema, mas pode usar um contexto especializado quando precisa investigar um problema específico.</p>
 <h2>Contexto especializado não significa contexto isolado</h2>
 <p>Dividir o conhecimento em partes menores não significa criar caixas que não conseguem se comunicar.</p>
 <p>Uma investigação pode começar pela observabilidade, continuar pela entrega e terminar nos dados. O agente precisa saber quando cada contexto é relevante e como conectar as evidências que encontra.</p>
-<img src="/images/posts/skills-specialized-context-for-ai-agents/f0a395fc-f30c-4a9d-9f96-547af24fa796.png" alt="Investigação de incidente" style="display:block;margin:0 auto" />
+<img width="1600" height="900" loading="lazy" decoding="async" src="/images/posts/skills-specialized-context-for-ai-agents/f0a395fc-f30c-4a9d-9f96-547af24fa796.webp" alt="Investigação de incidente" style="display:block;margin:0 auto" />
 <p>Uma skill oferece profundidade. O agente coordena o trabalho.</p>
 <h2>Uma skill precisa de limites claros</h2>
 <p>Uma skill genérica demais rapidamente perde seu valor.</p>

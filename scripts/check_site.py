@@ -10,7 +10,8 @@ Content checks (content/posts):
     its front matter says `translation: false`;
   - both versions have the same date, so a translation never shows up as new;
   - file names have no Hashnode-style hash at the end;
-  - every image referenced exists in static/ and has an alt text.
+  - every image referenced exists in static/ and has an alt text;
+  - no PNG/JPG over 300 KB (run scripts/optimize_images.py to convert to WebP).
 
 Link checks (public/):
   - every internal link, image, script and stylesheet points to a file that exists,
@@ -75,6 +76,11 @@ def check_content():
                 problem(path, f"image not found: {src}")
             if not alt.strip():
                 problem(path, f"image without alt text: {src}")
+        for src in re.findall(r'src="(/images/[^"]+)"|\]\((/images/[^)\s]+)', prose):
+            src = src[0] or src[1]
+            local = "static" + urllib.parse.unquote(src)
+            if os.path.exists(local) and local.lower().endswith((".png", ".jpg", ".jpeg")) and os.path.getsize(local) > 300 * 1024:
+                problem(path, f"heavy image ({os.path.getsize(local) // 1024} KB): {src}; run scripts/optimize_images.py")
         for alt, src in re.findall(r"!\[([^\]]*)\]\(([^)\s]+)", prose):
             if src.startswith("/") and not os.path.exists("static" + urllib.parse.unquote(src)):
                 problem(path, f"image not found: {src}")

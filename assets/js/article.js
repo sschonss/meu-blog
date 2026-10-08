@@ -154,3 +154,48 @@
   overlay.addEventListener('click', shut);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !overlay.hidden) shut(); });
 })();
+
+// Heading links: a "#" next to each heading copies a link straight to that
+// section. Markdown headings come with the theme's anchor; old imported HTML
+// headings get an id here. Both end up with the same look and behaviour.
+(function () {
+  var content = document.querySelector('[data-article-content]');
+  if (!content) return;
+  var label = content.getAttribute('data-anchor-label') || 'Link to this section';
+  var copied = content.getAttribute('data-anchor-copied') || 'Link copied';
+  var used = {};
+  function slug(text) {
+    var base = text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'section';
+    var id = base, n = 2;
+    while (document.getElementById(id)) id = base + '-' + n++;
+    return id;
+  }
+
+  Array.prototype.forEach.call(content.querySelectorAll('h2, h3, h4'), function (h) {
+    if (!h.textContent.trim()) return;
+    var id;
+    var theme = h.querySelector('a.subheading-anchor');
+    if (theme) { id = theme.getAttribute('href').slice(1); theme.remove(); }
+    else { if (!h.id) h.id = slug(h.textContent); id = h.id; }
+    if (used[id]) return;
+    used[id] = true;
+
+    var a = document.createElement('a');
+    a.className = 'heading-anchor';
+    a.href = '#' + id;
+    a.textContent = '#';
+    a.setAttribute('aria-label', label + ': ' + h.textContent.trim());
+    a.addEventListener('click', function () {
+      var url = location.href.split('#')[0] + '#' + id;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(function () {
+          a.setAttribute('data-copied', copied);
+          setTimeout(function () { a.removeAttribute('data-copied'); }, 1600);
+        }, function () {});
+      }
+      try { if (window.umami) window.umami.track('heading-link', { to: id, from: location.pathname }); } catch (e) {}
+    });
+    h.appendChild(a);
+  });
+})();

@@ -10,15 +10,15 @@ tags: ['Algorithms']
 <p>But before talking about Dijkstra's algorithm, let's talk about the <code>Breadth-First Search</code> algorithm.</p>
 <h3 id="heading-breadth-first-search">Breadth-First Search</h3>
 <p>Working with graphs is a common task in computing. One of the most common problems is finding the shortest path between two vertices in a graph. The <code>Breadth-First Search</code> algorithm shows how to find the shortest path in a graph, for example the shortest route between two cities on a map where cities are vertices and roads are edges.</p>
-<p><img src="/images/posts/algoritmo-dijkstra/graph.svg" alt="Unweighted graph with vertices A to G" /></p>
+<p><img loading="lazy" decoding="async" src="/images/posts/algoritmo-dijkstra/graph.svg" alt="Unweighted graph with vertices A to G" /></p>
 <p>Imagine we need to go from A to G. The <code>Breadth-First Search</code> algorithm helps us find the shortest path. It starts by visiting the source vertex (A) and then explores all neighboring vertices. After that, it explores the vertices two steps away, and so on.</p>
 <p>In our case, the shortest path is <code>A -> B -> E -> G</code>.</p>
-<p><img src="/images/posts/algoritmo-dijkstra/graph-bfs-path.svg" alt="Graph with the shortest path A → B → E → G highlighted" /></p>
+<p><img loading="lazy" decoding="async" src="/images/posts/algoritmo-dijkstra/graph-bfs-path.svg" alt="Graph with the shortest path A → B → E → G highlighted" /></p>
 <p>Here, it takes only 3 <code>steps</code> to reach G.</p>
 <h3 id="heading-dijkstras-algorithm">Dijkstra's Algorithm</h3>
 <p>But what if the edges have weights? Breadth-First Search no longer works. Dijkstra's algorithm finds the <code>cheapest</code> path in a directed or undirected graph whose edges have weights. It keeps two lists: one of visited vertices and one of unvisited vertices. It selects the unvisited vertex closest to the source, marks it as visited and updates the weights of its neighbors.</p>
 <p>Let's adapt the previous example to include weights on the edges.</p>
-<p><img src="/images/posts/algoritmo-dijkstra/graph-weighted.svg" alt="Graph with weighted edges and vertices A to G" /></p>
+<p><img loading="lazy" decoding="async" src="/images/posts/algoritmo-dijkstra/graph-weighted.svg" alt="Graph with weighted edges and vertices A to G" /></p>
 <p>Now each edge has a weight, and our challenge is to find the path with the lowest total weight.</p>
 <p>Let's apply Dijkstra's algorithm to find the cheapest path from A to G.</p>
 <ol>
@@ -36,7 +36,7 @@ tags: ['Algorithms']
 </li>
 </ol>
 <p>The cheapest path from A to G is <code>A -> C -> D -> E -> G</code>, with a total cost of 10.</p>
-<p><img src="/images/posts/algoritmo-dijkstra/graph-weighted-path.svg" alt="Weighted graph with the cheapest path A → C → D → E → G highlighted" /></p>
+<p><img loading="lazy" decoding="async" src="/images/posts/algoritmo-dijkstra/graph-weighted-path.svg" alt="Weighted graph with the cheapest path A → C → D → E → G highlighted" /></p>
 <h3 id="heading-applying-it-with-php">Applying it with PHP</h3>
 <p>Let's build a hands-on example in PHP to apply Dijkstra's algorithm.</p>
 

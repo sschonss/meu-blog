@@ -45,7 +45,7 @@ draft: false
 - **Nomes de arquivo:** o nome vira a URL, então use só o título em minúsculas e com hífens, sem números ou hashes (`tabelas-hash.pt-br.md` → `/pt-br/posts/tabelas-hash/`). A versão em inglês pode ter outro nome (`hash-tables.md`); o que liga as duas é o `translationKey`.
 - **Séries:** são uma taxonomia (`series`) e ganham páginas próprias em `/series/`.
 - **Temas (tags):** a taxonomia `tags` gera `/tags/` e `/pt-br/tags/`, com uma página por tema. Os temas também aparecem como filtros no topo da lista de artigos e em cada artigo. Use os mesmos nomes de tema em todos os artigos de cada idioma (`Architecture` / `Arquitetura`, `AI` / `IA`, `Algorithms` / `Algoritmos`...).
-- **Imagens:** ficam em `static/images/posts/<slug>/`. Sempre preencha o `alt` com uma descrição curta, no idioma do artigo. Tabelas vão como tabela HTML ou Markdown, não como imagem.
+- **Imagens:** ficam em `static/images/posts/<slug>/`. Sempre preencha o `alt` com uma descrição curta, no idioma do artigo. Depois de adicionar imagens, rode `python3 scripts/optimize_images.py`: ele converte PNG/JPG para WebP (até 1600px de largura), atualiza as referências nos artigos e marca as imagens para carregar só quando a pessoa chega nelas (`loading="lazy"`, com largura e altura para a página não pular). A checagem automática acusa PNG/JPG acima de 300 KB. Tabelas vão como tabela HTML ou Markdown, não como imagem.
 - **Código:** use blocos cercados com a linguagem (```` ```php ````). O Hugo colore o código no build e o Hextra põe o botão de copiar. Os artigos antigos, que vieram do Hashnode/Medium com o código em `<p>` e `<pre>`, já foram convertidos para esse formato.
 - **URLs antigas:** endereços antigos são redirecionados por páginas fixas em `static/`, que não dependem da versão do Hugo (as versões novas colocam os `aliases` de páginas PT dentro de `/pt-br/`). Os artigos que vieram do Hashnode tinham um hash no fim do slug (`quicksort-33f8e917ab6c`). Cada slug antigo tem redirect em `static/<slug>/`, `static/posts/<slug>/` e `static/pt-br/posts/<slug>/`, apontando para o endereço novo. Para renomear um artigo, crie as mesmas três páginas. Páginas inexistentes caem no `404.html`, que leva para a home.
 
@@ -59,6 +59,7 @@ Cada artigo ganha automaticamente:
 - **Compartilhar:** LinkedIn, WhatsApp, X e "copiar link" logo depois do texto (`layouts/_partials/article-share.html`), com os cliques contados no Umami como `share`.
 - **"Essa ideia virou palestra":** quando o artigo está ligado a uma palestra do Sessionize (veja abaixo), aparece um bloco com link para ela.
 - **Sugerir correção:** link no rodapé que abre o arquivo do artigo para edição no GitHub.
+- **Link em cada título:** ao passar o mouse num título aparece um `#`; clicar leva à seção e copia o link dela.
 - **Barra de progresso e imagem ampliável:** uma linha fina no topo acompanha a leitura, e clicar numa imagem abre ela em tela cheia (`assets/js/article.js`).
 - **Link para a tradução:** "Read in English" / "Ler em português", quando existe a outra versão.
 
@@ -150,7 +151,7 @@ assets/js/          talks.js, sessionize-photo.js, article.js, site.js
 assets/og/          fontes Inter, fundo e máscara das imagens de prévia
 assets/images/      profile.jpg (foto usada nas imagens de prévia)
 i18n/               textos em EN e PT
-scripts/            sync_sessionize.py, build_favicons.py, check_site.py, send_newsletter.py, sync_hashnode.py
+scripts/            sync_sessionize.py, build_favicons.py, check_site.py, optimize_images.py, send_newsletter.py, sync_hashnode.py
 static/             favicons, imagens, site.webmanifest
 themes/hextra/      tema (submódulo git)
 ```

@@ -20,7 +20,7 @@ tags: ['AI', 'Observability']
 <p>With agents, many teams still do the opposite. They evaluate the tool through a few isolated interactions and decide that it is fast, slow, good, or bad.</p>
 <p>An agent session is also a distributed flow. It involves a model, context, tools, permissions, external systems, files, tests, and human decisions. The final result is only the last event in this chain.</p>
 <p>If we want to improve this flow, we need to see what happens before the final result.</p>
-<img src="/images/posts/agent-observability-with-opentelemetry/e98ed5d6-ff82-4af9-abd1-c47cbabb2f20.png" alt="Observability flow for AI coding sessions: AI tool, instrumentation, OpenTelemetry collector, then Prometheus and Grafana" style="display:block;margin:0 auto" />
+<img width="1500" height="760" loading="lazy" decoding="async" src="/images/posts/agent-observability-with-opentelemetry/e98ed5d6-ff82-4af9-abd1-c47cbabb2f20.webp" alt="Observability flow for AI coding sessions: AI tool, instrumentation, OpenTelemetry collector, then Prometheus and Grafana" style="display:block;margin:0 auto" />
 
 <h2>What is worth measuring?</h2>
 <p>Observability does not mean recording everything. The goal is not to watch developers or turn token counts into a false measure of productivity.</p>

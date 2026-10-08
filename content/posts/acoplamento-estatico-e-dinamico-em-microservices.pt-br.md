@@ -22,7 +22,7 @@ tags: ['Arquitetura', 'Microservices']
 <p>Existem dois tipos de acoplamento em microservices: acoplamento estático e acoplamento dinâmico, e é sobre eles que vamos falar hoje.</p>
 <hr />
 <h2><strong>Exemplo de arquitetura de microservices</strong></h2>
-<img src="/images/posts/acoplamento-estatico-e-dinamico-em-microservices/bb9c5c1b-8245-4a17-9691-a5a166d7539f.png" alt="Diagrama da arquitetura de microservices: API Gateway, Nginx, PaymentService, OrderService, UserService, ProductCatalogService, RabbitMQ, NotificationService, MongoDB e Consul" style="display:block;margin:0 auto" />
+<img width="1600" height="794" loading="lazy" decoding="async" src="/images/posts/acoplamento-estatico-e-dinamico-em-microservices/bb9c5c1b-8245-4a17-9691-a5a166d7539f.webp" alt="Diagrama da arquitetura de microservices: API Gateway, Nginx, PaymentService, OrderService, UserService, ProductCatalogService, RabbitMQ, NotificationService, MongoDB e Consul" style="display:block;margin:0 auto" />
 
 <h3><strong>Componentes:</strong></h3>
 <ol>

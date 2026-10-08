@@ -20,7 +20,7 @@ tags: ['Architecture', 'Microservices']
 <p>There are two kinds of coupling in microservices: static coupling and dynamic coupling, and those are what we are going to talk about today.</p>
 <hr />
 <h2><strong>Example of a microservices architecture</strong></h2>
-<img src="/images/posts/acoplamento-estatico-e-dinamico-em-microservices/bb9c5c1b-8245-4a17-9691-a5a166d7539f.png" alt="Microservices architecture diagram: API Gateway, Nginx, PaymentService, OrderService, UserService, ProductCatalogService, RabbitMQ, NotificationService, MongoDB and Consul" style="display:block;margin:0 auto" />
+<img width="1600" height="794" loading="lazy" decoding="async" src="/images/posts/acoplamento-estatico-e-dinamico-em-microservices/bb9c5c1b-8245-4a17-9691-a5a166d7539f.webp" alt="Microservices architecture diagram: API Gateway, Nginx, PaymentService, OrderService, UserService, ProductCatalogService, RabbitMQ, NotificationService, MongoDB and Consul" style="display:block;margin:0 auto" />
 
 <h3><strong>Components:</strong></h3>
 <ol>

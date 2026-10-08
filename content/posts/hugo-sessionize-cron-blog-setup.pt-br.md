@@ -150,7 +150,7 @@ Na hora de montar o site, ele desenha uma imagem por página, nos dois idiomas, 
 
 Esta é a imagem que o blog gerou para o último artigo da série sobre arquitetura amigável à IA:
 
-![Imagem de prévia gerada automaticamente para o artigo Observabilidade de Agentes com OpenTelemetry](/images/posts/hugo-sessionize-cron-blog-setup/preview-pt.png)
+![Imagem de prévia gerada automaticamente para o artigo Observabilidade de Agentes com OpenTelemetry](/images/posts/hugo-sessionize-cron-blog-setup/preview-pt.webp)
 
 Não tem serviço externo nem headless browser: são os filtros de imagem do próprio Hugo aplicados sobre um fundo branco. O coração do partial `og-image.html` é isto:
 

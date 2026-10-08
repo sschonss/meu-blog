@@ -150,7 +150,7 @@ While building the site, it draws one image per page, in both languages, with th
 
 This is the image the blog generated for the last article in the AI-Friendly Architecture series:
 
-![Preview image generated automatically for the article Agent Observability with OpenTelemetry](/images/posts/hugo-sessionize-cron-blog-setup/preview-en.png)
+![Preview image generated automatically for the article Agent Observability with OpenTelemetry](/images/posts/hugo-sessionize-cron-blog-setup/preview-en.webp)
 
 No external service, no headless browser: just Hugo's own image filters applied on top of a white background. The heart of the `og-image.html` partial is this:
 

@@ -24,7 +24,7 @@
     </details>
   </nav>
 
-  <div class="article-content" data-article-content data-close-label="{{ i18n "closeImage" }}">{{ .Content }}</div>
+  <div class="article-content" data-article-content data-close-label="{{ i18n "closeImage" }}" data-anchor-label="{{ i18n "anchorLabel" }}" data-anchor-copied="{{ i18n "linkCopied" }}">{{ .Content }}</div>
 
   {{- partial "article-share.html" . }}
   {{- partial "article-talks.html" . }}

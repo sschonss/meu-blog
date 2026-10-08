@@ -349,3 +349,12 @@ html.img-zoom-open { overflow: hidden; }
 .newsletter .newsletter-note { font-size: .78rem; margin-top: .7rem; }
 .newsletter-note a { color: #2563eb; }
 .visually-hidden { clip: rect(0 0 0 0); height: 1px; overflow: hidden; position: absolute; white-space: nowrap; width: 1px; }
+
+/* Heading links (#) */
+.article-content [id] { scroll-margin-top: 5.5rem; }
+.article-content :is(h2, h3, h4) { position: relative; }
+.article-content .heading-anchor { color: #94a3b8; font-weight: 500; margin-left: .4rem; opacity: 0; text-decoration: none; transition: opacity .15s, color .15s; }
+.article-content :is(h2, h3, h4):hover .heading-anchor, .heading-anchor:focus { opacity: 1; }
+.article-content .heading-anchor:hover { color: #2563eb; text-decoration: none; }
+.heading-anchor[data-copied]::after { background: #111827; border-radius: .4rem; color: #fff; content: attr(data-copied); font-size: .72rem; font-weight: 600; letter-spacing: 0; margin-left: .5rem; padding: .2rem .5rem; position: absolute; white-space: nowrap; }
+@media (hover: none) { .heading-anchor { opacity: .45; } }
