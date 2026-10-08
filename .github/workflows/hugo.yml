@@ -26,6 +26,10 @@ jobs:
         # Fetched at build time so the workflow never needs to push to main.
         # Falls back to the committed data/sessionize.json if Sessionize is down.
         run: python3 scripts/sync_sessionize.py || echo "Sessionize sync failed; using committed data"
+      - name: Most read articles from Umami
+        # Public, read-only share link; no secret needed. If Umami is down the
+        # home page just hides the "Most read" block.
+        run: python3 scripts/sync_umami.py || echo "Umami sync failed; skipping most read"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'

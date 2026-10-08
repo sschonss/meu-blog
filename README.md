@@ -117,6 +117,10 @@ Cliques são enviados como eventos do Umami por `assets/js/site.js`, que reconhe
 
 Todos levam `from` com a página de origem. Para um link específico, `data-track="nome"` e `data-track-chave="valor"` no `<a>` sobrescrevem a detecção automática.
 
+### Mais lidos na home
+
+A home mostra os 5 artigos mais lidos dos últimos 30 dias. No deploy, `scripts/sync_umami.py` lê as visitas pelo link de compartilhamento público do Umami (`UMAMI_SHARE_ID`, só leitura, sem chave secreta) e grava `data/popular.json`, que não é commitado. As visitas das versões EN e PT de um artigo são somadas pelo `translationKey`, e cada idioma mostra a sua versão. Como o deploy roda todo dia, a lista se atualiza sozinha. Se o Umami falhar, ou se houver menos de 3 artigos com visitas, o bloco simplesmente não aparece.
+
 ## Aviso de idioma
 
 Páginas com tradução trazem um aviso escondido (`layouts/_partials/lang-suggest.html`). O `site.js` só o mostra quando o idioma preferido do navegador, entre português e inglês, é o da outra versão. Ele some de vez quando a pessoa fecha o aviso ou troca de idioma por conta própria, o que fica guardado no `localStorage`. Não há redirecionamento automático, para não atrapalhar o Google nem quem prefere o outro idioma.
@@ -133,7 +137,7 @@ assets/js/          talks.js, sessionize-photo.js, article.js, site.js
 assets/og/          fontes Inter, fundo e máscara das imagens de prévia
 assets/images/      profile.jpg (foto usada nas imagens de prévia)
 i18n/               textos em EN e PT
-scripts/            sync_sessionize.py, build_favicons.py, sync_hashnode.py
+scripts/            sync_sessionize.py, sync_umami.py, build_favicons.py, sync_hashnode.py
 static/             favicons, imagens, site.webmanifest
 themes/hextra/      tema (submódulo git)
 ```
