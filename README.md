@@ -163,7 +163,7 @@ A newsletter usa o [Buttondown](https://buttondown.com) (usuário `schons`, conf
 
 - **Inscrição:** a caixa "Receba os novos artigos por e-mail" aparece no fim dos artigos e na home (`layouts/_partials/newsletter.html`). O formulário vai direto para o Buttondown, sem chave, e o Buttondown pede confirmação por e-mail. As inscrições são contadas no Umami como `newsletter-subscribe`.
 - **Envio:** depois de publicar o site, o deploy roda `scripts/send_newsletter.py`. Para cada artigo publicado nos últimos 2 dias, ele cria um e-mail no Buttondown com as duas versões (português primeiro, inglês embaixo), usando o secret `BUTTONDOWN_API_KEY`. Se já existe um e-mail com o mesmo assunto, não cria de novo. Com artigos agendados, o e-mail sai na manhã em que o artigo é publicado.
-- **Rascunho ou envio direto:** com `NEWSLETTER_MODE: draft` no `.github/workflows/hugo.yml`, o e-mail fica como rascunho no Buttondown para você revisar e enviar. Trocando para `send`, ele é enviado sozinho.
+- **Envio direto ou rascunho:** com `NEWSLETTER_MODE: send` no `.github/workflows/hugo.yml` (o padrão atual), o e-mail é enviado sozinho. Trocando para `draft`, ele fica como rascunho no Buttondown para você revisar e enviar.
 
 ## Agendando artigos
 

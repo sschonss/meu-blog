@@ -56,5 +56,5 @@ jobs:
         # NEWSLETTER_MODE: "draft" waits for review in Buttondown; "send" sends it.
         env:
           BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
-          NEWSLETTER_MODE: draft
+          NEWSLETTER_MODE: send
         run: python3 scripts/send_newsletter.py || echo "Newsletter step failed; the site is already published"
