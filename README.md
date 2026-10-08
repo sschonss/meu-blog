@@ -92,6 +92,10 @@ A **bio** do topo não vem do Sessionize. Ela fica em `content/speakers/_index.m
 - **`hreflang`:** liga as versões EN e PT da mesma página, com `x-default` em inglês (`layouts/_partials/custom/head-end.html`).
 - **JSON-LD:** `BlogPosting` nos artigos, `WebSite` + `Person` na home e `ProfilePage` nas palestras.
 
+## Analytics
+
+As visitas são medidas com o [Umami](https://cloud.umami.is), que não usa cookies e por isso dispensa banner de consentimento. O script fica em `layouts/_partials/custom/head-end.html`. Ele só entra no build de produção e só conta acessos em `luizschons.com`, então `hugo server` e previews locais não sujam os números.
+
 ## Estrutura
 
 ```

@@ -49,3 +49,8 @@
 {{- else if eq .Section "speakers" }}
 <script type="application/ld+json">{{ dict "@context" "https://schema.org" "@type" "ProfilePage" "url" .Permalink "inLanguage" $lang "mainEntity" $person | jsonify | safeJS }}</script>
 {{- end }}
+
+{{- /* Umami analytics (cookieless). Only on the production build, and only counts luizschons.com. */ -}}
+{{- if hugo.IsProduction }}
+<script defer src="https://cloud.umami.is/script.js" data-website-id="79e23081-6e80-4be5-af4c-d15e5568e2cd" data-domains="luizschons.com"></script>
+{{- end }}
