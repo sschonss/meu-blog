@@ -18,7 +18,9 @@
     var target = box.getAttribute('data-target');
     var langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''])
       .map(function (l) { return String(l).toLowerCase(); });
-    var browserPT = langs.some(function (l) { return l.indexOf('pt') === 0; });
+    // The visitor's top preference between the two languages the site has.
+    var top = langs.filter(function (l) { return l.indexOf('pt') === 0 || l.indexOf('en') === 0; })[0] || '';
+    var browserPT = top.indexOf('pt') === 0;
     var wants = target === 'pt-br' ? browserPT : !browserPT;
     var chosen = read(LANG_KEY);
     if (wants && !read(DISMISS_KEY) && chosen !== pageLang) {

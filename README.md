@@ -113,7 +113,7 @@ Todos levam `from` com a página de origem. Para um link específico, `data-trac
 
 ## Aviso de idioma
 
-Páginas com tradução trazem um aviso escondido (`layouts/_partials/lang-suggest.html`). O `site.js` só o mostra quando o idioma do navegador é o da outra versão (português numa página em inglês, ou qualquer outro idioma numa página em português). Ele some de vez quando a pessoa fecha o aviso ou troca de idioma por conta própria, o que fica guardado no `localStorage`. Não há redirecionamento automático, para não atrapalhar o Google nem quem prefere o outro idioma.
+Páginas com tradução trazem um aviso escondido (`layouts/_partials/lang-suggest.html`). O `site.js` só o mostra quando o idioma preferido do navegador, entre português e inglês, é o da outra versão. Ele some de vez quando a pessoa fecha o aviso ou troca de idioma por conta própria, o que fica guardado no `localStorage`. Não há redirecionamento automático, para não atrapalhar o Google nem quem prefere o outro idioma.
 
 ## Estrutura
 
