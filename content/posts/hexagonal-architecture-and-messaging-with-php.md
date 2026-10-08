@@ -3,6 +3,7 @@ title: 'Hexagonal Architecture and Messaging with PHP'
 date: 2024-07-04
 translationKey: arquitetura-hexagonal-e-mensageria-com-php
 draft: false
+tags: ['Architecture', 'Messaging', 'PHP']
 ---
 
 <h3 id="heading-hexagonal-architecture-ports-and-adapters">Hexagonal Architecture (Ports and Adapters)</h3>

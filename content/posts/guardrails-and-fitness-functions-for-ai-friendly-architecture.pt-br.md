@@ -5,6 +5,7 @@ source: https://luizschons.com/guardrails-and-fitness-functions-for-ai-friendly-
 series: ['Arquitetura Amigável à IA']
 translationKey: 'guardrails-and-fitness-functions-for-ai-friendly-architecture'
 draft: false
+tags: ['IA', 'Arquitetura']
 ---
 
 <p>Este é o quinto artigo da série sobre arquitetura amigável à IA. Já discutimos como os agentes encontram contexto, usam skills e trabalham com conhecimento especializado.</p>
@@ -18,10 +19,13 @@ draft: false
 <p>Dar contexto a um agente não significa dar a ele acesso ilimitado ao sistema.</p>
 <h2>Instruções não são controles de segurança</h2>
 <p>Um ponto de partida comum é adicionar uma regra ao prompt ou a uma skill:</p>
-<pre><code class="language-text">Use the production API only for read operations.
+
+```text
+Use the production API only for read operations.
 Never change data.
 Never access admin endpoints.
-</code></pre>
+```
+
 <p>Essa orientação pode ajudar a direcionar o comportamento do agente, mas não deve ser tratada como uma barreira de segurança.</p>
 <p>O agente pode receber novos documentos, combinar informações de fontes diferentes e ler o código da aplicação. Um texto que diz ao agente para seguir uma regra também pode conter instruções conflitantes ou mostrar maneiras de contorná-la.</p>
 <p>O mesmo vale para verificações feitas dentro de uma skill ou por meio de uma integração MCP. Se a mesma camada que executa a ação decide se ela é segura com base no contexto fornecido ao agente, esse contexto pode ser alterado ou interpretado de forma inesperada.</p>
@@ -32,9 +36,12 @@ Never access admin endpoints.
 <p>Mas, ao ler o código, a documentação e os contratos da aplicação, o agente pode descobrir outros endpoints disponíveis. Ele pode encontrar rotas administrativas, parâmetros internos, conexões entre recursos ou formas indiretas de obter dados que não deveriam fazer parte da investigação.</p>
 <p>O problema não é apenas o método HTTP usado pela requisição. O problema é o conjunto de recursos que o agente consegue alcançar, os dados que recebe e as conexões que pode descobrir.</p>
 <p>Por isso, não basta dizer:</p>
-<pre><code class="language-text">GET is allowed.
+
+```text
+GET is allowed.
 POST, PUT, and DELETE are not allowed.
-</code></pre>
+```
+
 <p>Precisamos perguntar:</p>
 <ul>
 <li><p>qual serviço pode ser acessado;</p>
@@ -56,7 +63,9 @@ POST, PUT, and DELETE are not allowed.
 <p>Existem formas mais seguras de fornecer informações para uma investigação.</p>
 <h3>Um token com escopo limitado</h3>
 <p>Em vez de dar ao agente uma credencial de API genérica, podemos criar uma credencial específica para ele:</p>
-<pre><code class="language-text">principal: incident-investigation-agent
+
+```text
+principal: incident-investigation-agent
 resource: orders-observability-api
 operations:
   - read:incident-summary
@@ -66,7 +75,8 @@ data_policy:
   - exclude:customer.personal_data
   - exclude:payment.card_data
 expiration: 15 minutes
-</code></pre>
+```
+
 <p>O serviço que recebe essa credencial deve validar seu escopo. Uma descrição no prompt não substitui essa validação.</p>
 <h3>Dados derivados para investigação</h3>
 <p>Também podemos manter o agente longe da aplicação de produção. Eventos, métricas, logs sanitizados e informações operacionais podem ser enviados para um local separado de consultas, como uma réplica, um data lake ou um data warehouse.</p>
@@ -75,7 +85,9 @@ expiration: 15 minutes
 <p>Essa camada pode aplicar retenção, anonimização, filtragem de campos e um atraso antes que os dados fiquem disponíveis. O agente recebe contexto suficiente para investigar sem ganhar uma porta de entrada para a aplicação de produção.</p>
 <h3>O banco de dados com o menor privilégio possível</h3>
 <p>Quando o acesso direto ao banco for realmente necessário, ele deve ser criado para a tarefa. Não deve reutilizar uma credencial da aplicação:</p>
-<pre><code class="language-sql">CREATE ROLE incident_reader LOGIN PASSWORD 'managed-externally';
+
+```sql
+CREATE ROLE incident_reader LOGIN PASSWORD 'managed-externally';
 
 GRANT CONNECT ON DATABASE operations TO incident_reader;
 GRANT USAGE ON SCHEMA incident_data TO incident_reader;
@@ -84,7 +96,8 @@ GRANT SELECT ON incident_data.request_summary TO incident_reader;
 
 REVOKE ALL ON SCHEMA billing FROM incident_reader;
 REVOKE ALL ON SCHEMA customers FROM incident_reader;
-</code></pre>
+```
+
 <p>Além de ser somente leitura, esse usuário deve ter acesso apenas às tabelas, views ou schemas necessários para a tarefa. Views de investigação podem ocultar dados sensíveis e limitar a quantidade de informações retornadas.</p>
 <p>A ideia é simples: não devemos confiar que o agente evitará tabelas perigosas. O banco deve bloquear o acesso mesmo que o agente tente consultar algo fora do seu escopo.</p>
 <h2>Guardrails</h2>
@@ -107,7 +120,9 @@ REVOKE ALL ON SCHEMA customers FROM incident_reader;
 <p>Um exemplo real é o <a href="https://github.com/deptrac/deptrac">Deptrac</a>, uma ferramenta de análise estática para projetos PHP. Ela permite definir camadas arquiteturais e as dependências permitidas entre elas.</p>
 <p>Imagine um sistema com dois contextos: <code>Orders</code> e <code>Billing</code>. Uma decisão arquitetural pode determinar que <code>Orders</code> não deve importar diretamente classes internas de <code>Billing</code>. A comunicação deve acontecer por meio de um contrato público.</p>
 <p>Essa regra pode ser descrita em uma configuração do Deptrac:</p>
-<pre><code class="language-yaml">deptrac:
+
+```yaml
+deptrac:
   paths:
     - ./src
 
@@ -132,10 +147,14 @@ REVOKE ALL ON SCHEMA customers FROM incident_reader;
       - Shared
     Billing:
       - Shared
-</code></pre>
+```
+
 <p>Com essa regra, uma classe em <code>Orders</code> que importe diretamente uma classe de <code>Billing</code> cria uma violação. O pipeline pode executar:</p>
-<pre><code class="language-bash">vendor/bin/deptrac analyse --config-file=deptrac.yaml
-</code></pre>
+
+```bash
+vendor/bin/deptrac analyse --config-file=deptrac.yaml
+```
+
 <p>O resultado é determinístico. O Deptrac não precisa entender a intenção do agente, avaliar a qualidade do código gerado ou interpretar um prompt. Ele apenas verifica as dependências no código em relação às regras definidas pela equipe.</p>
 <p>Se um agente criar uma nova classe e adicionar uma dependência proibida, o pull request falhará mesmo que o agente tenha sido instruído a respeitar os limites. A fitness function protege a decisão arquitetural à medida que o sistema muda.</p>
 <h2>Conclusão</h2>

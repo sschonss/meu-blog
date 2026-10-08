@@ -4,6 +4,7 @@ date: 2026-10-07
 description: 'How I moved from Hashnode to a bilingual Hugo blog, with talks pulled from Sessionize, automatic preview images and a daily deploy on GitHub Actions.'
 translationKey: hugo-sessionize-cron-blog-setup
 draft: false
+tags: ['Hugo', 'GitHub Actions']
 ---
 
 For a good while my blog lived on Hashnode, and it worked fine. The problem showed up when I started writing in both English and Portuguese: Hashnode has no real support for two languages, so I published every article twice, as if they were unrelated posts, with nothing linking one to the other.

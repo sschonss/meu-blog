@@ -3,6 +3,7 @@ title: 'Are microservices technical debt?'
 date: 2024-12-06
 translationKey: microservices-sao-debitos-tecnicos
 draft: false
+tags: ['Architecture', 'Microservices']
 ---
 
 <p>Building software has never been so complex and, at the same time, so simple. The complexity lies in the sheer number of technologies, frameworks, languages and patterns available to us. The simplicity lies in how easy it is to access those technologies and to build software with them.</p>

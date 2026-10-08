@@ -4,6 +4,7 @@ date: 2026-08-20
 source: https://luizschons.com/seu-software-est-pronto-para-ser-entendido-por-uma-ia
 series: ['Arquitetura Amigável à IA']
 draft: false
+tags: ['IA', 'Arquitetura']
 ---
 
 <p>Este é o primeiro artigo de uma série sobre arquitetura amigável à IA, uma forma de pensar sobre sistemas, contexto e ferramentas para que agentes de IA possam trabalhar com mais eficiência em software do mundo real.</p>
@@ -71,7 +72,7 @@ draft: false
 <h3>O que isso muda na prática</h3>
 <p>Um sistema amigável à IA tende a ter algumas características:</p>
 <ol>
-<li><p>**Documentação viva<br />**A documentação não pode ser um cemitério de páginas desatualizadas. Ela precisa fazer parte do sistema e acompanhar as mudanças relevantes.</p>
+<li><p><strong>Documentação viva</strong><br />A documentação não pode ser um cemitério de páginas desatualizadas. Ela precisa fazer parte do sistema e acompanhar as mudanças relevantes.</p>
 </li>
 <li><p><strong>Decisões registradas</strong><br />Arquitetura sem histórico vira suposição. ADRs, RFCs e notas de decisão ajudam o agente a entender o “porquê”, não apenas o “como”.</p>
 </li>

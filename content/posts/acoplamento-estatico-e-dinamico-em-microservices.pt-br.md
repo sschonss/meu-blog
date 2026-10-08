@@ -5,6 +5,7 @@ source: https://luizschons.com/acoplamento-estatico-e-dinamico-em-microservices
 translationKey: acoplamento-estatico-e-dinamico-em-microservices
 draft: false
 aliases: ["/acoplamento-estatico-e-dinamico-em-microservices/"]
+tags: ['Arquitetura', 'Microservices']
 ---
 
 <p>Aplicações monolíticas são aquelas que possuem um único código fonte, um único executável e um único processo. Muitas vezes, essas aplicações são construídas em uma única linguagem de programação e são implantadas em um único servidor.</p>
@@ -21,7 +22,7 @@ aliases: ["/acoplamento-estatico-e-dinamico-em-microservices/"]
 <p>Existem dois tipos de acoplamento em microservices: acoplamento estático e acoplamento dinâmico, e é sobre eles que vamos falar hoje.</p>
 <hr />
 <h2><strong>Exemplo de arquitetura de microservices</strong></h2>
-<img src="/images/posts/acoplamento-estatico-e-dinamico-em-microservices/bb9c5c1b-8245-4a17-9691-a5a166d7539f.png" alt="" style="display:block;margin:0 auto" />
+<img src="/images/posts/acoplamento-estatico-e-dinamico-em-microservices/bb9c5c1b-8245-4a17-9691-a5a166d7539f.png" alt="Diagrama da arquitetura de microservices: API Gateway, Nginx, PaymentService, OrderService, UserService, ProductCatalogService, RabbitMQ, NotificationService, MongoDB e Consul" style="display:block;margin:0 auto" />
 
 <h3><strong>Componentes:</strong></h3>
 <ol>

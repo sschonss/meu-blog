@@ -5,6 +5,7 @@ source: https://luizschons.com/seu-software-est-pronto-para-ser-entendido-por-um
 series: ['AI-Friendly Architecture']
 draft: false
 aliases: ["/seu-software-est-pronto-para-ser-entendido-por-uma-ia/"]
+tags: ['AI', 'Architecture']
 ---
 
 <p>This is the first article in a series about AI-friendly architecture, a way of thinking about systems, context, and tools so that AI agents can work more effectively with real-world software.</p>
@@ -72,7 +73,7 @@ aliases: ["/seu-software-est-pronto-para-ser-entendido-por-uma-ia/"]
 <h3>What This Changes in Practice</h3>
 <p>An AI-friendly system tends to have a few characteristics:</p>
 <ol>
-<li><p>**Living documentation<br />**Documentation cannot be a graveyard of outdated pages. It needs to be part of the system and keep up with relevant changes.</p>
+<li><p><strong>Living documentation</strong><br />Documentation cannot be a graveyard of outdated pages. It needs to be part of the system and keep up with relevant changes.</p>
 </li>
 <li><p><strong>Recorded decisions</strong><br />Architecture without history becomes guesswork. ADRs, RFCs, and decision notes help the agent understand the “why,” not just the “how.”</p>
 </li>

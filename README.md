@@ -35,20 +35,26 @@ Os artigos ficam em `content/posts/`. Para publicar um novo, crie um Markdown co
 title: 'Meu artigo'
 date: 2026-10-01
 series: ['AI-Friendly Architecture']   # opcional
+tags: ['Architecture', 'AI']           # temas; no PT use os nomes em português
 translationKey: meu-artigo             # liga a versão EN com a PT
 draft: false
 ---
 ```
 
-- **Tradução:** crie `meu-artigo.pt-br.md` com o mesmo `translationKey`.
+- **Tradução:** crie `meu-artigo.pt-br.md` com o mesmo `translationKey` e a **mesma data** do original. Assim a tradução aparece no lugar certo da lista, e não como artigo novo. Todos os artigos existem nos dois idiomas.
+- **Nomes de arquivo:** o nome vira a URL, então use só o título em minúsculas e com hífens, sem números ou hashes (`tabelas-hash.pt-br.md` → `/pt-br/posts/tabelas-hash/`). A versão em inglês pode ter outro nome (`hash-tables.md`); o que liga as duas é o `translationKey`.
 - **Séries:** são uma taxonomia (`series`) e ganham páginas próprias em `/series/`.
-- **Imagens:** ficam em `static/images/posts/`.
-- **URLs antigas:** os `aliases` no front matter redirecionam endereços antigos para o novo. Os 11 artigos antigos em português, que antes ficavam na raiz do site, também têm páginas de redirect fixas em `static/<slug>/` e `static/posts/<slug>/`. Elas não dependem da versão do Hugo, que nas versões novas coloca os aliases de páginas PT dentro de `/pt-br/`. Páginas inexistentes caem no `404.html`, que leva para a home.
+- **Temas (tags):** a taxonomia `tags` gera `/tags/` e `/pt-br/tags/`, com uma página por tema. Os temas também aparecem como filtros no topo da lista de artigos e em cada artigo. Use os mesmos nomes de tema em todos os artigos de cada idioma (`Architecture` / `Arquitetura`, `AI` / `IA`, `Algorithms` / `Algoritmos`...).
+- **Imagens:** ficam em `static/images/posts/<slug>/`. Sempre preencha o `alt` com uma descrição curta, no idioma do artigo. Tabelas vão como tabela HTML ou Markdown, não como imagem.
+- **Código:** use blocos cercados com a linguagem (```` ```php ````). O Hugo colore o código no build e o Hextra põe o botão de copiar. Os artigos antigos, que vieram do Hashnode/Medium com o código em `<p>` e `<pre>`, já foram convertidos para esse formato.
+- **URLs antigas:** endereços antigos são redirecionados por páginas fixas em `static/`, que não dependem da versão do Hugo (as versões novas colocam os `aliases` de páginas PT dentro de `/pt-br/`). Os artigos que vieram do Hashnode tinham um hash no fim do slug (`quicksort-33f8e917ab6c`). Cada slug antigo tem redirect em `static/<slug>/`, `static/posts/<slug>/` e `static/pt-br/posts/<slug>/`, apontando para o endereço novo. Para renomear um artigo, crie as mesmas três páginas. Páginas inexistentes caem no `404.html`, que leva para a home.
 
 Cada artigo ganha automaticamente:
 
 - **Índice ("Neste artigo"):** gerado no navegador a partir dos títulos `h2`/`h3`, quando há 3 ou mais (`assets/js/article.js`). Fica fixo na lateral em telas largas e recolhível no topo em telas menores.
 - **Bloco da série:** mostra "Parte N de M" com todas as partes em ordem. O nome da série precisa ser idêntico em todos os artigos de cada idioma.
+- **Leia também:** até 3 artigos relacionados, escolhidos pelo Hugo a partir dos temas em comum, depois da série e da data (bloco `[related]` em `hugo.toml`).
+- **Comentários:** feitos com o [giscus](https://giscus.app), que guarda cada conversa como uma Discussion deste repositório. As versões EN e PT de um artigo dividem a mesma conversa (a chave é o `translationKey`). A configuração fica em `[params.giscus]` no `hugo.toml` e o bloco em `layouts/_partials/comments.html`; ele só aparece quando o `categoryId` está preenchido.
 - **Anterior / próximo:** outros artigos do mesmo idioma, por data.
 - **Link para a tradução:** "Read in English" / "Ler em português", quando existe a outra versão.
 
@@ -120,10 +126,10 @@ Páginas com tradução trazem um aviso escondido (`layouts/_partials/lang-sugge
 ```
 content/            artigos, palestras, contato (EN + PT)
 data/               sessionize.json (cópia dos dados do Sessionize)
-layouts/            layouts próprios (home, posts, séries, palestras, contato, 404)
-  _partials/        datas, eventos, favicons, imagem de prévia, SEO
+layouts/            layouts próprios (home, posts, séries, temas, palestras, contato, 404)
+  _partials/        datas, eventos, linha de artigo, comentários, favicons, imagem de prévia, SEO
 assets/css/         custom.css (estilos do site)
-assets/js/          talks.js, sessionize-photo.js, article.js
+assets/js/          talks.js, sessionize-photo.js, article.js, site.js
 assets/og/          fontes Inter, fundo e máscara das imagens de prévia
 assets/images/      profile.jpg (foto usada nas imagens de prévia)
 i18n/               textos em EN e PT

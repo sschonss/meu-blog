@@ -5,6 +5,7 @@ source: https://luizschons.com/from-epic-to-production-using-agents-to-deliver-f
 series: ['Arquitetura Amigável à IA']
 translationKey: 'from-epic-to-production-using-agents-to-deliver-features-in-real-systems'
 draft: false
+tags: ['IA', 'Arquitetura']
 ---
 
 <p>Este é o oitavo artigo da série sobre arquitetura amigável à IA. Nos artigos anteriores, falamos sobre contexto, documentação, observabilidade, skills, Context Skills, agentes, ferramentas, MCP, guardrails e harnesses.</p>
@@ -13,9 +14,12 @@ draft: false
 <p>Escrever o código é apenas uma etapa. Em muitos casos, nem é a mais difícil.</p>
 <h2>O épico</h2>
 <p>Vamos usar esta solicitação como exemplo:</p>
-<pre><code class="language-text">As a customer, I want to request a partial refund for an order,
+
+```text
+As a customer, I want to request a partial refund for an order,
 so I can return only some of the items I bought.
-</code></pre>
+```
+
 <p>À primeira vista, isso parece uma pequena mudança no serviço de pagamentos.</p>
 <p>Mas, antes de escrever código, precisamos entender várias coisas:</p>
 <ul>
@@ -111,7 +115,9 @@ so I can return only some of the items I bought.
 <h2>Registre a decisão do spike</h2>
 <p>O resultado do spike não deve permanecer apenas no histórico da conversa. Ele deve se tornar uma documentação que possa ser encontrada em investigações futuras.</p>
 <p>Um documento de decisão poderia ser assim:</p>
-<pre><code class="language-markdown"># Decision: partial refunds
+
+```markdown
+# Decision: partial refunds
 
 ## Context
 
@@ -140,7 +146,8 @@ Use the existing transaction and track the total refunded amount.
 - two refund requests may run at the same time;
 - the external and internal states may become different;
 - some consumers may not know the new format.
-</code></pre>
+```
+
 <p>Essa documentação ajuda a equipe atual, mas também ajuda agentes e trabalhos futuros.</p>
 <p>Cada spike bem documentado adiciona uma nova fonte de contexto à arquitetura. Com o tempo, deixamos de depender apenas do código e construímos um mapa de decisões, contratos e consequências.</p>
 <h2>Defina o que significa sucesso</h2>

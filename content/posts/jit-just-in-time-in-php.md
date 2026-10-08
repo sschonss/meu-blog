@@ -3,6 +3,7 @@ title: 'JIT (Just in Time) — PHP'
 date: 2024-05-28
 translationKey: jit-just-in-time-php
 draft: false
+tags: ['PHP', 'Performance']
 ---
 
 <p>If you haven't upgraded to PHP 8.0 or later yet, it's time to do it. PHP 8.0 was released on November 26, 2020 and brought the JIT (Just In Time) compiler, which is what we are going to talk about today.</p>
@@ -10,31 +11,36 @@ draft: false
 <p>When you run a PHP script, PHP compiles it into an intermediate code called opcode (PHP Opcode). The opcode is then executed by the Zend virtual machine.</p>
 <p>Here is an example of PHP code and its opcode:</p>
 <p><strong>PHP:</strong></p>
-<pre><code class="lang-php"><span class="hljs-meta"><?php</span>
+
+```php
 $a = M_PI;
-$b = <span class="hljs-number">10</span> + sin($a);
-<span class="hljs-keyword">echo</span> <span class="hljs-string">"Result: "</span>, $b;
-</code></pre>
+$b = 10 + sin($a);
+echo "Result: ", $b;
+```
+
 <p><strong>Opcode:</strong></p>
-<pre><code class="lang-c">Finding entry points
-Branch analysis from position: <span class="hljs-number">0</span>
-<span class="hljs-number">1</span> jumps found. (Code = <span class="hljs-number">62</span>) Position <span class="hljs-number">1</span> = <span class="hljs-number">-2</span>
+
+```text
+Finding entry points
+Branch analysis from position: 0
+1 jumps found. (Code = 62) Position 1 = -2
 filename:       /in/ceTlX
 function name:  (null)
-number of ops:  <span class="hljs-number">9</span>
-compiled vars:  !<span class="hljs-number">0</span> = $a, !<span class="hljs-number">1</span> = $b
-line      #* E I O op                           fetch          ext  <span class="hljs-keyword">return</span>  operands
+number of ops:  9
+compiled vars:  !0 = $a, !1 = $b
+line      #* E I O op                           fetch          ext  return  operands
 -------------------------------------------------------------------------------------
-    <span class="hljs-number">2</span>     <span class="hljs-number">0</span>  E >   ASSIGN                                                   !<span class="hljs-number">0</span>, <span class="hljs-number">3.14159</span>
-    <span class="hljs-number">3</span>     <span class="hljs-number">1</span>        INIT_FCALL                                               <span class="hljs-string">'sin'</span>
-          <span class="hljs-number">2</span>        SEND_VAR                                                 !<span class="hljs-number">0</span>
-          <span class="hljs-number">3</span>        DO_ICALL                                         $<span class="hljs-number">3</span>
-          <span class="hljs-number">4</span>        ADD                                              ~<span class="hljs-number">4</span>      <span class="hljs-number">10</span>, $<span class="hljs-number">3</span>
-          <span class="hljs-number">5</span>        ASSIGN                                                   !<span class="hljs-number">1</span>, ~<span class="hljs-number">4</span>
-    <span class="hljs-number">4</span>     <span class="hljs-number">6</span>        ECHO                                                     <span class="hljs-string">'Result%3A+'</span>
-          <span class="hljs-number">7</span>        ECHO                                                     !<span class="hljs-number">1</span>
-    <span class="hljs-number">5</span>     <span class="hljs-number">8</span>      > RETURN                                                   <span class="hljs-number">1</span>
-</code></pre>
+    2     0  E >   ASSIGN                                                   !0, 3.14159
+    3     1        INIT_FCALL                                               'sin'
+          2        SEND_VAR                                                 !0
+          3        DO_ICALL                                         $3
+          4        ADD                                              ~4      10, $3
+          5        ASSIGN                                                   !1, ~4
+    4     6        ECHO                                                     'Result%3A+'
+          7        ECHO                                                     !1
+    5     8      > RETURN                                                   1
+```
+
 <p>Basically, opcode is a sequence of instructions that the Zend virtual machine executes.</p>
 <h1 id="heading-jit"><strong>JIT</strong></h1>
 <p>So where does the JIT come in? The JIT is a compiler that compiles opcode into native machine code. In other words, it turns opcode into machine code that the CPU can execute directly.</p>
@@ -42,16 +48,22 @@ line      #* E I O op                           fetch          ext  <span class=
 <h1 id="heading-enabling-the-jit"><strong>Enabling the JIT</strong></h1>
 <p>The JIT is not enabled by default. To enable it, you need a few extra steps.</p>
 <p>First, you need to install the <code>opcache</code> extension:</p>
-<pre><code class="lang-bash">sudo apt-get install php8.0-opcache
-</code></pre>
+
+```bash
+sudo apt-get install php8.0-opcache
+```
+
 <p>Then, you need to enable the JIT in the PHP configuration file (<code>php.ini</code>):</p>
-<pre><code class="lang-php">[opcache]
-opcache.enable=<span class="hljs-number">1</span>
-opcache.jit_buffer_size=<span class="hljs-number">100</span>M
+
+```php
+[opcache]
+opcache.enable=1
+opcache.jit_buffer_size=100M
 opcache.jit=tracing
-opcache.jit=<span class="hljs-number">1205</span>
-opcache.enable_cli=<span class="hljs-number">1</span>
-</code></pre>
+opcache.jit=1205
+opcache.enable_cli=1
+```
+
 <p>Here we are enabling the JIT and setting the JIT buffer size to 100 MB. The JIT can run in two modes: <code>tracing</code> and <code>function</code>. The <code>tracing</code> mode is the default and is faster, while the <code>function</code> mode is more precise.</p>
 <p>To better understand the difference between the <code>tracing</code> and <code>function</code> modes, I recommend reading the <a target="_blank" href="https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.jit">official documentation</a>.</p>
 <p>Finally, we enable the JIT for the command line (<code>opcache.enable_cli=1</code>).</p>
@@ -63,19 +75,31 @@ opcache.enable_cli=<span class="hljs-number">1</span>
 <p><em>We won't go into the details of how this script is written or its patterns, since the focus is the JIT.</em></p>
 </blockquote>
 <p>Let's run the script without the JIT:</p>
-<pre><code class="lang-bash">./start.sh
-</code></pre>
+
+```bash
+./start.sh
+```
+
 <p>The result was:</p>
-<pre><code class="lang-bash">Execution time: 6.2343468666077 seconds
+
+```bash
+Execution time: 6.2343468666077 seconds
 Encrypted: 46d37684d6032ef0167c00d29f3358d5a180438d3e8604e4c11728699d78fdb0a32284bfa8234ed59f69e7febd0d23bebab983211565582a98da8cb5c8800e42
-</code></pre>
+```
+
 <p>Now let's enable the JIT and run the script again:</p>
-<pre><code class="lang-bash">./start-jit.sh
-</code></pre>
+
+```bash
+./start-jit.sh
+```
+
 <p>The result was:</p>
-<pre><code class="lang-bash">Execution time: 3.292811870575 seconds
+
+```bash
+Execution time: 3.292811870575 seconds
 Encrypted: 46d37684d6032ef0167c00d29f3358d5a180438d3e8604e4c11728699d78fdb0a32284bfa8234ed59f69e7febd0d23bebab983211565582a98da8cb5c8800e42
-</code></pre>
+```
+
 <p>With the JIT enabled, the PHP script ran 3 seconds faster. That is a very significant performance gain.</p>
 <p>But remember, the JIT is not a silver bullet. It may not make much difference for PHP scripts that run on the web. For PHP scripts that run on the command line, however, the JIT can bring a big performance gain.</p>
 <h1 id="heading-conclusion"><strong>Conclusion</strong></h1>

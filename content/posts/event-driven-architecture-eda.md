@@ -3,6 +3,7 @@ title: 'Event-driven Architecture (EDA)'
 date: 2024-08-03
 translationKey: event-driven-architecture-eda
 draft: false
+tags: ['Architecture', 'Messaging', 'Microservices']
 ---
 
 Software architecture involves many trade-offs. A poor choice can lead to rework and delays, so it is important to know the available options and understand when each one makes sense.

@@ -5,6 +5,7 @@ source: https://luizschons.com/skills-specialized-context-for-ai-agents
 series: ['Arquitetura Amigável à IA']
 draft: false
 translationKey: 'skills-specialized-context-for-ai-agents'
+tags: ['IA', 'Arquitetura']
 ---
 
 <p>Este é o quarto artigo de uma série sobre arquitetura amigável à IA. Já falamos sobre contexto, documentação e observabilidade. Agora quero falar sobre uma forma de organizar conhecimento e fluxos de trabalho para agentes: as skills.</p>
@@ -41,7 +42,9 @@ translationKey: 'skills-specialized-context-for-ai-agents'
 <p>Uma skill genérica demais rapidamente perde seu valor.</p>
 <p>“Investigue problemas em produção” é uma instrução ampla. Ela não explica por onde começar, quais fontes consultar ou como decidir que uma hipótese é mais provável do que outra.</p>
 <p>Uma skill mais útil define o contexto, o objetivo, as fontes disponíveis e os limites da investigação:</p>
-<pre><code class="language-text">Contexto:
+
+```text
+Contexto:
   APIs e serviços do domínio de pedidos.
 
 Objetivo:
@@ -70,16 +73,20 @@ Limites:
   - não executar comandos de escrita;
   - não expor dados sensíveis no resultado;
   - pedir ajuda quando as evidências não forem suficientes.
-</code></pre>
+```
+
 <p>Este exemplo é mais útil porque transforma uma intenção em um processo que pode ser seguido.</p>
 <p>Ele também deixa algo claro: consultar um banco de dados não significa oferecer acesso ilimitado. A skill pode usar uma conexão somente leitura, com tabelas, campos e limites definidos para aquela investigação.</p>
 <p>Na prática, o agente pode acessar fontes por meio de capacidades claramente definidas:</p>
-<pre><code class="language-text">search_logs(service, time_range)
+
+```text
+search_logs(service, time_range)
 query_metrics(service, metric, time_range)
 get_trace(trace_id)
 list_recent_changes(service, time_range)
 query_readonly_database(query, parameters)
-</code></pre>
+```
+
 <p>Cada capacidade deve ter sua própria política de acesso. A consulta ao banco pode permitir somente operações de leitura, limitar o tempo de execução e permitir acesso apenas às tabelas necessárias para aquele domínio.</p>
 <p>Isso não significa que toda skill precise ser rígida. Ela pode permitir alguma flexibilidade, desde que defina claramente o problema que pretende resolver.</p>
 <p>Quanto mais claro o contexto, menor a probabilidade de o agente desperdiçar tempo em caminhos irrelevantes.</p>

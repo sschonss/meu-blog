@@ -1,0 +1,24 @@
+{{- /* Comments via giscus (GitHub Discussions). One thread per article, shared by
+     the EN and PT versions: the thread is keyed by the translationKey (or slug). */ -}}
+{{- with site.Params.giscus }}{{ if .categoryId }}
+{{- $term := printf "posts/%s" ($.Params.translationKey | default $.File.ContentBaseName) }}
+<section class="article-comments" aria-labelledby="comments-title">
+  <h2 id="comments-title">{{ i18n "comments" }}</h2>
+  <script src="https://giscus.app/client.js"
+    data-repo="{{ .repo }}"
+    data-repo-id="{{ .repoId }}"
+    data-category="{{ .category }}"
+    data-category-id="{{ .categoryId }}"
+    data-mapping="specific"
+    data-term="{{ $term }}"
+    data-strict="1"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="light"
+    data-lang="{{ if eq site.Language.Lang "pt-br" }}pt{{ else }}en{{ end }}"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async></script>
+</section>
+{{- end }}{{ end }}

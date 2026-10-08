@@ -1,0 +1,19 @@
+{{ define "main" }}
+{{ partial "sidebar.html" (dict "context" . "disableSidebar" true) }}{{/* mobile menu (hamburger) */}}
+<div class="series-page">
+  <header class="series-header">
+    <p class="series-kicker">{{ i18n "archive" }}</p>
+    <h1>{{ i18n "tags" }}</h1>
+    <p>{{ i18n "tagsDescription" }}</p>
+  </header>
+  <section class="series-grid">
+    {{ range .Data.Terms.ByCount }}
+    <a class="series-card" href="{{ .Page.RelPermalink }}">
+      <span class="series-count">{{ .Count }} {{ if eq .Count 1 }}{{ i18n "article" | lower }}{{ else }}{{ i18n "articles" | lower }}{{ end }}</span>
+      <h2>{{ .Page.Title }}</h2>
+      <span class="series-arrow">{{ i18n "viewTopic" }} <span>→</span></span>
+    </a>
+    {{ end }}
+  </section>
+</div>
+{{ end }}

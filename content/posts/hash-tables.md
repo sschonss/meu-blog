@@ -3,6 +3,7 @@ title: 'Hash Tables'
 date: 2024-03-06
 translationKey: tabelas-hash
 draft: false
+tags: ['Algorithms', 'Data structures', 'Go']
 ---
 
 <p>A hash table is a data structure that maps lookup keys to values.</p>
@@ -16,11 +17,44 @@ draft: false
 <h3 id="heading-12-example">1.2. Example</h3>
 <p>A hash function is often used to create an index into an array, which is why it needs to be fast and efficient.</p>
 <p>I wrote a very simple hash function that takes a word and returns a number that represents it.</p>
-<p>package main  </p>
-<p>import (<br /> "fmt"<br />)  </p>
-<p>func main() {<br /> for {<br />  run()<br /> }<br />}  </p>
-<p>func run(){<br /> words := [10000]string{}<br /> fmt.Println("Type a word to hash")<br /> var word string<br /> fmt.Scanln(&word)<br /> wordHash := fake_hash(word)<br /> fmt.Println("The word", word, "has the hash", wordHash)<br /> words[wordHash] = word<br /> fmt.Println("The word", word, "was added to the array at position", wordHash)<br /> fmt.Println("Type a hash to look up the matching word")<br /> var hash int<br /> fmt.Scanln(&hash)<br /> fmt.Println("The word for hash", hash, "is", words[hash])<br />}  </p>
-<p>func fake_hash(word string) int {<br /> hash := 0<br /> for i := 0; i < len(word); i++ {<br />  hash += int(word[i])<br /> }<br /> return hash<br />}</p>
+
+```go
+package main
+
+import (
+    "fmt"
+)
+
+func main() {
+    for {
+        run()
+    }
+}
+
+func run(){
+    words := [10000]string{}
+    fmt.Println("Type a word to hash")
+    var word string
+    fmt.Scanln(&word)
+    wordHash := fake_hash(word)
+    fmt.Println("The word", word, "has the hash", wordHash)
+    words[wordHash] = word
+    fmt.Println("The word", word, "was added to the array at position", wordHash)
+    fmt.Println("Type a hash to look up the matching word")
+    var hash int
+    fmt.Scanln(&hash)
+    fmt.Println("The word for hash", hash, "is", words[hash])
+}
+
+func fake_hash(word string) int {
+    hash := 0
+    for i := 0; i < len(word); i++ {
+        hash += int(word[i])
+    }
+    return hash
+}
+```
+
 <p>In this example, the fake_hash function takes the word and adds up the ASCII values of its characters, returning a number that represents the word.</p>
 <p>But don't worry: you probably won't need to write a hash function yourself, since programming languages already ship with optimized ones.</p>
 <p>Your language may call it something else, like a “map” or a “dictionary”, but the concept is the same.</p>
@@ -35,8 +69,26 @@ draft: false
 <p>When you add a name and a phone number to the phone book, the hash function is used to generate an index for that name.</p>
 <p>When you want to find someone's number, the hash function generates the index for that name, and the phone number is returned.</p>
 <p>Like this:</p>
-<p>package main  </p>
-<p>import (<br />    "fmt"<br />)<br />func main() {<br />    phoneBook := make(map[string]string)<br />    phoneBook["John"] = "1234-5678"<br />    phoneBook["Mary"] = "8765-4321"<br />    phoneBook["Joseph"] = "4321-5678"<br />    phoneBook["Anna"] = "5678-4321"<br />    fmt.Println("John's phone number is", phoneBook["John"])<br />    fmt.Println("Mary's phone number is", phoneBook["Mary"])<br />    fmt.Println("Joseph's phone number is", phoneBook["Joseph"])<br />    fmt.Println("Anna's phone number is", phoneBook["Anna"])<br />}</p>
+
+```go
+package main
+
+import (
+    "fmt"
+)
+func main() {
+    phoneBook := make(map[string]string)
+    phoneBook["John"] = "1234-5678"
+    phoneBook["Mary"] = "8765-4321"
+    phoneBook["Joseph"] = "4321-5678"
+    phoneBook["Anna"] = "5678-4321"
+    fmt.Println("John's phone number is", phoneBook["John"])
+    fmt.Println("Mary's phone number is", phoneBook["Mary"])
+    fmt.Println("Joseph's phone number is", phoneBook["Joseph"])
+    fmt.Println("Anna's phone number is", phoneBook["Anna"])
+}
+```
+
 <p>In this example, the hash function generates an index for each name, and the phone number is returned in constant time.</p>
 <h3 id="heading-22-dns">2.2. DNS</h3>
 <p>Another classic example of a hash table is DNS (Domain Name System).</p>
@@ -45,8 +97,24 @@ draft: false
 <p>If DNS were not a hash table, you would have to go through the whole list of domains until you found the site's name. Imagine how long that would take.</p>
 <p>But since DNS is a hash table, you can find a site's IP address in constant time, that is, in O(1).</p>
 <p>Let's look at an example.</p>
-<p>package main  </p>
-<p>import (<br />    "fmt"<br />)<br />func main() {<br />    dns := make(map[string]string)<br />    dns["www.google.com"] = "192.168.5.5"<br />    dns["www.facebook.com"] = "192.168.40.21"<br />    dns["www.twitter.com"] = "192.168.11.11"<br />    fmt.Println("The IP address of www.google.com is", dns["www.google.com"])<br />    fmt.Println("The IP address of www.facebook.com is", dns["www.facebook.com"])<br />    fmt.Println("The IP address of www.twitter.com is", dns["www.twitter.com"])<br />}</p>
+
+```go
+package main
+
+import (
+    "fmt"
+)
+func main() {
+    dns := make(map[string]string)
+    dns["www.google.com"] = "192.168.5.5"
+    dns["www.facebook.com"] = "192.168.40.21"
+    dns["www.twitter.com"] = "192.168.11.11"
+    fmt.Println("The IP address of www.google.com is", dns["www.google.com"])
+    fmt.Println("The IP address of www.facebook.com is", dns["www.facebook.com"])
+    fmt.Println("The IP address of www.twitter.com is", dns["www.twitter.com"])
+}
+```
+
 <p>See how similar these examples are? The idea is the same: the hash table generates an index for each name, and the IP address is returned in constant time.</p>
 <h3 id="heading-3-collisions">3. Collisions</h3>
 <h3 id="heading-31-introduction">3.1. Introduction</h3>
@@ -77,7 +145,12 @@ draft: false
 <p>An ideal load factor is below 0.7, meaning less than 70% of the table's positions are occupied.</p>
 <h4 id="heading-411-how-to-calculate-the-load-factor">4.1.1. How to Calculate the Load Factor</h4>
 <p>The load factor is calculated like this:</p>
-<p>NK = number of keys<br />NP = number of positions in the hash table</p>
+
+```text
+NK = number of keys
+NP = number of positions in the hash table
+```
+
 <p>NK / NP = load factor</p>
 <p>For example, if the hash table has 100 positions and 70 keys, the load factor is 0.7.</p>
 <p>70 / 100 = 0.7</p>
@@ -97,8 +170,21 @@ draft: false
 <p>SHA is a very secure hash function, and it is practically impossible to find two different keys with the same hash value.</p>
 <p>One of SHA's main advantages is that it is fast, efficient and one-way: it is easy to compute the hash of a key, but practically impossible to recover the key from the hash.</p>
 <p>Here is an example of using SHA in Go:</p>
-<p>package main<br />import (<br />    "crypto/sha256"<br />    "fmt"<br />)  </p>
-<p>func main() {<br />    word := "hello"<br />    hash := sha256.Sum256([]byte(word))<br />    fmt.Printf("The hash of %s is %x\n", word, hash)<br />}</p>
+
+```go
+package main
+import (
+    "crypto/sha256"
+    "fmt"
+)
+
+func main() {
+    word := "hello"
+    hash := sha256.Sum256([]byte(word))
+    fmt.Printf("The hash of %s is %x\n", word, hash)
+}
+```
+
 <p>In this example, the SHA-256 hash function is used to generate a hash value for the word “hello”.</p>
 <p>But if you try to use SHA-256 to get the word “hello” back from the hash value, you won't be able to.</p>
 <h3 id="heading-6-conclusion">6. Conclusion</h3>

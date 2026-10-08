@@ -4,6 +4,7 @@ date: 2024-03-06
 source: https://luizschons.com/tabelas-hash-1f1a85a83795
 translationKey: tabelas-hash
 draft: false
+tags: ['Algoritmos', 'Estruturas de dados', 'Go']
 ---
 
 <p>Uma tabela hash é uma estrutura de dados que associa chaves de pesquisa a valores.</p>
@@ -17,11 +18,44 @@ draft: false
 <h3 id="heading-12-exemplo">1.2. Exemplo</h3>
 <p>Muitas vezes, a função hash é usada para criar um índice para um array, e é por isso que a função hash deve ser rápida e eficiente.</p>
 <p>Desenvolvi uma função hash muito simples, que pega uma palavra e retorna um número que representa essa palavra.</p>
-<p>package main  </p>
-<p>import (<br /> "fmt"<br />)  </p>
-<p>func main() {<br /> for {<br />  run()<br /> }<br />}  </p>
-<p>func run(){<br /> array_palavras := [10000]string{}<br /> fmt.Println("Digite uma palavra para ser hasheada")<br /> var palavra string<br /> fmt.Scanln(&palavra)<br /> hash_palavra := fake_hash(palavra)<br /> fmt.Println("A palavra", palavra, "tem o hash", hash_palavra)<br /> array_palavras[hash_palavra] = palavra<br /> fmt.Println("A palavra", palavra, "foi adicionada ao array na posicao", hash_palavra)<br /> fmt.Println("Digite um hash para buscar a palavra correspondente")<br /> var hash int<br /> fmt.Scanln(&hash)<br /> fmt.Println("A palavra correspondente ao hash", hash, "é", array_palavras[hash])<br />}  </p>
-<p>func fake_hash(palavra string) int {<br /> hash := 0<br /> for i := 0; i < len(palavra); i++ {<br />  hash += int(palavra[i])<br /> }<br /> return hash<br />}</p>
+
+```go
+package main
+
+import (
+    "fmt"
+)
+
+func main() {
+    for {
+        run()
+    }
+}
+
+func run(){
+    array_palavras := [10000]string{}
+    fmt.Println("Digite uma palavra para ser hasheada")
+    var palavra string
+    fmt.Scanln(&palavra)
+    hash_palavra := fake_hash(palavra)
+    fmt.Println("A palavra", palavra, "tem o hash", hash_palavra)
+    array_palavras[hash_palavra] = palavra
+    fmt.Println("A palavra", palavra, "foi adicionada ao array na posicao", hash_palavra)
+    fmt.Println("Digite um hash para buscar a palavra correspondente")
+    var hash int
+    fmt.Scanln(&hash)
+    fmt.Println("A palavra correspondente ao hash", hash, "é", array_palavras[hash])
+}
+
+func fake_hash(palavra string) int {
+    hash := 0
+    for i := 0; i < len(palavra); i++ {
+        hash += int(palavra[i])
+    }
+    return hash
+}
+```
+
 <p>Nesse exemplo, a função fake_hash pega a palavra e soma os valores ASCII de cada caractere, retornando um número que representa a palavra.</p>
 <p>Mas fique tranquilo, provavelmente você não vai precisar criar uma função hash, pois as linguagens de programação já possuem funções hash prontas e otimizadas.</p>
 <p>Pode ser que na sua linguagem de programação a função hash seja chamada de outra coisa, como “map” ou “dicionário”, mas o conceito é o mesmo.</p>
@@ -36,8 +70,26 @@ draft: false
 <p>Ao adicionar um nome e um número de telefone à lista telefônica, a função hash é usada para gerar um índice para esse nome.</p>
 <p>Quando você quer encontrar o número de telefone de uma pessoa, a função hash é usada para gerar o índice correspondente ao nome da pessoa, e o número de telefone é retornado.</p>
 <p>Dessa forma:</p>
-<p>package main  </p>
-<p>import (<br />    "fmt"<br />)<br />func main() {<br />    lista_telefonica := make(map[string]string)<br />    lista_telefonica["João"] = "1234-5678"<br />    lista_telefonica["Maria"] = "8765-4321"<br />    lista_telefonica["José"] = "4321-5678"<br />    lista_telefonica["Ana"] = "5678-4321"<br />    fmt.Println("O número de telefone de João é", lista_telefonica["João"])<br />    fmt.Println("O número de telefone de Maria é", lista_telefonica["Maria"])<br />    fmt.Println("O número de telefone de José é", lista_telefonica["José"])<br />    fmt.Println("O número de telefone de Ana é", lista_telefonica["Ana"])<br />}</p>
+
+```go
+package main
+
+import (
+    "fmt"
+)
+func main() {
+    lista_telefonica := make(map[string]string)
+    lista_telefonica["João"] = "1234-5678"
+    lista_telefonica["Maria"] = "8765-4321"
+    lista_telefonica["José"] = "4321-5678"
+    lista_telefonica["Ana"] = "5678-4321"
+    fmt.Println("O número de telefone de João é", lista_telefonica["João"])
+    fmt.Println("O número de telefone de Maria é", lista_telefonica["Maria"])
+    fmt.Println("O número de telefone de José é", lista_telefonica["José"])
+    fmt.Println("O número de telefone de Ana é", lista_telefonica["Ana"])
+}
+```
+
 <p>Nesse exemplo, a função hash é usada para gerar um índice para cada nome, e o número de telefone é retornado em tempo constante.</p>
 <h3 id="heading-22-dns">2.2. DNS</h3>
 <p>Outro exemplo clássico de uso de tabela hash é o DNS (Domain Name System).</p>
@@ -46,8 +98,24 @@ draft: false
 <p>Se o DNS não fosse uma tabela hash, você teria que percorrer toda a lista de domínios até encontrar o nome do site, imagina o tempo que isso levaria.</p>
 <p>Mas, como o DNS é uma tabela hash, você pode encontrar o endereço IP de um site em tempo constante, ou seja, em O(1).</p>
 <p>Vamos entender mais sobre isso com um exemplo.</p>
-<p>package main  </p>
-<p>import (<br />    "fmt"<br />)<br />func main() {<br />    dns := make(map[string]string)<br />    dns["www.google.com"] = "192.168.5.5"<br />    dns["www.facebook.com"] = "192.168.40.21"<br />    dns["www.twitter.com"] = "192.168.11.11"<br />    fmt.Println("O endereço IP de www.google.com é", dns["www.google.com"])<br />    fmt.Println("O endereço IP de www.facebook.com é", dns["www.facebook.com"])<br />    fmt.Println("O endereço IP de www.twitter.com é", dns["www.twitter.com"])<br />}</p>
+
+```go
+package main
+
+import (
+    "fmt"
+)
+func main() {
+    dns := make(map[string]string)
+    dns["www.google.com"] = "192.168.5.5"
+    dns["www.facebook.com"] = "192.168.40.21"
+    dns["www.twitter.com"] = "192.168.11.11"
+    fmt.Println("O endereço IP de www.google.com é", dns["www.google.com"])
+    fmt.Println("O endereço IP de www.facebook.com é", dns["www.facebook.com"])
+    fmt.Println("O endereço IP de www.twitter.com é", dns["www.twitter.com"])
+}
+```
+
 <p>Entende como são exemplos bem similares? A ideia é a mesma, a tabela hash é usada para gerar um índice para cada nome, e o endereço IP é retornado em tempo constante.</p>
 <h3 id="heading-3-colisoes">3. Colisões</h3>
 <h3 id="heading-31-introducao">3.1. Introdução</h3>
@@ -78,7 +146,12 @@ draft: false
 <p>Um fator de carga ideal é menor que 0,7, ou seja, menos de 70% das posições da tabela hash estão ocupadas.</p>
 <h4 id="heading-411-como-calcular-o-fator-de-carga">4.1.1. Como Calcular o Fator de Carga</h4>
 <p>O fator de carga é calculado da seguinte forma:</p>
-<p>NK = número de chaves de pesquisa<br />NP = número de posições da tabela hash</p>
+
+```text
+NK = número de chaves de pesquisa
+NP = número de posições da tabela hash
+```
+
 <p>NK / NP = fator de carga</p>
 <p>Por exemplo, se a tabela hash tem 100 posições e 70 chaves de pesquisa, o fator de carga é 0,7.</p>
 <p>70 / 100 = 0,7</p>
@@ -98,8 +171,21 @@ draft: false
 <p>SHA é uma função hash muito segura, e é praticamente impossível encontrar duas chaves de pesquisa diferentes com o mesmo valor hash.</p>
 <p>Uma das principais vantagens de SHA é que ela é rápida, eficiente e unidirecional, ou seja, é fácil calcular o valor hash de uma chave de pesquisa, mas é praticamente impossível calcular a chave de pesquisa a partir do valor hash.</p>
 <p>Segue um exemplo de como usar SHA em Go:</p>
-<p>package main<br />import (<br />    "crypto/sha256"<br />    "fmt"<br />)  </p>
-<p>func main() {<br />    palavra := "hello"<br />    hash := sha256.Sum256([]byte(palavra))<br />    fmt.Printf("O hash de %s é %x\n", palavra, hash)<br />}</p>
+
+```go
+package main
+import (
+    "crypto/sha256"
+    "fmt"
+)
+
+func main() {
+    palavra := "hello"
+    hash := sha256.Sum256([]byte(palavra))
+    fmt.Printf("O hash de %s é %x\n", palavra, hash)
+}
+```
+
 <p>Nesse exemplo, a função hash SHA-256 é usada para gerar um valor hash para a palavra “hello”.</p>
 <p>Mas se você quiser usar o SHA-256 para gerar a palavra “hello” a partir do valor hash, você não vai conseguir.</p>
 <h3 id="heading-6-conclusao">6. Conclusão</h3>

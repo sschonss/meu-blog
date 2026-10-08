@@ -5,6 +5,7 @@ source: https://luizschons.com/skills-specialized-context-for-ai-agents
 series: ['AI-Friendly Architecture']
 draft: false
 aliases: ["/skills-specialized-context-for-ai-agents/"]
+tags: ['AI', 'Architecture']
 ---
 
 <p>This is the fourth article in a series about AI-friendly architecture. We have already talked about context, documentation, and observability. Now I want to talk about a way to organize knowledge and workflows for agents: skills.</p>
@@ -68,7 +69,9 @@ aliases: ["/skills-specialized-context-for-ai-agents/"]
 <p>A skill that is too general quickly loses its value.</p>
 <p>“Investigate production problems” is a broad instruction. It does not explain where to start, which sources to check, or how to decide that one idea is more likely than another.</p>
 <p>A more useful skill defines the context, the goal, the available sources, and the investigation limits:</p>
-<pre><code class="language-text">Context:
+
+```text
+Context:
   APIs and services in the orders domain.
 
 Goal:
@@ -97,16 +100,20 @@ Limits:
   - do not run write commands;
   - do not expose sensitive data in the result;
   - ask for help when the evidence is not enough.
-</code></pre>
+```
+
 <p>This example is more useful because it turns an intention into a process that can be followed.</p>
 <p>It also makes one thing clear: querying a database does not mean giving unlimited access. The skill can use a read-only connection with defined tables, fields, and limits for that investigation.</p>
 <p>In practice, the agent can access sources through clearly defined capabilities:</p>
-<pre><code class="language-text">search_logs(service, time_range)
+
+```text
+search_logs(service, time_range)
 query_metrics(service, metric, time_range)
 get_trace(trace_id)
 list_recent_changes(service, time_range)
 query_readonly_database(query, parameters)
-</code></pre>
+```
+
 <p>Each capability should have its own access policy.</p>
 <p>The database query may allow only read operations, limit how long the query can run, and allow access only to the tables needed for that domain.</p>
 <p>This does not mean that every skill needs to be rigid. It can allow some flexibility as long as it clearly defines the problem it is meant to solve.</p>

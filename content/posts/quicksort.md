@@ -3,6 +3,7 @@ title: 'Quicksort'
 date: 2024-02-28
 translationKey: quicksort
 draft: false
+tags: ['Algorithms']
 ---
 
 <p>Quicksort is a very efficient sorting algorithm, invented by C.A.R. Hoare in 1960. It is widely used to sort arrays. The algorithm presented below is a recursive version of Quicksort that picks an element as the pivot and partitions the array so that all elements smaller than the pivot come before it and the larger ones come after it. The subarrays are then sorted recursively.</p>
@@ -15,9 +16,9 @@ draft: false
 <p>Array: [1, 2, 3, 4, 5]</p>
 <p>What is the base case? The base case is when the array has only one element. In that case, the sum is the element itself.</p>
 <p>How do we reach the base case? We remove one element at a time and see what is left.</p>
-<p><img src="/images/posts/quicksort/a10290d3-4010-4716-8fc4-b65d59558f23.png" alt /></p>
+<table><thead><tr><th>Removed element</th><th>Remaining array</th></tr></thead><tbody><tr><td>1</td><td>[2, 3, 4, 5]</td></tr><tr><td>2</td><td>[3, 4, 5]</td></tr><tr><td>3</td><td>[4, 5]</td></tr><tr><td>4</td><td>[5]</td></tr></tbody></table>
 <p>Now that we have reached the base case, let's solve the problem. The sum of all elements of the array [5] is 5. Now we add the 4 we removed earlier. The sum of all elements of the array [4, 5] is 9. Now we add the 3 we removed earlier. The sum of all elements of the array [3, 9] is 12. And so on.</p>
-<p><img src="/images/posts/quicksort/f05822b2-a2fd-4bf6-aea3-e2049ad244b4.png" alt /></p>
+<table><thead><tr><th>Base case</th><th>Sum</th></tr></thead><tbody><tr><td>[5]</td><td>5</td></tr><tr><td>[4, 5]</td><td>9</td></tr><tr><td>[3, 9]</td><td>12</td></tr><tr><td>[2, 12]</td><td>14</td></tr><tr><td>[1, 14]</td><td>15</td></tr></tbody></table>
 <p>The sum of all elements of the array [1, 2, 3, 4, 5] is 15.</p>
 <p>This is a simple case of D&amp;C, and many algorithms use this concept to solve problems.</p>
 <h3 id="heading-why-not-use-a-loop">Why not use a loop?</h3>
@@ -30,31 +31,31 @@ draft: false
 <p>Quicksort is a very efficient sorting algorithm, invented by C.A.R. Hoare in 1960. It is widely used to sort arrays. The algorithm presented below is a recursive version of Quicksort that picks an element as the pivot and partitions the array so that all elements smaller than the pivot come before it and the larger ones come after it. The subarrays are then sorted recursively.</p>
 <h3 id="heading-example-1">Example</h3>
 <p>Let's see an example of how Quicksort works.</p>
-<p><img src="/images/posts/quicksort/5195328a-abf0-4d07-be67-675cd27dfc0d.png" alt /></p>
+<table><thead><tr><th>Array</th></tr></thead><tbody><tr><td>3, 6, 8, 10, 1, 2, 1</td></tr></tbody></table>
 <p>Step 1: Pick an element as the pivot. Let's pick 6.</p>
 <p>Step 2: Partition the array so that all elements smaller than the pivot come before it and the larger ones come after it.</p>
-<p><img src="/images/posts/quicksort/5c2bacf4-226e-47d9-bf60-144eea312205.png" alt /></p>
+<table><thead><tr><th>Less than 6</th><th>Pivot</th><th>Greater than 6</th></tr></thead><tbody><tr><td>3, 1, 2, 1</td><td>6</td><td>8, 10</td></tr></tbody></table>
 <p>Step 3: Sort the subarrays recursively.</p>
 <p>What does sorting the subarrays recursively mean? It means repeating steps 1 and 2 for each subarray, picking a pivot and partitioning it.</p>
 <p>Let's pick 1 as the pivot.</p>
-<p><img src="/images/posts/quicksort/11e39580-eeee-46e7-84a2-fac3b07437e7.png" alt /></p>
+<table><thead><tr><th>Less than 1</th><th>Pivot</th><th>Greater than 1</th></tr></thead><tbody><tr><td></td><td>1, 1</td><td>2, 3</td></tr></tbody></table>
 <p>Let's pick 2 as the pivot.</p>
-<p><img src="/images/posts/quicksort/22e0a07e-fcb2-4d68-917c-5d84a92b907d.png" alt /></p>
+<table><thead><tr><th>Less than 2</th><th>Pivot</th><th>Greater than 2</th></tr></thead><tbody><tr><td></td><td>2</td><td>3</td></tr></tbody></table>
 <p>Now we have to pick 3 as the pivot.</p>
-<p><img src="/images/posts/quicksort/7bcf8627-69bb-4cf2-921f-c820c064fe67.png" alt /></p>
+<table><thead><tr><th>Less than 3</th><th>Pivot</th><th>Greater than 3</th></tr></thead><tbody><tr><td></td><td>3</td><td></td></tr></tbody></table>
 <p>Now that we have reached the base case, let's sort the subarrays recursively.</p>
 <p>We go back up through the arrays until the left side is sorted.</p>
-<p><img src="/images/posts/quicksort/0b523144-1510-49ae-8b14-de4164606250.png" alt /></p>
+<table><thead><tr><th>Less than 6</th><th>Pivot</th><th>Greater than 6</th></tr></thead><tbody><tr><td>1, 1, 2, 3</td><td>6</td><td>8, 10</td></tr></tbody></table>
 <p>Now let's sort the right side.</p>
-<p><img src="/images/posts/quicksort/3d7d40e5-e410-4ff6-b42c-5e41372a229a.png" alt /></p>
+<table><thead><tr><th>Array</th></tr></thead><tbody><tr><td>8, 10</td></tr></tbody></table>
 <p>Step 1: Pick an element as the pivot. Let's pick 10.</p>
 <p>Step 2: Partition the array so that all elements smaller than the pivot come before it and the larger ones come after it.</p>
-<p><img src="/images/posts/quicksort/9aacc718-2522-4392-800a-0111b53d6cf0.png" alt /></p>
+<table><thead><tr><th>Less than 10</th><th>Pivot</th><th>Greater than 10</th></tr></thead><tbody><tr><td>8</td><td>10</td><td></td></tr></tbody></table>
 <p>Now that we have reached the base case, let's sort the subarrays recursively.</p>
 <p>We go back up through the arrays until the right side is sorted.</p>
-<p><img src="/images/posts/quicksort/2a0e8dcd-a3ec-4a26-b4fe-1221e875c665.png" alt /></p>
+<table><thead><tr><th>Array</th></tr></thead><tbody><tr><td>8, 10</td></tr></tbody></table>
 <p>Now that the subarrays are sorted, the original array is sorted.</p>
-<p><img src="/images/posts/quicksort/caaef6a6-ec30-4b91-ab22-9d7ad14273e2.png" alt /></p>
+<table><thead><tr><th>Array</th></tr></thead><tbody><tr><td>1, 1, 2, 3, 6, 8, 10</td></tr></tbody></table>
 <p>That is an example of how Quicksort works.</p>
 <h3 id="heading-performance">Performance</h3>
 <p>In software development, performance is a very important factor, and we often use Big O notation to describe an algorithm's efficiency.</p>

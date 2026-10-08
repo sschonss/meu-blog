@@ -5,6 +5,7 @@ source: https://luizschons.com/code-is-not-context-designing-a-context-architect
 series: ['Arquitetura Amigável à IA']
 translationKey: 'code-is-not-context-designing-a-context-architecture-for-agents'
 draft: false
+tags: ['IA', 'Arquitetura']
 ---
 
 <p>Este é o segundo artigo de uma série sobre arquitetura amigável à IA. No primeiro artigo, expliquei como a IA se parece com uma pessoa nova entrando em uma empresa e tentando entender um sistema pela primeira vez.</p>

@@ -4,6 +4,7 @@ date: 2026-08-21
 source: https://luizschons.com/observability-is-also-context-for-ai-agents
 series: ['Arquitetura Amigável à IA']
 draft: false
+tags: ['IA', 'Observabilidade']
 ---
 
 <p>Este é o terceiro artigo de uma série sobre arquitetura amigável à IA. Já falamos sobre como a IA se parece com uma nova pessoa entrando em uma empresa e sobre a importância de conectar código, documentação e decisões arquiteturais.</p>
@@ -62,9 +63,13 @@ draft: false
 <h2>Os registros precisam contar uma história</h2>
 <p>Um log com uma mensagem curta pode ajudar alguém que conhece o código. Para uma investigação maior, normalmente não é suficiente.</p>
 <p>Compare estes dois exemplos:</p>
-<pre><code class="language-text">Error processing payment
-</code></pre>
-<pre><code class="language-json">{
+
+```text
+Error processing payment
+```
+
+```json
+{
   "event": "payment_processing_failed",
   "order_id": "ord_123",
   "payment_provider": "provider_a",
@@ -73,7 +78,8 @@ draft: false
   "request_id": "req_456",
   "occurred_at": "2026-08-20T18:30:00Z"
 }
-</code></pre>
+```
+
 <p>O segundo exemplo é melhor porque contém informações que podem ser conectadas a outros sinais.</p>
 <p>Com um <code>request_id</code>, podemos acompanhar a requisição por diferentes serviços. Com um <code>order_id</code>, podemos entender o impacto em uma transação. Com o código de erro, podemos agrupar falhas semelhantes. Com o timestamp, podemos comparar o evento com deploys e mudanças de infraestrutura.</p>
 <p>Registros estruturados tornam o comportamento do sistema mais fácil de entender.</p>

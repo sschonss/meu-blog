@@ -6,6 +6,7 @@ series: ['AI-Friendly Architecture']
 draft: false
 aliases: ["/from-epic-to-production-using-agents-to-deliver-features-in-real-systems/"]
 translationKey: 'from-epic-to-production-using-agents-to-deliver-features-in-real-systems'
+tags: ['AI', 'Architecture']
 ---
 
 <p>This is the eighth article in the series about AI-friendly architecture. In the previous articles, we talked about context, documentation, observability, skills, Context Skills, agents, tools, MCP, guardrails, and harnesses.</p>
@@ -14,9 +15,12 @@ translationKey: 'from-epic-to-production-using-agents-to-deliver-features-in-rea
 <p>Writing the code is only one step. In many cases, it is not even the hardest one.</p>
 <h2>The epic</h2>
 <p>Let us use this request as an example:</p>
-<pre><code class="language-text">As a customer, I want to request a partial refund for an order,
+
+```text
+As a customer, I want to request a partial refund for an order,
 so I can return only some of the items I bought.
-</code></pre>
+```
+
 <p>At first, this looks like a small change in the payment service.</p>
 <p>But before writing code, we need to understand several things:</p>
 <ul>
@@ -112,7 +116,9 @@ so I can return only some of the items I bought.
 <h2>Record the spike decision</h2>
 <p>The result of the spike should not remain only in the conversation history. It should become documentation that can be found during future investigations.</p>
 <p>A decision document could look like this:</p>
-<pre><code class="language-markdown"># Decision: partial refunds
+
+```markdown
+# Decision: partial refunds
 
 ## Context
 
@@ -141,7 +147,8 @@ Use the existing transaction and track the total refunded amount.
 - two refund requests may run at the same time;
 - the external and internal states may become different;
 - some consumers may not know the new format.
-</code></pre>
+```
+
 <p>This documentation helps the current team, but it also helps future agents and future work.</p>
 <p>Every well-documented spike adds a new context source to the architecture. Over time, we stop depending only on code and build a map of decisions, contracts, and consequences.</p>
 <h2>Define what success means</h2>

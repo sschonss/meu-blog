@@ -5,9 +5,8 @@ source: https://luizschons.com/context-skills-breaking-down-the-context-for-ai-a
 series: ['Arquitetura Amigável à IA']
 draft: false
 translationKey: 'context-skills-breaking-down-the-context-for-ai-agents'
+tags: ['IA', 'Arquitetura']
 ---
-
-
 
 <p>Este é o sexto artigo da série sobre arquitetura amigável à IA. Já discutimos como o código, a documentação e a observabilidade ajudam os agentes a entender os sistemas. Também vimos como as habilidades podem fornecer conhecimento especializado para problemas específicos.</p>
 <p>Agora quero dar um passo para trás e olhar para a arquitetura por trás dessas habilidades.</p>
@@ -15,7 +14,9 @@ translationKey: 'context-skills-breaking-down-the-context-for-ai-agents'
 <h2>O monólito de contexto</h2>
 <p>Uma das primeiras tentativas de preparar um repositório para agentes é muitas vezes criar um arquivo central com todas as instruções.</p>
 <p>Algo assim</p>
-<pre><code class="language-text">AGENTS.md
+
+```text
+AGENTS.md
 
 # Como nossa empresa funciona
 
@@ -28,7 +29,8 @@ Business rules
 Runbooks
 Testing conventions
 Information about all teams
-</code></pre>
+```
+
 <p>No começo, esse arquivo ajuda. Ele cria um lugar para registrar decisões e orientações que costumavam existir apenas na cabeça das pessoas.</p>
 <p>Mas pode crescer rapidamente. Depois de algum tempo, fica difícil saber quais partes se aplicam a cada tarefa, quem é responsável por atualizá-las e quais instruções têm prioridade.</p>
 <p>Este é um monólito de contexto.</p>
@@ -109,13 +111,16 @@ Information about all teams
 <p>Dividir o contexto não significa criar agentes isolados que não conseguem se comunicar.</p>
 <p>O agente principal coordena as especializações.</p>
 <p>Imagine uma investigação em que a taxa de falhas de pagamento aumentou. O agente pode fazer o seguinte:</p>
-<pre><code class="language-text">1. Activate the Payments Context Skill.
+
+```text
+1. Activate the Payments Context Skill.
 2. Use the Observability Skill to investigate the signals.
 3. Use the Delivery Skill to check recent deployments.
 4. Use the Data Platform Skill if the flow depends on processed data.
 5. Combine the evidence into a hypothesis.
 6. Show what was confirmed and what is still uncertain.
-</code></pre>
+```
+
 <p>Cada skill acrescenta uma visão específica. O agente conecta as informações entre elas.</p>
 <p>Essa separação permite que uma skill seja mantida pelas pessoas que realmente conhecem aquele contexto. Elas não precisam manter todas as instruções do agente de engenharia.</p>
 <h2>Contexto demais também pode ser um problema</h2>
@@ -125,13 +130,16 @@ Information about all teams
 <p>Outra pergunta útil é: se esse contexto mudar, quem precisa revisar o conhecimento? Se a resposta incluir equipes muito diferentes, responsabilidades conflitantes ou fontes não relacionadas, o limite pode ser grande demais.</p>
 <p>Os limites também devem ser observáveis. Precisamos saber qual contexto foi consultado, quais fontes foram usadas e quais regras orientaram a resposta. Sem essa visibilidade, é difícil entender se um problema veio de informação ausente, da escolha da skill ou da interpretação do agente.</p>
 <p>Podemos começar com alguns contextos maiores:</p>
-<pre><code class="language-text">Observability
+
+```text
+Observability
 Delivery
 Data
 Payments
 Orders
 Security
-</code></pre>
+```
+
 <p>Com o tempo, cada contexto pode evoluir. Uma skill de observabilidade pode ganhar especializações para incidentes, desempenho e capacidade. Essa divisão deve acontecer quando houver uma necessidade real, não apenas porque é possível criar mais arquivos.</p>
 <h2>Onde vivem as Context Skills?</h2>
 <p>Uma Context Skill pode viver junto do código da equipe, em um repositório de plataforma ou em um catálogo compartilhado. A escolha depende de quem mantém o contexto e de como os agentes serão usados.</p>
@@ -156,14 +164,17 @@ Security
 <p>A responsabilidade é uma parte essencial dessa arquitetura.</p>
 <p>Se todos são responsáveis por uma skill, provavelmente ninguém é realmente responsável. Se ninguém revisa as instruções quando uma API muda, o agente começa a trabalhar com conhecimento desatualizado.</p>
 <p>Uma skill pode ter um arquivo simples de metadados:</p>
-<pre><code class="language-yaml">name: payments-context
+
+```yaml
+name: payments-context
 owner: payments-team
 review_frequency: quarterly
 sources:
   - payment-service
   - payment-documentation
   - payment-dashboards
-</code></pre>
+```
+
 <p>Esse arquivo não resolve sozinho o problema de manutenção, mas torna a responsabilidade mais visível e pode ajudar a criar um processo de revisão.</p>
 <h2>Conclusão</h2>
 <p>Durante muito tempo, nossa preocupação foi decompor sistemas para que pudessem ser desenvolvidos e operados por equipes diferentes.</p>

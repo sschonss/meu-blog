@@ -4,6 +4,7 @@ date: 2024-04-25
 source: https://luizschons.com/programac3a7c3a3o-paralela-e-assc3adncrona-com-php-5969c49d0bba
 translationKey: programacao-paralela-e-assincrona-com-php
 draft: false
+tags: ['PHP', 'Performance']
 ---
 
 <p>Photo by <a target="_blank" href="https://unsplash.com/@benofthenorth?utm_source=medium&utm_medium=referral">Ben Griffiths</a> on <a target="_blank" href="https://unsplash.com?utm_source=medium&utm_medium=referral">Unsplash</a></p>
@@ -17,18 +18,35 @@ draft: false
 <p><em>Quando você compra um processador com múltiplos núcleos, você está comprando a capacidade de executar várias threads simultaneamente. No entanto, para aproveitar ao máximo essa capacidade, é necessário que o software seja desenvolvido de forma a utilizar esses recursos de forma eficiente.</em></p>
 </blockquote>
 <h4 id="heading-exemplo-de-programacao-paralela-em-php">Exemplo de Programação Paralela em PHP</h4>
-<p><?php  </p>
-<p>use function parallel\run;  </p>
-<p>class DataProcessor<br />{<br />    public function process(array $data): array {<br />        $formattedData = $this->formatData($data);<br />        $excel_file = $this->generateExcel($formattedData);<br />        $this->sendEmail($excel_file, Auth::user()->email);<br />    }<br />}  </p>
-<p>$data = range(1, 1000);  </p>
-<p>$processor = new DataProcessor();  </p>
-<p>$parallelResult1 = run(function () use ($processor, $data) {<br />    return $processor->process($data);<br />});  </p>
-<p>$parallelResult2 = $processor->process($data);</p>
+
+```php
+<?php
+use function parallel\run;
+
+class DataProcessor
+{
+    public function process(array $data): array {
+        $formattedData = $this->formatData($data);
+        $excel_file = $this->generateExcel($formattedData);
+        $this->sendEmail($excel_file, Auth::user()->email);
+    }
+}
+
+$data = range(1, 1000);
+$processor = new DataProcessor();
+
+$parallelResult1 = run(function () use ($processor, $data) {
+    return $processor->process($data);
+});
+
+$parallelResult2 = $processor->process($data);
+```
+
 <p>No exemplo acima, estamos utilizando a extensão parallel para executar o método <code>process</code> da classe <code>DataProcessor</code> em paralelo. Isso significa que o método será executado em uma thread separada, o que pode resultar em um aumento de desempenho.</p>
 <p>Isso não é bala de prata, e nem sempre é a melhor solução para todos os problemas. No entanto, em alguns casos, a programação paralela pode ser uma forma eficiente de melhorar o desempenho de uma aplicação.</p>
 <p>O exemplo acima é bastante simplificado, mas ilustra como a programação paralela pode ser utilizada em PHP. Para obter mais informações sobre a extensão parallel, consulte a <a target="_blank" href="https://www.php.net/manual/en/book.parallel.php">documentação oficial</a>.</p>
 <p>Aqui esta uma imagem de um exemplo de programação paralela em PHP:</p>
-<p><img src="/images/posts/programacao-paralela-e-assincrona-com-php/e7563efd-e150-4fc2-a5d1-758f6bb59a65.png" alt /></p>
+<p><img src="/images/posts/programacao-paralela-e-assincrona-com-php/e7563efd-e150-4fc2-a5d1-758f6bb59a65.png" alt="Diagrama da programação paralela: a thread principal inicia as threads A, B e C, que rodam ao mesmo tempo" /></p>
 <p><em>Imagem ilustrativa de um exemplo de programação paralela retirada da internet.</em></p>
 <p>Perceba que a programação paralela é diferente da programação assíncrona. Na programação paralela, várias threads são executadas simultaneamente, enquanto na programação assíncrona, várias tarefas podem ser executadas de forma concorrente, mas não necessariamente simultaneamente.</p>
 <h3 id="heading-programacao-assincrona">Programação Assíncrona</h3>
@@ -39,15 +57,27 @@ draft: false
 <p><em>Você pode achar o termo “servidor auto-contido” em alguns lugares, mas a ideia é a mesma: um servidor que pode lidar com várias requisições simultaneamente, sem a necessidade de criar uma nova thread para cada requisição.</em></p>
 </blockquote>
 <h4 id="heading-exemplo-de-programacao-assincrona-em-php">Exemplo de Programação Assíncrona em PHP</h4>
-<p>use Swoole\Http\Server;  </p>
-<p>$server = new Server("0.0.0.0", 9501);  </p>
-<p>$server->on("start", function (Server $server) {<br />    echo "Server started at http://{$server->host}:{$server->port}\n";<br />});  </p>
-<p>$server->on("request", function ($request, $response) {<br />    $data = $request->rawContent();<br />    $response->end("Received data: $data");<br />});  </p>
-<p>$server->start();</p>
+
+```php
+use Swoole\Http\Server;
+$server = new Server("0.0.0.0", 9501);
+
+$server->on("start", function (Server $server) {
+    echo "Server started at http://{$server->host}:{$server->port}\n";
+});
+
+$server->on("request", function ($request, $response) {
+    $data = $request->rawContent();
+    $response->end("Received data: $data");
+});
+
+$server->start();
+```
+
 <p>No exemplo acima, estamos utilizando a extensão swoole para criar um servidor web assíncrono em PHP. O servidor irá escutar na porta 9501 e responder a todas as requisições com uma mensagem contendo os dados recebidos</p>
 <p>Esse exemplo é bastante simplificado, mas ilustra como a programação assíncrona pode ser utilizada em PHP. Para obter mais informações sobre a extensão swoole, consulte a <a target="_blank" href="https://www.swoole.co.uk/">documentação oficial</a>.</p>
 <p>Aqui esta uma imagem de um exemplo de programação assíncrona:</p>
-<p><img src="/images/posts/programacao-paralela-e-assincrona-com-php/554adf54-7f19-4abf-bea2-aad9a2b23333.png" alt /></p>
+<p><img src="/images/posts/programacao-paralela-e-assincrona-com-php/554adf54-7f19-4abf-bea2-aad9a2b23333.png" alt="Diagrama de sequência da programação assíncrona: um processo dispara várias requisições por uma thread e recebe as respostas fora de ordem" /></p>
 <p>Imagem ilustrativa de um exemplo de programação assíncrona retirada da internet.</p>
 <h3 id="heading-ciclo-de-vida-de-uma-requisicao-no-php-fpm">Ciclo de Vida de uma Requisição no PHP-FPM</h3>
 <p>Quando uma requisição é feita a um servidor web PHP, como o PHP-FPM, o servidor passa por várias etapas para processar a requisição e retornar uma resposta ao cliente. O ciclo de vida de uma requisição no PHP-FPM pode ser dividido em várias etapas:</p>

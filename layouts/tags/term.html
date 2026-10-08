@@ -1,0 +1,14 @@
+{{ define "main" }}
+{{ partial "sidebar.html" (dict "context" . "disableSidebar" true) }}{{/* mobile menu (hamburger) */}}
+<div class="series-page">
+  <a class="series-back" href="{{ "tags/" | relLangURL }}">← {{ i18n "allTags" }}</a>
+  <header class="series-header series-term-header">
+    <p class="series-kicker">{{ i18n "tagKicker" }}</p>
+    <h1>{{ .Title }}</h1>
+    <p>{{ i18n "tagArticles" (dict "Count" (len .Pages)) }}</p>
+  </header>
+  <div class="posts-list">
+    {{ range .Pages.ByDate.Reverse }}{{ partial "post-row.html" . }}{{ end }}
+  </div>
+</div>
+{{ end }}

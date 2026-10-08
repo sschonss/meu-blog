@@ -5,6 +5,7 @@ source: https://luizschons.com/observability-is-also-context-for-ai-agents
 series: ['AI-Friendly Architecture']
 draft: false
 aliases: ["/observability-is-also-context-for-ai-agents/"]
+tags: ['AI', 'Observability']
 ---
 
 <p>This is the third article in a series about AI-friendly architecture. We have already talked about how AI is like a new person joining a company and how important it is to connect code, documentation, and architectural decisions.</p>
@@ -63,9 +64,13 @@ aliases: ["/observability-is-also-context-for-ai-agents/"]
 <h2>Logs Need to Tell a Story</h2>
 <p>A log with a short message may help someone who knows the code. For a larger investigation, it is usually not enough.</p>
 <p>Compare these two examples:</p>
-<pre><code class="language-text">Error processing payment
-</code></pre>
-<pre><code class="language-json">{
+
+```text
+Error processing payment
+```
+
+```json
+{
   "event": "payment_processing_failed",
   "order_id": "ord_123",
   "payment_provider": "provider_a",
@@ -74,7 +79,8 @@ aliases: ["/observability-is-also-context-for-ai-agents/"]
   "request_id": "req_456",
   "occurred_at": "2026-08-20T18:30:00Z"
 }
-</code></pre>
+```
+
 <p>The second example is better because it contains information that can be connected to other signals.</p>
 <p>With a <code>request_id</code>, we can follow the request across different services. With an <code>order_id</code>, we can understand the impact on one transaction. With the error code, we can group similar failures. With the timestamp, we can compare the event with deployments and infrastructure changes.</p>
 <p>Structured logs make the system’s behavior easier to understand.</p>

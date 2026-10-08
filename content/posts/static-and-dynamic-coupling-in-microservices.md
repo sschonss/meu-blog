@@ -3,6 +3,7 @@ title: 'Static and dynamic coupling in microservices'
 date: 2024-10-11
 translationKey: acoplamento-estatico-e-dinamico-em-microservices
 draft: false
+tags: ['Architecture', 'Microservices']
 ---
 
 <p>Monolithic applications are those with a single codebase, a single executable and a single process. They are often built in a single programming language and deployed to a single server.</p>
@@ -19,7 +20,7 @@ draft: false
 <p>There are two kinds of coupling in microservices: static coupling and dynamic coupling, and those are what we are going to talk about today.</p>
 <hr />
 <h2><strong>Example of a microservices architecture</strong></h2>
-<img src="/images/posts/acoplamento-estatico-e-dinamico-em-microservices/bb9c5c1b-8245-4a17-9691-a5a166d7539f.png" alt="" style="display:block;margin:0 auto" />
+<img src="/images/posts/acoplamento-estatico-e-dinamico-em-microservices/bb9c5c1b-8245-4a17-9691-a5a166d7539f.png" alt="Microservices architecture diagram: API Gateway, Nginx, PaymentService, OrderService, UserService, ProductCatalogService, RabbitMQ, NotificationService, MongoDB and Consul" style="display:block;margin:0 auto" />
 
 <h3><strong>Components:</strong></h3>
 <ol>

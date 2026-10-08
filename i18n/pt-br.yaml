@@ -36,3 +36,11 @@ seriesPart: "Parte {{ .N }} de {{ .Total }}"
 previousArticle: Artigo anterior
 nextArticle: Próximo artigo
 readTranslation: Read in English
+tags: Temas
+allTags: Todos os temas
+tagKicker: TEMA
+tagsDescription: Navegue pelos artigos por tema.
+tagArticles: "{{ .Count }} artigos sobre este tema."
+relatedArticles: Leia também
+comments: Comentários
+viewTopic: Ver artigos

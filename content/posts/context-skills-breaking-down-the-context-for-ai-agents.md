@@ -5,6 +5,7 @@ source: https://luizschons.com/context-skills-breaking-down-the-context-for-ai-a
 series: ['AI-Friendly Architecture']
 draft: false
 aliases: ["/context-skills-breaking-down-the-context-for-ai-agents/"]
+tags: ['AI', 'Architecture']
 ---
 
 <p>This is the sixth article in the series about AI-friendly architecture. We have already discussed how code, documentation, and observability help agents understand systems. We also saw how skills can provide specialized knowledge for specific problems.</p>
@@ -13,7 +14,9 @@ aliases: ["/context-skills-breaking-down-the-context-for-ai-agents/"]
 <h2>The Context Monolith</h2>
 <p>One of the first attempts to prepare a repository for agents is often to create one central file with all the instructions.</p>
 <p>Something like this:</p>
-<pre><code class="language-text">AGENTS.md
+
+```text
+AGENTS.md
 
 # How our company works
 
@@ -26,7 +29,8 @@ Business rules
 Runbooks
 Testing conventions
 Information about all teams
-</code></pre>
+```
+
 <p>At first, this file helps. It creates one place to record decisions and guidance that used to exist only in people's heads.</p>
 <p>But it can grow quickly. After some time, it becomes hard to know which parts apply to each task, who is responsible for updating them, and which instructions have priority.</p>
 <p>This is a context monolith.</p>
@@ -107,13 +111,16 @@ Information about all teams
 <p>Breaking down the context does not mean creating isolated agents that cannot communicate.</p>
 <p>The main agent coordinates the specializations.</p>
 <p>Imagine an investigation where the payment failure rate has increased. The agent can do the following:</p>
-<pre><code class="language-text">1. Activate the Payments Context Skill.
+
+```text
+1. Activate the Payments Context Skill.
 2. Use the Observability Skill to investigate the signals.
 3. Use the Delivery Skill to check recent deployments.
 4. Use the Data Platform Skill if the flow depends on processed data.
 5. Combine the evidence into a hypothesis.
 6. Show what was confirmed and what is still uncertain.
-</code></pre>
+```
+
 <p>Each skill adds a specific view. The agent connects the information between them.</p>
 <p>This separation allows a skill to be maintained by the people who really know that context. They do not need to maintain every instruction for the engineering agent.</p>
 <h2>Too Much Context Can Also Be a Problem</h2>
@@ -123,13 +130,16 @@ Information about all teams
 <p>Another useful question is: if this context changes, who needs to review the knowledge? If the answer includes very different teams, conflicting responsibilities, or unrelated sources, the boundary may be too large.</p>
 <p>Boundaries should also be observable. We need to know which context was consulted, which sources were used, and which rules guided the answer. Without this visibility, it is hard to understand whether a problem came from missing information, the choice of skill, or the agent's interpretation.</p>
 <p>We can start with a few larger contexts:</p>
-<pre><code class="language-text">Observability
+
+```text
+Observability
 Delivery
 Data
 Payments
 Orders
 Security
-</code></pre>
+```
+
 <p>Over time, each context can evolve. An observability skill may later gain specializations for incidents, performance, and capacity. This split should happen when there is a real need, not just because it is possible to create more files.</p>
 <h2>Where Do Context Skills Live?</h2>
 <p>A Context Skill can live with the team's code, in a platform repository, or in a shared catalog. The choice depends on who maintains the context and how the agents will be used.</p>
@@ -154,14 +164,17 @@ Security
 <p>Ownership is an essential part of this architecture.</p>
 <p>If everyone is responsible for a skill, probably no one is truly responsible. If no one reviews the instructions when an API changes, the agent starts working with outdated knowledge.</p>
 <p>A skill can have a simple metadata file:</p>
-<pre><code class="language-yaml">name: payments-context
+
+```yaml
+name: payments-context
 owner: payments-team
 review_frequency: quarterly
 sources:
   - payment-service
   - payment-documentation
   - payment-dashboards
-</code></pre>
+```
+
 <p>This file does not solve the maintenance problem on its own, but it makes responsibility more visible and can help create a review process.</p>
 <h2>Conclusion</h2>
 <p>For a long time, our concern was decomposing systems so they could be developed and operated by different teams.</p>

@@ -10,6 +10,7 @@
       <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "post-date.html" .Date }}</time>
       <span>{{ i18n "readingTime" .ReadingTime }}</span>
       {{- with .Params.series }}<a href="{{ (printf "/series/%s/" (index . 0 | urlize)) | relURL }}">{{ i18n "series" }} {{ index . 0 }}</a>{{ end }}
+      {{- with .GetTerms "tags" }}<span class="article-tags">{{ range . }}<a href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}</span>{{ end }}
       {{- range .Translations }}<a class="article-translation" href="{{ .RelPermalink }}" hreflang="{{ .Language.LanguageCode | lower }}" lang="{{ .Language.LanguageCode | lower }}">{{ i18n "readTranslation" }} →</a>{{ end }}
     </div>
   </header>
@@ -42,6 +43,20 @@
   </aside>
   {{- end }}
   {{- end }}
+
+  {{- /* Related articles: shared tags first, then series and date (see [related] in hugo.toml). */}}
+  {{- with first 3 (site.RegularPages.Related . | complement (slice .)) }}
+  <aside class="article-related">
+    <h2>{{ i18n "relatedArticles" }}</h2>
+    <ul>
+      {{- range . }}
+      <li><a href="{{ .RelPermalink }}"><strong>{{ .Title }}</strong><span>{{ partial "post-date.html" .Date }} · {{ i18n "readingTime" .ReadingTime }}</span></a></li>
+      {{- end }}
+    </ul>
+  </aside>
+  {{- end }}
+
+  {{- partial "comments.html" . }}
 
   {{- /* Previous / next article in this language, by date. */}}
   {{- $posts := (where site.RegularPages "Section" "posts").ByDate }}

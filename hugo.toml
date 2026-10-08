@@ -100,3 +100,26 @@ titleCaseStyle = 'none'
 
 [taxonomies]
   series = 'series'
+  tag = 'tags'
+
+[related]
+  includeNewer = true
+  threshold = 20
+  toLower = true
+  [[related.indices]]
+    name = 'tags'
+    weight = 100
+  [[related.indices]]
+    name = 'series'
+    weight = 60
+  [[related.indices]]
+    name = 'date'
+    weight = 5
+
+# Comments (giscus): stored as GitHub Discussions in this repository.
+# The block only renders once categoryId is filled in.
+[params.giscus]
+  repo = 'sschonss/meu-blog'
+  repoId = 'R_kgDOU3qW3A'
+  category = 'Announcements'
+  categoryId = ''

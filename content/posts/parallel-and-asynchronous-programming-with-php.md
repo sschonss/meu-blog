@@ -3,6 +3,7 @@ title: 'Parallel and Asynchronous Programming with PHP'
 date: 2024-04-25
 translationKey: programacao-paralela-e-assincrona-com-php
 draft: false
+tags: ['PHP', 'Performance']
 ---
 
 <p>Photo by <a target="_blank" href="https://unsplash.com/@benofthenorth?utm_source=medium&utm_medium=referral">Ben Griffiths</a> on <a target="_blank" href="https://unsplash.com?utm_source=medium&utm_medium=referral">Unsplash</a></p>
@@ -16,18 +17,35 @@ draft: false
 <p><em>When you buy a multi-core processor, you are buying the ability to run several threads at the same time. However, to take full advantage of that, the software has to be built to use those resources efficiently.</em></p>
 </blockquote>
 <h4 id="heading-parallel-programming-example-in-php">Parallel Programming Example in PHP</h4>
-<p><?php  </p>
-<p>use function parallel\run;  </p>
-<p>class DataProcessor<br />{<br />    public function process(array $data): array {<br />        $formattedData = $this->formatData($data);<br />        $excel_file = $this->generateExcel($formattedData);<br />        $this->sendEmail($excel_file, Auth::user()->email);<br />    }<br />}  </p>
-<p>$data = range(1, 1000);  </p>
-<p>$processor = new DataProcessor();  </p>
-<p>$parallelResult1 = run(function () use ($processor, $data) {<br />    return $processor->process($data);<br />});  </p>
-<p>$parallelResult2 = $processor->process($data);</p>
+
+```php
+<?php
+use function parallel\run;
+
+class DataProcessor
+{
+    public function process(array $data): array {
+        $formattedData = $this->formatData($data);
+        $excel_file = $this->generateExcel($formattedData);
+        $this->sendEmail($excel_file, Auth::user()->email);
+    }
+}
+
+$data = range(1, 1000);
+$processor = new DataProcessor();
+
+$parallelResult1 = run(function () use ($processor, $data) {
+    return $processor->process($data);
+});
+
+$parallelResult2 = $processor->process($data);
+```
+
 <p>In the example above, we use the parallel extension to run the <code>process</code> method of the <code>DataProcessor</code> class in parallel. This means the method runs in a separate thread, which can result in better performance.</p>
 <p>This is not a silver bullet, and it is not always the best solution for every problem. In some cases, however, parallel programming can be an efficient way to improve an application's performance.</p>
 <p>The example above is quite simplified, but it shows how parallel programming can be used in PHP. For more information about the parallel extension, see the <a target="_blank" href="https://www.php.net/manual/en/book.parallel.php">official documentation</a>.</p>
 <p>Here is an image illustrating parallel programming:</p>
-<p><img src="/images/posts/programacao-paralela-e-assincrona-com-php/e7563efd-e150-4fc2-a5d1-758f6bb59a65.png" alt /></p>
+<p><img src="/images/posts/programacao-paralela-e-assincrona-com-php/e7563efd-e150-4fc2-a5d1-758f6bb59a65.png" alt="Parallel programming diagram: the main thread starts threads A, B and C, which run at the same time" /></p>
 <p><em>Illustration of parallel programming, taken from the internet.</em></p>
 <p>Note that parallel programming is different from asynchronous programming. In parallel programming, several threads run at the same time, while in asynchronous programming several tasks can run concurrently, but not necessarily at the same time.</p>
 <h3 id="heading-asynchronous-programming">Asynchronous Programming</h3>
@@ -38,15 +56,27 @@ draft: false
 <p><em>You may see the term “self-contained server” in some places, but the idea is the same: a server that can handle several requests at the same time without creating a new thread for each one.</em></p>
 </blockquote>
 <h4 id="heading-asynchronous-programming-example-in-php">Asynchronous Programming Example in PHP</h4>
-<p>use Swoole\Http\Server;  </p>
-<p>$server = new Server("0.0.0.0", 9501);  </p>
-<p>$server->on("start", function (Server $server) {<br />    echo "Server started at http://{$server->host}:{$server->port}\n";<br />});  </p>
-<p>$server->on("request", function ($request, $response) {<br />    $data = $request->rawContent();<br />    $response->end("Received data: $data");<br />});  </p>
-<p>$server->start();</p>
+
+```php
+use Swoole\Http\Server;
+$server = new Server("0.0.0.0", 9501);
+
+$server->on("start", function (Server $server) {
+    echo "Server started at http://{$server->host}:{$server->port}\n";
+});
+
+$server->on("request", function ($request, $response) {
+    $data = $request->rawContent();
+    $response->end("Received data: $data");
+});
+
+$server->start();
+```
+
 <p>In the example above, we use the swoole extension to create an asynchronous web server in PHP. The server listens on port 9501 and answers every request with a message containing the data it received.</p>
 <p>This example is quite simplified, but it shows how asynchronous programming can be used in PHP. For more information about the swoole extension, see the <a target="_blank" href="https://www.swoole.co.uk/">official documentation</a>.</p>
 <p>Here is an image illustrating asynchronous programming:</p>
-<p><img src="/images/posts/programacao-paralela-e-assincrona-com-php/554adf54-7f19-4abf-bea2-aad9a2b23333.png" alt /></p>
+<p><img src="/images/posts/programacao-paralela-e-assincrona-com-php/554adf54-7f19-4abf-bea2-aad9a2b23333.png" alt="Sequence diagram of asynchronous programming: a process fires several requests through a thread and gets the responses out of order" /></p>
 <p>Illustration of asynchronous programming, taken from the internet.</p>
 <h3 id="heading-request-lifecycle-in-php-fpm">Request Lifecycle in PHP-FPM</h3>
 <p>When a request is made to a PHP web server such as PHP-FPM, the server goes through several steps to process it and return a response to the client. The lifecycle of a request in PHP-FPM can be split into these steps:</p>

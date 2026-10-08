@@ -1,0 +1,12 @@
+<article class="post-row">
+  <div class="post-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "post-date.html" .Date }}</time><span>{{ i18n "readingTime" .ReadingTime }}</span></div>
+  <div class="post-main"><h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2><p>{{ .Summary | plainify | truncate 220 }}</p>
+    {{- $series := .GetTerms "series" }}{{ $tags := .GetTerms "tags" }}
+    {{- if or $series $tags }}
+    <div class="post-tags">
+      {{- range $series }}<a class="is-series" href="{{ .RelPermalink }}">{{ i18n "series" }} {{ .LinkTitle }}</a>{{ end }}
+      {{- range $tags }}<a href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}
+    </div>
+    {{- end }}
+  </div>
+</article>

@@ -8,6 +8,7 @@ aliases:
   - "/guardrails-and-fitness-functions-for-ai-friendly-architecture/"
   - "/seguran-a-guardrails-e-fitness-functions-para-agentes/"
 translationKey: 'guardrails-and-fitness-functions-for-ai-friendly-architecture'
+tags: ['AI', 'Architecture']
 ---
 
 <p>This is the fifth article in the series about AI-friendly architecture. We have already discussed how agents find context, use skills, and work with specialized knowledge.</p>
@@ -21,10 +22,13 @@ translationKey: 'guardrails-and-fitness-functions-for-ai-friendly-architecture'
 <p>Giving context to an agent does not mean giving it unlimited access to the system.</p>
 <h2>Instructions Are Not Security Controls</h2>
 <p>A common starting point is to add a rule to the prompt or to a skill:</p>
-<pre><code class="language-text">Use the production API only for read operations.
+
+```text
+Use the production API only for read operations.
 Never change data.
 Never access admin endpoints.
-</code></pre>
+```
+
 <p>This guidance can help direct the agent's behavior, but it should not be treated as a security barrier.</p>
 <p>The agent may receive new documents, combine information from different sources, and read the application code. A text that tells the agent to follow a rule may also contain conflicting instructions or show ways to bypass that rule.</p>
 <p>The same is true for checks made inside a skill or through an MCP integration. If the same layer that performs the action decides whether it is safe based on context given to the agent, that context may be changed or understood in an unexpected way.</p>
@@ -35,9 +39,12 @@ Never access admin endpoints.
 <p>But by reading the code, documentation, and application contracts, the agent may discover other available endpoints. It may find admin routes, internal parameters, connections between resources, or indirect ways to get data that should not be part of the investigation.</p>
 <p>The problem is not only the HTTP method used by the request. The problem is the set of resources the agent can reach, the data it receives, and the connections it can discover.</p>
 <p>That is why it is not enough to say:</p>
-<pre><code class="language-text">GET is allowed.
+
+```text
+GET is allowed.
 POST, PUT, and DELETE are not allowed.
-</code></pre>
+```
+
 <p>We need to ask:</p>
 <ul>
 <li><p>which service can be accessed;</p>
@@ -59,7 +66,9 @@ POST, PUT, and DELETE are not allowed.
 <p>There are safer ways to provide information for an investigation.</p>
 <h3>A Limited-Scope Token</h3>
 <p>Instead of giving the agent a general API credential, we can create a credential made for the agent:</p>
-<pre><code class="language-text">principal: incident-investigation-agent
+
+```text
+principal: incident-investigation-agent
 resource: orders-observability-api
 operations:
   - read:incident-summary
@@ -69,7 +78,8 @@ data_policy:
   - exclude:customer.personal_data
   - exclude:payment.card_data
 expiration: 15 minutes
-</code></pre>
+```
+
 <p>The service that receives this credential must validate its scope. A description in the prompt does not replace this validation.</p>
 <h3>Derived Data for Investigation</h3>
 <p>We can also keep the agent away from the production application. Events, metrics, sanitized logs, and operational information can be sent to a separate place for queries, such as a replica, a data lake, or a data warehouse.</p>
@@ -78,7 +88,9 @@ expiration: 15 minutes
 <p>This layer can apply retention, anonymization, field filtering, and a delay before data is available. The agent receives enough context to investigate without getting a way into the production application.</p>
 <h3>The Least Privilege Database Possible</h3>
 <p>When direct database access is really needed, it should be created for the task. It should not reuse an application credential:</p>
-<pre><code class="language-sql">CREATE ROLE incident_reader LOGIN PASSWORD 'managed-externally';
+
+```sql
+CREATE ROLE incident_reader LOGIN PASSWORD 'managed-externally';
 
 GRANT CONNECT ON DATABASE operations TO incident_reader;
 GRANT USAGE ON SCHEMA incident_data TO incident_reader;
@@ -87,7 +99,8 @@ GRANT SELECT ON incident_data.request_summary TO incident_reader;
 
 REVOKE ALL ON SCHEMA billing FROM incident_reader;
 REVOKE ALL ON SCHEMA customers FROM incident_reader;
-</code></pre>
+```
+
 <p>Besides being read-only, this user should have access only to the tables, views, or schemas needed for the task. Investigation views can hide sensitive data and limit the amount of information returned.</p>
 <p>The idea is simple: we should not trust the agent to avoid dangerous tables. The database must block access even if the agent tries to query something outside its scope.</p>
 <h2>Guardrails</h2>
@@ -110,7 +123,9 @@ REVOKE ALL ON SCHEMA customers FROM incident_reader;
 <p>One real example is <a href="https://github.com/deptrac/deptrac">Deptrac</a>, a static analysis tool for PHP projects. It lets us define architectural layers and the dependencies allowed between them.</p>
 <p>Imagine a system with two contexts: <code>Orders</code> and <code>Billing</code>. An architectural decision may say that <code>Orders</code> must not directly import internal classes from <code>Billing</code>. Communication must happen through a public contract.</p>
 <p>This rule can be described in a Deptrac configuration:</p>
-<pre><code class="language-yaml">deptrac:
+
+```yaml
+deptrac:
   paths:
     - ./src
 
@@ -135,10 +150,14 @@ REVOKE ALL ON SCHEMA customers FROM incident_reader;
       - Shared
     Billing:
       - Shared
-</code></pre>
+```
+
 <p>With this rule, a class in <code>Orders</code> that directly imports a class from <code>Billing</code> creates a violation. The pipeline can run:</p>
-<pre><code class="language-bash">vendor/bin/deptrac analyse --config-file=deptrac.yaml
-</code></pre>
+
+```bash
+vendor/bin/deptrac analyse --config-file=deptrac.yaml
+```
+
 <p>The result is deterministic. Deptrac does not need to understand the agent's intention, judge the quality of the generated code, or interpret a prompt. It only checks the dependencies in the code against the rules defined by the team.</p>
 <p>If an agent creates a new class and adds a forbidden dependency, the pull request fails even if the agent was told to respect the limits. The fitness function protects the architectural decision as the system changes.</p>
 <h2>Conclusion</h2>
