@@ -198,9 +198,15 @@ Também testei o `Http::pool`, que faz as três chamadas ao mesmo tempo usando o
 | Laravel Octane, 4 workers, `Http::pool` | 18,9 | 2.652 ms |
 | Hyperf, **1 worker**, `parallel()` | **201,6** | **248 ms** |
 
-O resultado mais interessante é que **o Octane não mudou nada aqui**. Ele roda em cima do Swoole, mas cada worker do Octane atende uma requisição por vez, exatamente como um processo do PHP-FPM, e fica parado enquanto espera a rede. O Laravel não foi feito para corrotinas: o container, os facades, o Eloquent e boa parte dos pacotes guardam estado que acabaria compartilhado entre requisições ao mesmo tempo, então o Octane não usa essa parte do Swoole: no [código dele](https://github.com/laravel/octane/blob/2.x/src/Commands/StartSwooleCommand.php), o servidor sobe com `'enable_coroutine' => false`.
+Os números do Laravel no PHP-FPM e no Octane ficaram praticamente iguais, e não é erro do teste: é exatamente o que deveria acontecer. Cada requisição passa uns 600 ms esperando os três serviços e menos de 10 ms executando código do Laravel. Quando cada worker atende uma requisição por vez, o limite é sempre a mesma conta:
 
-O `Http::pool` ajuda: fazer as três chamadas juntas triplicou o resultado nos dois casos. Mas o worker continua ocupado durante a requisição inteira, e o limite continua sendo 4 requisições ao mesmo tempo. O Hyperf, com um único worker, fez mais de 10 vezes isso.
+> **4 workers ÷ 0,6 s de espera ≈ 6,7 requisições por segundo**
+
+O Laravel no PHP-FPM chegou a 6,4, e o Octane também. O Octane corta pela metade o tempo de montar o framework a cada requisição (o `/ping`, logo abaixo, mostra isso), mas são uns 5 ms num total de mais de 600: somem no meio da espera.
+
+E o Octane atende uma requisição por vez porque, apesar de rodar em cima do Swoole, não usa as corrotinas dele. O Laravel não foi feito para isso: o container, os facades, o Eloquent e boa parte dos pacotes guardam estado que acabaria compartilhado entre requisições ao mesmo tempo. No [código do Octane](https://github.com/laravel/octane/blob/2.x/src/Commands/StartSwooleCommand.php), o servidor sobe com `'enable_coroutine' => false`. Cada worker fica parado esperando a rede, exatamente como um processo do PHP-FPM.
+
+Com o `Http::pool`, a conta é a mesma, só que com uma espera menor: as três chamadas juntas levam uns 200 ms, então o limite vira 4 ÷ 0,2 s = **20 requisições por segundo**, e os dois ficaram em quase 19. O Hyperf não tem esse limite, porque enquanto uma requisição espera, o mesmo worker atende outras. Com um único worker, ele fez mais de 10 vezes isso.
 
 ### Então pra que serve o Octane?
 
