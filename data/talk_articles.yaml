@@ -12,6 +12,7 @@
     - arquitetura-hexagonal-e-mensageria-com-php
 "187692":   # Building High-Performance PHP Applications with Hyperf
   posts:
+    - corrotinas-no-php-swoole-e-hyperf
     - programacao-paralela-e-assincrona-com-php
     - jit-just-in-time-php
 "187694":   # Design for Failure
