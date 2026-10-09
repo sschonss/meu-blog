@@ -122,9 +122,9 @@ This is where the differences start. We create 100,000 coroutines, each waiting 
 
 | | Total time | Memory per coroutine |
 | --- | ---: | ---: |
-| PHP + Swoole | 1,902 ms | ~9.1 KB |
-| Go | 1,091 ms | ~2.7 KB |
-| Kotlin | 1,543 ms | **~0.2 KB** |
+| PHP + Swoole | 2,065 ms | ~9.1 KB |
+| Go | 1,114 ms | ~2.7 KB |
+| Kotlin | 1,780 ms | **~0.2 KB** |
 
 All three handle 100,000 without breaking a sweat, something unthinkable with threads or processes. But the cost of each one is very different, and the reason is how each language stores the "where was I" of a paused coroutine:
 
@@ -133,19 +133,21 @@ All three handle 100,000 without breaking a sweat, something unthinkable with th
 
 ## Scenario 4: CPU-heavy work
 
-Four tasks that only compute (a million MD5 hashes each), first one after the other and then in coroutines, on a machine with 2 cores:
+Four tasks that only compute (a million MD5 hashes each), first one after the other and then in coroutines, on a machine with 2 cores. Each measurement runs 5 times and the median counts, and the computation was written to allocate no memory, so the Go and JVM garbage collectors do not skew the comparison:
 
 | | One at a time | In coroutines | Speedup |
 | --- | ---: | ---: | ---: |
-| PHP + Swoole | 526 ms | 547 ms | **1.0x** |
-| Go | 689 ms | 499 ms | 1.4x |
-| Kotlin (`Dispatchers.Default`) | 759 ms | 377 ms | **2.0x** |
+| PHP + Swoole | 601 ms | 591 ms | **1.0x** |
+| Go | 551 ms | 369 ms | **1.5x** |
+| Kotlin (`Dispatchers.Default`) | 545 ms | 369 ms | **1.5x** |
 
 This is where what we saw about schedulers shows up:
 
 - **In Swoole, nothing changes.** The coroutines of a process take turns on a single thread, and computation has no waiting to make use of. To use several cores in PHP, the answer is still more processes: more server workers or *task workers*.
-- **In Go, goroutines spread across cores on their own**, without changing a line. On this shared GitHub Actions machine the gain was 1.4x, below the ideal 2x, but the difference from PHP is clear.
+- **In Go, goroutines spread across cores on their own**, without changing a line.
 - **In Kotlin, you have to ask for it:** the same code inside `runBlocking` would run on a single thread, like Swoole. With `Dispatchers.Default`, it used both cores.
+
+The ideal with 2 cores would be 2x. GitHub Actions machines usually provide 2 virtual cores that are really two threads of the same physical core, so the gain lands around 1.5x. On a machine with 2 real cores, the same Go program reached 2.0x.
 
 Do not compare the rows with each other: each language computes MD5 its own way, and PHP's MD5 is written in C. What matters is the last column, how much each one gains by running in parallel.
 

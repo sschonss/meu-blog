@@ -66,6 +66,10 @@ Two things change here:
 1. **The process does not die.** The code is loaded once, when the worker starts, and stays in memory serving one request after another.
 2. **Each request runs in a coroutine.** That is where the gain is.
 
+The diagram shows the difference with three requests arriving at the same time, each waiting 600 ms on the network. On PHP-FPM, the process is stuck with one request until it finishes, and the others wait in the queue. On Swoole, the worker only works during the small slices where there is code to run, and is free for the whole wait:
+
+![Timeline of three requests: on PHP-FPM they are handled one after the other and finish in 1.8 seconds; on Swoole the three wait on the network at the same time and finish in about 0.6 seconds](/images/posts/corrotinas-no-php-swoole-e-hyperf/timeline-en.svg)
+
 ## Coroutines, no mystery
 
 A coroutine is a function that can **pause halfway** and resume later. When a coroutine is about to wait for something, like the network, a file or the database, it hands control back to Swoole's *scheduler*, which runs another coroutine in the meantime. All of this happens in a single process and a single thread.
@@ -169,11 +173,11 @@ The repository's CI runs the same load test on the three runtimes: 300 requests,
 
 | Runtime | Requests/s | Mean latency | p95 |
 | --- | ---: | ---: | ---: |
-| PHP-FPM, 4 workers, sequential | 6.5 | 7,686 ms | 7,902 ms |
-| Swoole, 1 worker, same sequential code | 70.3 | 711 ms | 628 ms |
-| Swoole, 1 worker, parallel coroutines | **203.9** | **245 ms** | 230 ms |
-| Hyperf, 1 worker, sequential | 70.1 | 713 ms | 631 ms |
-| Hyperf, 1 worker, `parallel()` | **201.6** | **248 ms** | 232 ms |
+| PHP-FPM, 4 workers, sequential | 6.5 | 7,677 ms | 7,884 ms |
+| Swoole, 1 worker, same sequential code | 69.9 | 715 ms | 631 ms |
+| Swoole, 1 worker, parallel coroutines | **203.6** | **246 ms** | 234 ms |
+| Hyperf, 1 worker, sequential | 70.2 | 712 ms | 626 ms |
+| Hyperf, 1 worker, `parallel()` | **200.9** | **249 ms** | 231 ms |
 
 A few things stand out:
 
@@ -184,25 +188,47 @@ A few things stand out:
 
 The exact numbers change from machine to machine, but the proportions hold. The result of the latest run is always in [`results/benchmark.md`](https://github.com/sschonss/hyperf-coroutines/blob/main/results/benchmark.md).
 
+### What if I just make the PHP-FPM pool bigger?
+
+That is the first objection: if the problem is having only 4 processes, just raise `pm.max_children`. By the math, it would take about 120 processes to get close to Hyperf (120 ÷ 0.6 s = 200 per second). So the demo also runs PHP-FPM with 120 workers and measures each runtime's memory during the test:
+
+| Runtime | Requests/s | Mean latency | Memory under load |
+| --- | ---: | ---: | ---: |
+| PHP-FPM, 4 workers | 6.5 | 7,677 ms | 19 MiB |
+| PHP-FPM, **120 workers** | 69.3 | 722 ms | 107 MiB |
+| Swoole, 1 worker, same sequential code | 69.9 | 715 ms | 17 MiB |
+| Swoole, 1 worker, parallel coroutines | **203.6** | **246 ms** | 17 MiB |
+
+And it works, up to a point. With 120 processes, PHP-FPM tied with Swoole running the same code: both reached about 70 per second. They did not get to 200 because the test sends 50 requests at a time, and at 600 ms each the ceiling for any runtime that makes the calls one after the other is 50 ÷ 0.6 s ≈ 83. For the same throughput, PHP-FPM used 6 times more memory.
+
+What a bigger pool does not change:
+
+- **Latency.** Each request still takes 600 ms, because the calls are still made one after the other. With parallel coroutines, a single worker answers in 250 ms.
+- **Sizing.** Each waiting request takes up a whole process, so the pool has to be as big as the peak of simultaneous requests, and every extra process is memory reserved even when nobody is using it. If the peak goes past 120, the queue is back. In Swoole, each waiting request costs one coroutine of a few KB in the same worker, whether the peak is 50 or 5,000.
+- **The cost grows with the framework.** With Laravel, shown below, the same 120 processes used 274 MiB to serve 60 requests per second. Hyperf served 200 with 74 MiB.
+
+The memory of every runtime across all tests is in [`results/memory.md`](https://github.com/sschonss/hyperf-coroutines/blob/main/results/memory.md).
+
 ## What about Laravel?
 
-Most people writing PHP today use Laravel, so it is in the demo too: a fresh Laravel project with the same report in a controller, using Laravel's own HTTP client. It runs in two ways: on PHP-FPM, like almost every Laravel app in production, and on **Laravel Octane**, which runs Laravel on top of Swoole. Both with 4 workers, OPcache on and Laravel's production caches (`php artisan optimize`).
+Most people writing PHP today use Laravel, so it is in the demo too: a fresh Laravel project with the same report in a controller, using Laravel's own HTTP client. It runs in two ways: on PHP-FPM, like almost every Laravel app in production, and on **Laravel Octane**, which runs Laravel on top of Swoole. Both with 4 workers (and PHP-FPM also with 120), OPcache on and Laravel's production caches (`php artisan optimize`).
 
 I also tested `Http::pool`, which makes the three calls at once using `curl_multi` under the hood and works even on PHP-FPM:
 
-| Runtime | Requests/s | Mean latency |
-| --- | ---: | ---: |
-| Laravel on PHP-FPM, 4 workers, sequential | 6.4 | 7,795 ms |
-| Laravel on PHP-FPM, 4 workers, `Http::pool` | 18.8 | 2,659 ms |
-| Laravel Octane, 4 workers, sequential | 6.4 | 7,837 ms |
-| Laravel Octane, 4 workers, `Http::pool` | 18.9 | 2,652 ms |
-| Hyperf, **1 worker**, `parallel()` | **201.6** | **248 ms** |
+| Runtime | Requests/s | Mean latency | Memory under load |
+| --- | ---: | ---: | ---: |
+| Laravel on PHP-FPM, 4 workers, sequential | 6.4 | 7,782 ms | 44 MiB |
+| Laravel on PHP-FPM, 4 workers, `Http::pool` | 18.7 | 2,668 ms | 44 MiB |
+| Laravel on PHP-FPM, **120 workers**, sequential | 59.7 | 837 ms | 274 MiB |
+| Laravel Octane, 4 workers, sequential | 6.5 | 7,728 ms | 207 MiB |
+| Laravel Octane, 4 workers, `Http::pool` | 18.9 | 2,643 ms | 207 MiB |
+| Hyperf, **1 worker**, `parallel()` | **200.9** | **249 ms** | 74 MiB |
 
 Laravel on PHP-FPM and on Octane came out practically the same, and that is not a mistake in the test: it is exactly what should happen. Each request spends about 600 ms waiting for the three services and less than 10 ms running Laravel code. When each worker handles one request at a time, the limit is always the same math:
 
 > **4 workers ÷ 0.6 s of waiting ≈ 6.7 requests per second**
 
-Laravel on PHP-FPM reached 6.4, and so did Octane. Octane cuts the time it takes to build the framework on every request in half (the `/ping` test below shows it), but that is about 5 ms out of more than 600: it disappears in the waiting.
+Laravel on PHP-FPM reached 6.4, and Octane 6.5. Octane cuts the time it takes to build the framework on every request in half (the `/ping` test below shows it), but that is about 5 ms out of more than 600: it disappears in the waiting.
 
 And Octane handles one request at a time because, even though it runs on Swoole, it does not use Swoole's coroutines. Laravel was not built for that: the container, facades, Eloquent and many packages keep state that would end up shared between concurrent requests. In [Octane's source code](https://github.com/laravel/octane/blob/2.x/src/Commands/StartSwooleCommand.php), the server starts with `'enable_coroutine' => false`. Each worker sits idle waiting for the network, exactly like a PHP-FPM process.
 
@@ -214,11 +240,11 @@ Octane's gain shows up somewhere else: in the cost of the framework itself. On P
 
 | Runtime | Requests/s | Mean latency |
 | --- | ---: | ---: |
-| Plain PHP on PHP-FPM, 4 workers | 2,383 | 21 ms |
-| Laravel on PHP-FPM, 4 workers | 441 | 113 ms |
-| Laravel Octane, 4 workers | 945 | 53 ms |
-| Hyperf, **1 worker** | **6,462** | **8 ms** |
-| Plain Swoole, 1 worker | 8,988 | 6 ms |
+| Plain PHP on PHP-FPM, 4 workers | 2,340 | 21 ms |
+| Laravel on PHP-FPM, 4 workers | 421 | 119 ms |
+| Laravel Octane, 4 workers | 904 | 55 ms |
+| Hyperf, **1 worker** | **6,146** | **8 ms** |
+| Plain Swoole, 1 worker | 8,277 | 6 ms |
 
 Octane more than doubles Laravel with very little effort, and that holds for any application. It is a great improvement. But Hyperf, with a quarter of the workers, served almost 7 times more than Octane and came close to plain Swoole.
 
