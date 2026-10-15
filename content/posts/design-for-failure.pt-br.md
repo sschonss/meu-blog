@@ -1,10 +1,9 @@
 ---
 title: 'Design for Failure: como assim meu sistema falha?'
-date: 2026-10-30
+date: 2026-10-15
 description: 'Retry com backoff e jitter, fallback, circuit breaker e saga: os padrões para um sistema distribuído continuar de pé quando uma parte dele cai, com código em PHP e os trade-offs de cada um.'
 translationKey: design-for-failure
 tags: ['Arquitetura', 'Microservices', 'PHP']
-draft: true
 ---
 
 Todo sistema falha. A pergunta não é *se* um serviço vai cair, é *o que acontece com o resto* quando ele cair. Esse é o assunto da minha palestra **Design for Failure**, que apresentei na SoftWeek e no PHPeste em 2025, e este artigo é a versão escrita dela, com um pouco mais de espaço para os detalhes que não cabem em 40 minutos de palco.
@@ -72,7 +71,7 @@ Três cuidados que valem para qualquer retry:
 
 - **Só repita o que é idempotente.** Retentar uma consulta de frete é seguro. Retentar uma cobrança, sem uma chave de idempotência, pode cobrar o cliente duas vezes, porque a primeira tentativa pode ter funcionado e só a resposta se perdeu.
 - **Conte o tempo total.** Com timeout de 2 s e esperas de 1 s e 2 s, o pior caso são 9 segundos. Alguém está esperando do outro lado.
-- **No PHP-FPM, esperar custa um processo.** Aquele `usleep` segura um worker parado sem fazer nada. No Swoole e no Hyperf, a mesma chamada só pausa a corrotina, e o processo segue atendendo outras requisições, como mostrei no [artigo sobre corrotinas](/pt-br/posts/corrotinas-no-php-swoole-e-hyperf/).
+- **No PHP-FPM, esperar custa um processo.** Aquele `usleep` segura um worker parado sem fazer nada. No Swoole e no Hyperf, a mesma chamada só pausa a corrotina, e o processo segue atendendo outras requisições.
 
 ### Thundering herd: quando o retry piora tudo
 

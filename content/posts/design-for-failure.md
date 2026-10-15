@@ -1,10 +1,9 @@
 ---
 title: 'Design for Failure: wait, my system fails?'
-date: 2026-10-30
+date: 2026-10-15
 description: 'Retry with backoff and jitter, fallback, circuit breaker and saga: the patterns that keep a distributed system standing when part of it goes down, with PHP code and the trade-offs of each one.'
 translationKey: design-for-failure
 tags: ['Architecture', 'Microservices', 'PHP']
-draft: true
 ---
 
 Every system fails. The question is not *whether* a service will go down, it is *what happens to everything else* when it does. That is the subject of my talk **Design for Failure**, which I gave at SoftWeek and PHPeste in 2025, and this article is its written version, with a bit more room for the details that do not fit in 40 minutes on stage.
@@ -72,7 +71,7 @@ Three precautions that apply to any retry:
 
 - **Only repeat what is idempotent.** Retrying a shipping quote is safe. Retrying a charge without an idempotency key can charge the customer twice, because the first attempt may have worked and only its response got lost.
 - **Count the total time.** With a 2 s timeout and waits of 1 s and 2 s, the worst case is 9 seconds. Someone is waiting on the other end.
-- **On PHP-FPM, waiting costs a process.** That `usleep` holds a worker doing nothing. On Swoole and Hyperf, the same call only pauses the coroutine, and the process keeps serving other requests, as I showed in the [article about coroutines](/posts/coroutines-in-php-swoole-and-hyperf/).
+- **On PHP-FPM, waiting costs a process.** That `usleep` holds a worker doing nothing. On Swoole and Hyperf, the same call only pauses the coroutine, and the process keeps serving other requests.
 
 ### Thundering herd: when retrying makes it worse
 
