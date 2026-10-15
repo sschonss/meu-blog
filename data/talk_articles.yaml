@@ -17,5 +17,6 @@
     - jit-just-in-time-php
 "187694":   # Design for Failure
   posts:
+    - design-for-failure
     - microservices-e-mensageria-com-php-nodejs-rabbitmq-e-docker
     - event-driven-architecture-eda
