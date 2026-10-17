@@ -97,6 +97,12 @@ A **bio** do topo não vem do Sessionize. Ela fica em `content/speakers/_index.m
 - **Foto:** se a imagem do Sessionize não carregar, entra o backup `static/images/profile-fallback.jpg`, que é atualizado a cada deploy.
 - **No deploy:** os scripts falham sem quebrar o build, e ficam valendo os arquivos já commitados (`data/sessionize.json`, favicons e foto de backup).
 
+### Avaliação das palestras
+
+A página `/feedback/` (`/pt-br/feedback/`) recebe avaliações das palestras: palestra, evento, nota de 1 a 5 e dois campos de texto. Não tem login, e as respostas vão para um Google Form ("Avaliação de palestras", na minha conta do Google), então só eu vejo. O formulário do blog manda direto para o Google Form, e os ids ficam em `[params.feedback]` no `hugo.toml`. Se o `form` ficar vazio, a página mostra "em breve".
+
+Um link com `?t=<id da sessão>&e=<id do evento>` já deixa a palestra e o evento escolhidos, por exemplo `https://luizschons.com/pt-br/feedback/?t=187694&e=1019926`. É esse link que vai no QR code do último slide. Os ids estão em `data/sessionize.json`. Se uma pergunta do Google Form mudar, os números `entry` mudam também: pegue os novos num link pré-preenchido do formulário.
+
 ## SEO e prévias de link
 
 - **Imagem de prévia (`og:image`):** cada página ganha uma imagem 1200×630 gerada pelo Hugo no build (`layouts/_partials/og-image.html`). Ela traz o título, a série, sua foto do Sessionize e o seu nome, e é usada no LinkedIn, no WhatsApp e no X (`summary_large_image`). A foto vem de `assets/images/profile.jpg`, que o deploy atualiza a partir do Sessionize.

@@ -139,3 +139,16 @@ buildFuture = false
 # (scripts/send_newsletter.py).
 [params.newsletter]
   username = 'schons'
+
+# Talk feedback (/feedback/): answers go to a Google Form, read only by me.
+# form:    the id in the form's link, the part after /forms/d/e/
+# entries: the entry.NNN number of each question, from a pre-filled link.
+# The page shows a "coming soon" note until form is filled in.
+[params.feedback]
+  form = '1FAIpQLSeE6UOMpx3wyp68IbjOPak3wc14l2IA_OvYJfBVaMQUctjFMw'
+  [params.feedback.entries]
+    talk = '1014736643'
+    event = '97282208'
+    rating = '1991191711'
+    liked = '439215272'
+    improve = '1183943776'

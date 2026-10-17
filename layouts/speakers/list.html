@@ -94,6 +94,10 @@
     {{- end }}
   </div>
 
+  {{- with site.Params.feedback }}{{ if .form }}
+  <p class="talk-feedback-cta">{{ i18n "feedbackCta" }} <a href="{{ "feedback/" | relLangURL }}">{{ i18n "feedbackCtaLink" }} →</a></p>
+  {{- end }}{{ end }}
+
   <p class="profile-note">{{ i18n "talksInvite" }} <a href="https://www.linkedin.com/in/luiz-schons/">LinkedIn ↗</a></p>
 </div>
 

@@ -61,3 +61,29 @@ newsletterEmail: seu@email.com
 newsletterButton: Inscrever
 newsletterNote: Você vai receber um e-mail para confirmar. Prefere leitor de feed? Também tem
 anchorLabel: Link para esta seção
+feedbackKicker: AVALIAÇÃO
+feedbackTalk: Qual palestra?
+feedbackEvent: Em qual evento?
+feedbackChoose: Escolha…
+feedbackOther: Outro
+feedbackRating: Que nota você dá?
+feedbackStars: "{{ .Count }} de 5"
+feedbackLiked: O que você mais gostou?
+feedbackImprove: O que eu posso melhorar?
+feedbackOptional: opcional
+feedbackPlaceholderLiked: Um exemplo, um trecho, a forma de explicar…
+feedbackPlaceholderImprove: Ritmo, profundidade, slides, o que faltou…
+feedbackSend: Enviar avaliação
+feedbackSending: Enviando…
+feedbackPrivacy: As respostas são anônimas e só eu vejo. Se quiser uma resposta, deixe seu contato no texto.
+feedbackNeedRating: Escolha uma nota de 1 a 5.
+feedbackNeedTalk: Escolha a palestra.
+feedbackThanksTitle: Valeu demais!
+feedbackThanksText: Sua avaliação chegou. Eu leio todas, e é assim que as próximas palestras ficam melhores.
+feedbackThanksMore: Avaliar outra palestra
+feedbackError: Não consegui enviar. Confira sua conexão e tente de novo.
+feedbackSoon: As avaliações abrem em breve.
+feedbackSeeTalks: Ver minhas palestras
+rateTalk: Avaliar
+feedbackCta: Assistiu a uma palestra minha?
+feedbackCtaLink: Deixe sua avaliação

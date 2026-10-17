@@ -61,3 +61,29 @@ newsletterEmail: your@email.com
 newsletterButton: Subscribe
 newsletterNote: You will get an email to confirm. Prefer a feed reader? There is also
 anchorLabel: Link to this section
+feedbackKicker: FEEDBACK
+feedbackTalk: Which talk?
+feedbackEvent: At which event?
+feedbackChoose: Choose…
+feedbackOther: Other
+feedbackRating: How would you rate it?
+feedbackStars: "{{ .Count }} out of 5"
+feedbackLiked: What did you like most?
+feedbackImprove: What can I do better?
+feedbackOptional: optional
+feedbackPlaceholderLiked: An example, a part of it, the way it was explained…
+feedbackPlaceholderImprove: Pace, depth, slides, what was missing…
+feedbackSend: Send feedback
+feedbackSending: Sending…
+feedbackPrivacy: Answers are anonymous and only I see them. If you'd like a reply, leave your contact in the text.
+feedbackNeedRating: Pick a rating from 1 to 5.
+feedbackNeedTalk: Pick the talk.
+feedbackThanksTitle: Thank you so much!
+feedbackThanksText: Your feedback is in. I read every one, and that is how the next talks get better.
+feedbackThanksMore: Rate another talk
+feedbackError: I couldn't send it. Check your connection and try again.
+feedbackSoon: Feedback opens soon.
+feedbackSeeTalks: See my talks
+rateTalk: Rate
+feedbackCta: Watched one of my talks?
+feedbackCtaLink: Leave your feedback

@@ -1,0 +1,98 @@
+{{ define "main" }}
+{{ partial "sidebar.html" (dict "context" . "disableSidebar" true) }}{{/* mobile menu (hamburger) */}}
+{{- /* Talk feedback. The form posts straight to a Google Form (params.feedback),
+     so the answers land in a spreadsheet only I can see. Links like
+     /feedback/?t=<session id>&e=<event id> pre-select the talk and the event:
+     that is what the QR code on the last slide points to. */ -}}
+{{- $cfg := site.Params.feedback -}}
+{{- $ready := and $cfg $cfg.form -}}
+{{- $data := site.Data.sessionize -}}
+{{- $sessions := $data.sessions | default slice -}}
+{{- $today := time.AsTime (now.Format "2006-01-02") -}}
+{{- $events := slice -}}
+{{- range $data.events -}}
+  {{- if le (time.AsTime .eventStartDate).Unix $today.Unix }}{{ $events = $events | append . }}{{ end -}}
+{{- end -}}
+{{- $events = sort $events "eventStartDate" "desc" -}}
+
+<div class="profile-page feedback-page">
+  <header class="profile-header">
+    <p class="profile-kicker">{{ i18n "feedbackKicker" }}</p>
+    <h1>{{ .Title }}</h1>
+    <p>{{ .Description }}</p>
+  </header>
+
+  {{- if not $ready }}
+  <div class="talks-fallback feedback-soon">
+    <p>{{ i18n "feedbackSoon" }}</p>
+    <a href="{{ "speakers/" | relLangURL }}">{{ i18n "feedbackSeeTalks" }} →</a>
+  </div>
+  {{- else }}
+  {{- $e := $cfg.entries }}
+  <form class="feedback-form" data-feedback novalidate
+        action="https://docs.google.com/forms/d/e/{{ $cfg.form }}/formResponse"
+        data-entry-talk="entry.{{ $e.talk }}" data-entry-event="entry.{{ $e.event }}"
+        data-entry-rating="entry.{{ $e.rating }}" data-entry-liked="entry.{{ $e.liked }}"
+        data-entry-improve="entry.{{ $e.improve }}">
+
+    <div class="feedback-row">
+      <label class="feedback-field">
+        <span>{{ i18n "feedbackTalk" }}</span>
+        <select name="talk" required>
+          <option value="">{{ i18n "feedbackChoose" }}</option>
+          {{- range $sessions }}<option value="{{ .title }}" data-id="{{ int .id }}">{{ .title }}</option>{{ end }}
+          <option value="{{ i18n "feedbackOther" }}">{{ i18n "feedbackOther" }}</option>
+        </select>
+      </label>
+      <label class="feedback-field">
+        <span>{{ i18n "feedbackEvent" }}</span>
+        <select name="event">
+          <option value="">{{ i18n "feedbackChoose" }}</option>
+          {{- range $events }}<option value="{{ .name }}" data-id="{{ int .id }}">{{ .name }}</option>{{ end }}
+          <option value="{{ i18n "feedbackOther" }}">{{ i18n "feedbackOther" }}</option>
+        </select>
+      </label>
+    </div>
+
+    <fieldset class="feedback-field feedback-stars">
+      <legend>{{ i18n "feedbackRating" }}</legend>
+      <div class="stars">
+        {{- range $n := seq 5 -1 1 }}
+        <input type="radio" id="star-{{ $n }}" name="rating" value="{{ $n }}">
+        <label for="star-{{ $n }}" title="{{ i18n "feedbackStars" (dict "Count" $n) }}"><span class="visually-hidden">{{ i18n "feedbackStars" (dict "Count" $n) }}</span>★</label>
+        {{- end }}
+      </div>
+    </fieldset>
+
+    <label class="feedback-field">
+      <span>{{ i18n "feedbackLiked" }} <small>{{ i18n "feedbackOptional" }}</small></span>
+      <textarea name="liked" rows="3" maxlength="2000" placeholder="{{ i18n "feedbackPlaceholderLiked" }}"></textarea>
+    </label>
+    <label class="feedback-field">
+      <span>{{ i18n "feedbackImprove" }} <small>{{ i18n "feedbackOptional" }}</small></span>
+      <textarea name="improve" rows="3" maxlength="2000" placeholder="{{ i18n "feedbackPlaceholderImprove" }}"></textarea>
+    </label>
+
+    {{- /* Honeypot: hidden from people, filled in by most spam bots. */}}
+    <label class="feedback-hp" aria-hidden="true">Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+
+    <p class="feedback-error" role="alert" hidden></p>
+    <div class="feedback-actions">
+      <button type="submit" data-sending="{{ i18n "feedbackSending" }}">{{ i18n "feedbackSend" }}</button>
+      <p>{{ i18n "feedbackPrivacy" }}</p>
+    </div>
+  </form>
+
+  <div class="feedback-thanks" role="status" hidden>
+    <div class="feedback-thanks-icon" aria-hidden="true">✓</div>
+    <h2 tabindex="-1">{{ i18n "feedbackThanksTitle" }}</h2>
+    <p>{{ i18n "feedbackThanksText" }}</p>
+    <button type="button" data-feedback-again>{{ i18n "feedbackThanksMore" }}</button>
+  </div>
+
+  <script type="application/json" id="feedback-strings">{{ dict "needRating" (i18n "feedbackNeedRating") "needTalk" (i18n "feedbackNeedTalk") "error" (i18n "feedbackError") | jsonify | safeJS }}</script>
+  {{- $js := resources.Get "js/feedback.js" | minify | fingerprint }}
+  <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+  {{- end }}
+</div>
+{{ end }}
