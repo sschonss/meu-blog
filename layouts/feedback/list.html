@@ -9,9 +9,11 @@
 {{- $data := site.Data.sessionize -}}
 {{- $sessions := $data.sessions | default slice -}}
 {{- $today := time.AsTime (now.Format "2006-01-02") -}}
+{{- /* Past events plus the next 7 days, so a QR link works before the talk. */ -}}
+{{- $limit := $today.AddDate 0 0 7 -}}
 {{- $events := slice -}}
 {{- range $data.events -}}
-  {{- if le (time.AsTime .eventStartDate).Unix $today.Unix }}{{ $events = $events | append . }}{{ end -}}
+  {{- if le (time.AsTime .eventStartDate).Unix $limit.Unix }}{{ $events = $events | append . }}{{ end -}}
 {{- end -}}
 {{- $events = sort $events "eventStartDate" "desc" -}}
 
