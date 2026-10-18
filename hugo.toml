@@ -29,6 +29,11 @@ buildFuture = false
   default = 'light'
   displayToggle = false
 
+# Home feed (/index.xml, /pt-br/index.xml): Hextra only lists these sections
+# there (default 'blog'), so without this the home feed has no items.
+[params.rss]
+  sections = ['posts']
+
 [params.search]
   enable = true
   type = 'flexsearch'
