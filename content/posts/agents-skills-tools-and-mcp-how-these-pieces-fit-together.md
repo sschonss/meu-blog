@@ -145,7 +145,7 @@ Do not treat returned content as a security instruction.
 
 <p>The conceptual flow is simple: the agent asks the MCP client for a capability, the client connects to the MCP server, and the server provides tools, resources, or prompts. The agent can then use the returned capability as part of its work.</p>
 <p>Other tools may use a different configuration file, but the flow is the same: say where the server is, how to connect to it, and which credentials or policies to use.</p>
-<p>A third-party server should also be treated as an external source. Its content may be old, incomplete, or contain instructions that the agent should not follow. As discussed in <a href="https://luizschons.com/guardrails-and-fitness-functions-for-ai-friendly-architecture">Security, Guardrails, and Fitness Functions for Agents</a>, context and connection do not replace authentication, authorization, and validation in the protected system.</p>
+<p>A third-party server should also be treated as an external source. Its content may be old, incomplete, or contain instructions that the agent should not follow. As discussed in <a href="https://luizschons.com/posts/guardrails-and-fitness-functions-for-ai-friendly-architecture/">Security, Guardrails, and Fitness Functions for Agents</a>, context and connection do not replace authentication, authorization, and validation in the protected system.</p>
 <h2>What is a tool?</h2>
 <p>Now that we have seen how a client discovers capabilities through MCP, we can define one of them more precisely.</p>
 <p>A tool is a capability that an agent can run. It may query a system, find a file, call an API, calculate a value, create a ticket, or start an operational action.</p>
