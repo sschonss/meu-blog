@@ -3,7 +3,7 @@
 {{ partial "sidebar.html" (dict "context" . "disableSidebar" true) }}{{/* mobile menu (hamburger) */}}
 {{- $page := . -}}
 <article class="article-page">
-  <a class="article-back" href="{{ "posts" | relURL }}">← {{ i18n "backToArticles" }}</a>
+  <a class="article-back" href="{{ "posts/" | relLangURL }}">← {{ i18n "backToArticles" }}</a>
   <header class="article-header">
     <p class="article-kicker">{{ i18n "article" }}</p>
     <h1>{{ .Title }}</h1>
@@ -76,7 +76,7 @@
   </nav>
   {{- end }}
 
-  <footer class="article-footer"><a href="{{ "posts" | relURL }}">← {{ i18n "articles" }}</a><span>{{ with .File }}<a class="article-edit" href="https://github.com/sschonss/meu-blog/edit/main/content/{{ .Path }}" data-track="suggest-fix">{{ i18n "suggestFix" }} ↗</a>{{ end }}<a href="https://www.linkedin.com/in/luiz-schons/">LinkedIn ↗</a></span></footer>
+  <footer class="article-footer"><a href="{{ "posts/" | relLangURL }}">← {{ i18n "articles" }}</a><span>{{ with .File }}<a class="article-edit" href="https://github.com/sschonss/meu-blog/edit/main/content/{{ .Path }}" data-track="suggest-fix">{{ i18n "suggestFix" }} ↗</a>{{ end }}<a href="https://www.linkedin.com/in/luiz-schons/">LinkedIn ↗</a></span></footer>
 </article>
 {{- $js := resources.Get "js/article.js" | minify | fingerprint }}
 <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>

@@ -1,7 +1,7 @@
 {{ define "main" }}
 {{ partial "sidebar.html" (dict "context" . "disableSidebar" true) }}{{/* mobile menu (hamburger) */}}
 <div class="series-page">
-  <a class="series-back" href="{{ "series" | relURL }}">← {{ i18n "allSeries" }}</a>
+  <a class="series-back" href="{{ "series/" | relLangURL }}">← {{ i18n "allSeries" }}</a>
   <header class="series-header series-term-header">
     <p class="series-kicker">{{ if eq site.Language.Lang "pt-br" }}SÉRIE{{ else }}SERIES{{ end }}</p>
     <h1>{{ .Title }}</h1>
