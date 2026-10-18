@@ -37,13 +37,15 @@
         data-entry-rating="entry.{{ $e.rating }}" data-entry-liked="entry.{{ $e.liked }}"
         data-entry-improve="entry.{{ $e.improve }}">
 
+    {{- /* "Other" is sent as the same value in both languages, so the answers
+         sheet has one bucket for it; only the label is translated. */}}
     <div class="feedback-row">
       <label class="feedback-field">
         <span>{{ i18n "feedbackTalk" }}</span>
         <select name="talk" required>
           <option value="">{{ i18n "feedbackChoose" }}</option>
           {{- range $sessions }}<option value="{{ .title }}" data-id="{{ int .id }}">{{ .title }}</option>{{ end }}
-          <option value="{{ i18n "feedbackOther" }}">{{ i18n "feedbackOther" }}</option>
+          <option value="Other">{{ i18n "feedbackOther" }}</option>
         </select>
       </label>
       <label class="feedback-field">
@@ -51,7 +53,7 @@
         <select name="event">
           <option value="">{{ i18n "feedbackChoose" }}</option>
           {{- range $events }}<option value="{{ .name }}" data-id="{{ int .id }}">{{ .name }}</option>{{ end }}
-          <option value="{{ i18n "feedbackOther" }}">{{ i18n "feedbackOther" }}</option>
+          <option value="Other">{{ i18n "feedbackOther" }}</option>
         </select>
       </label>
     </div>
