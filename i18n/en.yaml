@@ -87,3 +87,6 @@ feedbackSeeTalks: See my talks
 rateTalk: Rate
 feedbackCta: Watched one of my talks?
 feedbackCtaLink: Leave your feedback
+tagTermDescription: "Articles about {{ .Name }} by Luiz Schons: software engineering, architecture and AI."
+seriesTermDescription: "{{ .Name }}: a series of articles by Luiz Schons, to read in order."
+tagArticleOne: "1 article about this topic."
