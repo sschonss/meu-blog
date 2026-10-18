@@ -9,7 +9,7 @@ tags: ['PHP', 'Performance']
 ---
 
 <p>Se você ainda não atualizou para o PHP 8.0 ou maior, está na hora de fazer isso. O PHP 8.0 foi lançado em 26 de novembro de 2020 e trouxe o JIT (Just In Time) e é sobre ele que vamos falar hoje.</p>
-<h3 id="heading-codigo-opc">Código OPC</h3>
+<h2 id="heading-codigo-opc">Código OPC</h2>
 <p>Quando você executa um script PHP, o PHP o compila para um código intermediário chamado de código OPC (PHP Opcode). O código OPC é então executado pela máquina virtual Zend.</p>
 <p>Segue um exemplo de código PHP e seu código OPC:</p>
 <p><strong>PHP:</strong></p>
@@ -44,10 +44,10 @@ line      #* E I O op                           fetch          ext  return  oper
 ```
 
 <p>Basicamente, o código OPC é uma sequência de instruções que a máquina virtual Zend executa.</p>
-<h1 id="heading-jit"><strong>JIT</strong></h1>
+<h2 id="heading-jit"><strong>JIT</strong></h2>
 <p>Mas onde o JIT entra nisso? O JIT é um compilador que compila o código OPC em código de máquina nativo. Isso significa que o JIT compila o código OPC em código de máquina que a CPU pode executar diretamente.</p>
 <p>Dessa forma não usamos mais a máquina virtual Zend para executar o código OPC, mas sim o código de máquina nativo gerado pelo JIT.</p>
-<h1 id="heading-habilitando-o-jit"><strong>Habilitando o JIT</strong></h1>
+<h2 id="heading-habilitando-o-jit"><strong>Habilitando o JIT</strong></h2>
 <p>O JIT não é habilitado por padrão. Para habilitá-lo, você precisa de alguns passos adicionais.</p>
 <p>Primeiro, você precisa instalar a extensão <code>opcache</code>:</p>
 
@@ -69,7 +69,7 @@ opcache.enable_cli=1
 <p>Aqui, estamos habilitando o JIT e definindo o tamanho do buffer JIT para 100 MB. O JIT pode operar em dois modos: <code>tracing</code> e <code>function</code>. O modo <code>tracing</code> é o modo padrão e é mais rápido, mas o modo <code>function</code> é mais preciso.</p>
 <p>Para entender melhor a diferença entre os modos <code>tracing</code> e <code>function</code>, recomendo a leitura da <a target="_blank" href="https://www.php.net/manual/en/opcache.configuration.php#ini.opcache.jit">documentação oficial</a>.</p>
 <p>E depois habilitamos o JIT para a linha de comando (<code>opcache.enable_cli=1</code>).  </p>
-<h2 id="heading-benchmark"><strong>Benchmark</strong></h2>
+<h3 id="heading-benchmark"><strong>Benchmark</strong></h3>
 <p>Se você roda o PHP na Web, o JIT pode não fazer muita diferença. Mas se você roda scripts PHP na linha de comando, o JIT pode trazer um grande ganho de performance.</p>
 <p>Pois então, vamos fazer um benchmark para comparar a performance do PHP 8.0 com e sem JIT.</p>
 <p>No repositório <a target="_blank" href="https://github.com/sschonss/jit-php-doc">php-jit-doc</a> você encontra um script PHP que calcula um monte de coisa para deixar o processador bem ocupado.</p>
@@ -104,7 +104,7 @@ Encrypted: 46d37684d6032ef0167c00d29f3358d5a180438d3e8604e4c11728699d78fdb0a3228
 
 <p>Com o JIT habilitado, o script PHP rodou 3 segundos mais rápido. Isso é um ganho de performance muito considerável.</p>
 <p>Mas lembre-se, o JIT não é uma bala de prata. Ele pode não fazer muita diferença para scripts PHP que rodam na Web. Mas para scripts PHP que rodam na linha de comando, o JIT pode trazer um grande ganho de performance.</p>
-<h1 id="heading-conclusao"><strong>Conclusão</strong></h1>
+<h2 id="heading-conclusao"><strong>Conclusão</strong></h2>
 <p>Esse foi um breve resumo sobre o JIT no PHP 8.0. Se você quiser saber mais sobre o JIT, recomendo a leitura da <a target="_blank" href="https://www.php.net/manual/en/book.opcache.php">documentação oficial</a>.</p>
 <p>Trouxe somente exemplos básicos e didáticos para que você entenda o que é o JIT e como habilitá-lo. Acho que era importante trazer esse conteúdo para o perfil para que possamos falar sobre assuntos mais complexos e avançados.</p>
 <p>Se você gostou do conteúdo, deixe um comentário e compartilhe com seus amigos. Até a próxima!</p>
