@@ -5,6 +5,7 @@ source: https://luizschons.com/skills-specialized-context-for-ai-agents
 series: ['AI-Friendly Architecture']
 draft: false
 aliases: ["/skills-specialized-context-for-ai-agents/"]
+translationKey: 'skills-specialized-context-for-ai-agents'
 tags: ['AI', 'Architecture']
 ---
 

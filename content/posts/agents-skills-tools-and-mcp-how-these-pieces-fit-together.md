@@ -5,6 +5,7 @@ source: https://luizschons.com/agents-skills-tools-and-mcp-how-these-pieces-fit-
 series: ['AI-Friendly Architecture']
 draft: false
 aliases: ["/agents-skills-tools-and-mcp-how-these-pieces-fit-together/"]
+translationKey: 'agents-skills-tools-and-mcp-how-these-pieces-fit-together'
 tags: ['AI', 'Architecture']
 ---
 

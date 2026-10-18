@@ -5,6 +5,7 @@ source: https://luizschons.com/context-skills-breaking-down-the-context-for-ai-a
 series: ['AI-Friendly Architecture']
 draft: false
 aliases: ["/context-skills-breaking-down-the-context-for-ai-agents/"]
+translationKey: 'context-skills-breaking-down-the-context-for-ai-agents'
 tags: ['AI', 'Architecture']
 ---
 
