@@ -8,6 +8,15 @@
 <link rel="alternate" hreflang="x-default" href="{{ $en.Permalink }}">
 {{- end }}
 
+{{- /* RSS autodiscovery: the site feed in the current language, plus the feed of
+     this list page (articles, a topic, a series) when it has its own. */ -}}
+{{- with site.Home.OutputFormats.Get "rss" }}
+<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ site.Title }}">
+{{- end }}
+{{- if or (eq .Kind "term") (and (eq .Kind "section") (eq .Section "posts")) }}{{ with .OutputFormats.Get "rss" }}
+<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ $.Title }} – {{ site.Title }}">
+{{- end }}{{ end }}
+
 {{- /* Structured data (JSON-LD). */ -}}
 {{- $speaker := site.Data.sessionize.speaker | default dict -}}
 {{- $person := dict
