@@ -6,8 +6,8 @@
 
 Content checks (content/posts):
   - every article has title, date and at least one tag;
-  - every article exists in English and Portuguese (same translationKey), unless
-    its front matter says `translation: false`;
+  - every article exists in English and Portuguese (same translationKey, or neither
+    file has one), unless its front matter says `translation: false`;
   - both versions have the same date, so a translation never shows up as new;
   - file names have no Hashnode-style hash at the end;
   - every image referenced exists in static/ and has an alt text;
@@ -89,7 +89,10 @@ def check_content():
 
         if fm.get("translation") == "false":
             continue
-        key = fm.get("translationKey") or stem
+        # Same rule as Hugo: without translationKey a page pairs by its path, and a
+        # page with one only pairs with pages that declare the same key. So if just
+        # one of the two files has translationKey, Hugo treats them as unrelated.
+        key = fm.get("translationKey") or f"{stem} (no translationKey)"
         entry = articles.setdefault(key, {})
         if lang in entry:
             problem(path, f"two {lang} articles share translationKey `{key}` ({entry[lang][0]})")
@@ -100,7 +103,8 @@ def check_content():
             if lang in langs and other not in langs:
                 missing = "Portuguese" if other == "pt-br" else "English"
                 problem(langs[lang][0], f"no {missing} version (same translationKey `{key}`); "
-                        "add it or set `translation: false`")
+                        "add it or set `translation: false`; if the translation exists, "
+                        "give both files the same translationKey")
         if "en" in langs and "pt-br" in langs and langs["en"][1][:10] != langs["pt-br"][1][:10]:
             problem(langs["en"][0], f"date {langs['en'][1]} differs from the Portuguese version "
                     f"({langs['pt-br'][1]}); a translation must keep the original date")
