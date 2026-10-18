@@ -1,0 +1,15 @@
+{{- /* Same as Hextra's partial, plus a description for tag and series pages
+     (they have no summary, so the meta/OG description used to be empty). */ -}}
+{{ with .Description | plainify | htmlUnescape -}}
+  {{ . -}}
+{{ else -}}
+  {{ if .IsHome -}}
+    {{ with .Site.Params.description | plainify | htmlUnescape -}}
+      {{ . -}}
+    {{ end -}}
+  {{ else if eq .Kind "term" -}}
+    {{ i18n (cond (eq .Data.Plural "series") "seriesTermDescription" "tagTermDescription") (dict "Name" .Title) -}}
+  {{ else -}}
+    {{ .Summary | plainify | htmlUnescape | chomp -}}
+  {{ end -}}
+{{ end -}}

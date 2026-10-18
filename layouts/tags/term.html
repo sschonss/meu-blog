@@ -5,7 +5,7 @@
   <header class="series-header series-term-header">
     <p class="series-kicker">{{ i18n "tagKicker" }}</p>
     <h1>{{ .Title }}</h1>
-    <p>{{ i18n "tagArticles" (dict "Count" (len .Pages)) }}</p>
+    <p>{{ i18n (cond (eq (len .Pages) 1) "tagArticleOne" "tagArticles") (dict "Count" (len .Pages)) }}</p>
   </header>
   <div class="posts-list">
     {{ range .Pages.ByDate.Reverse }}{{ partial "post-row.html" . }}{{ end }}

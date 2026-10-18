@@ -87,3 +87,6 @@ feedbackSeeTalks: Ver minhas palestras
 rateTalk: Avaliar
 feedbackCta: Assistiu a uma palestra minha?
 feedbackCtaLink: Deixe sua avaliação
+tagTermDescription: "Artigos sobre {{ .Name }} por Luiz Schons: engenharia de software, arquitetura e IA."
+seriesTermDescription: "{{ .Name }}: uma série de artigos por Luiz Schons, para ler em ordem."
+tagArticleOne: "1 artigo sobre este tema."
