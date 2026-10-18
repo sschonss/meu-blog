@@ -60,15 +60,15 @@ buildFuture = false
 
 [[languages.en.menu.main]]
   name = 'Articles'
-  pageRef = '/posts'
+  pageRef = '/posts/'
   weight = 1
 [[languages.en.menu.main]]
   name = 'Talks'
-  pageRef = '/speakers'
+  pageRef = '/speakers/'
   weight = 2
 [[languages.en.menu.main]]
   name = 'Contact'
-  pageRef = '/contact'
+  pageRef = '/contact/'
   weight = 3
 [[languages.en.menu.main]]
   name = 'Search'
@@ -85,15 +85,15 @@ buildFuture = false
 
 [[languages."pt-br".menu.main]]
   name = 'Artigos'
-  pageRef = '/posts'
+  pageRef = '/posts/'
   weight = 1
 [[languages."pt-br".menu.main]]
   name = 'Palestras'
-  pageRef = '/speakers'
+  pageRef = '/speakers/'
   weight = 2
 [[languages."pt-br".menu.main]]
   name = 'Contato'
-  pageRef = '/contact'
+  pageRef = '/contact/'
   weight = 3
 [[languages."pt-br".menu.main]]
   name = 'Buscar'
