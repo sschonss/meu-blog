@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 610" width="960" height="610" role="img" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title>Modo inseguro: o agente lê o AGENTS.md plantado e manda o .env para attacker.example. Modo contido: quatro portas (MCP com allowlist, rede, token só leitura e spans) barram o envio e registram cada tentativa</title>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker><marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker></defs>
+<rect width="960" height="610" fill="#ffffff"/>
+<text x="30" y="38" font-size="15" font-weight="700" fill="#111827">Modo inseguro</text>
+<rect x="30" y="60" width="160" height="64" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="110.0" y="87.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">AGENTS.md</text>
+<text x="110.0" y="105.5" text-anchor="middle" font-size="12" fill="#475569">com instrução plantada</text>
+<line x1="192" y1="92" x2="228" y2="92" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
+<rect x="230" y="60" width="170" height="64" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="315.0" y="87.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Agente</text>
+<text x="315.0" y="105.5" text-anchor="middle" font-size="12" fill="#475569">segue o que o arquivo diz</text>
+<line x1="402" y1="92" x2="428" y2="92" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
+<rect x="430" y="60" width="260" height="64" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+<text x="560.0" y="87.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Ferramentas liberadas</text>
+<text x="560.0" y="105.5" text-anchor="middle" font-size="12" fill="#475569">read_file, http_post, shell</text>
+<line x1="692" y1="92" x2="728" y2="92" stroke="#dc2626" stroke-width="1.5" marker-end="url(#ar)"/>
+<rect x="730" y="60" width="200" height="64" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+<text x="830.0" y="87.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">attacker.example</text>
+<text x="830.0" y="105.5" text-anchor="middle" font-size="12" fill="#475569">recebe o .env inteiro</text>
+<text x="30" y="152" font-size="12" fill="#64748b">Nada fica no caminho: o agente lê o .env e manda para fora pela rede.</text>
+<line x1="30" y1="178" x2="930" y2="178" stroke="#e2e8f0" stroke-width="1.5"/>
+<text x="30" y="212" font-size="15" font-weight="700" fill="#111827">Modo contido</text>
+<rect x="430" y="232" width="260" height="76" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="560.0" y="256.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">1 · MCP com allowlist</text>
+<text x="560.0" y="274.5" text-anchor="middle" font-size="12" fill="#475569">só read_file e list_dir</text>
+<text x="560.0" y="292.5" text-anchor="middle" font-size="12" fill="#475569">http_post e shell: recusadas</text>
+<rect x="430" y="326" width="260" height="76" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="560.0" y="350.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">2 · Rede: proxy Squid (portaria)</text>
+<text x="560.0" y="368.5" text-anchor="middle" font-size="12" fill="#475569">só api.github.com passa</text>
+<text x="560.0" y="386.5" text-anchor="middle" font-size="12" fill="#475569">plano B: container --network none</text>
+<rect x="430" y="420" width="260" height="58" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="560.0" y="444.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">3 · Token fine-grained</text>
+<text x="560.0" y="462.5" text-anchor="middle" font-size="12" fill="#475569">só leitura: escrita volta 403</text>
+<rect x="30" y="332" width="160" height="64" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="110.0" y="359.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">AGENTS.md</text>
+<text x="110.0" y="377.5" text-anchor="middle" font-size="12" fill="#475569">com instrução plantada</text>
+<line x1="192" y1="364" x2="228" y2="364" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
+<rect x="230" y="332" width="170" height="64" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="315.0" y="359.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Agente</text>
+<text x="315.0" y="377.5" text-anchor="middle" font-size="12" fill="#475569">segue o que o arquivo diz</text>
+<line x1="402" y1="352" x2="428" y2="276" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ab)"/>
+<line x1="402" y1="364" x2="428" y2="364" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ab)"/>
+<line x1="402" y1="376" x2="428" y2="444" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ab)"/>
+<rect x="730" y="332" width="200" height="64" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="830.0" y="359.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">attacker.example</text>
+<text x="830.0" y="377.5" text-anchor="middle" font-size="12" fill="#475569">bloqueado: o .env não chega</text>
+<line x1="692" y1="364" x2="728" y2="364" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+<text x="710" y="384" text-anchor="middle" font-size="11" font-weight="700" fill="#dc2626">403</text>
+<rect x="730" y="420" width="200" height="58" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+<text x="830.0" y="444.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">API do GitHub</text>
+<text x="830.0" y="462.5" text-anchor="middle" font-size="12" fill="#475569">a leitura funciona</text>
+<line x1="692" y1="449" x2="728" y2="449" stroke="#16a34a" stroke-width="1.5" marker-end="url(#ag)"/>
+<line x1="560" y1="480" x2="560" y2="520" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ab)"/>
+<text x="570" y="505" font-size="11" fill="#2563eb">spans de 1, 2 e 3</text>
+<rect x="430" y="522" width="240" height="64" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="550.0" y="549.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">4 · Cada recusa ou bloqueio</text>
+<text x="550.0" y="567.5" text-anchor="middle" font-size="12" fill="#475569">vira um span, sem o segredo</text>
+<line x1="672" y1="554" x2="698" y2="554" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
+<rect x="700" y="522" width="125" height="64" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="762.5" y="549.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">OTel Collector</text>
+<text x="762.5" y="567.5" text-anchor="middle" font-size="12" fill="#475569">recebe os spans</text>
+<line x1="827" y1="554" x2="843" y2="554" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
+<rect x="845" y="522" width="85" height="64" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="887.5" y="549.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Grafana</text>
+<text x="887.5" y="567.5" text-anchor="middle" font-size="12" fill="#475569">alerta</text>
+</svg>
