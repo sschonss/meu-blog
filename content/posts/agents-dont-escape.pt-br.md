@@ -4,7 +4,6 @@ date: 2026-10-26
 description: 'O caso Hugging Face e os incidentes de outubro explicados sem jargão, e um lab em que um agente vaza um .env e depois é contido com quatro controles simples.'
 translationKey: agents-dont-escape
 tags: ['IA', 'Arquitetura', 'Observabilidade']
-draft: true
 ---
 
 Toda vez que um agente de IA aparece onde não devia, a manchete é a mesma: o agente "fugiu". Só que, quando você lê o relatório, quase nunca tem um modelo genial arrombando um cofre. Tem uma porta que alguém deixou aberta.

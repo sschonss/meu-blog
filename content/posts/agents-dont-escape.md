@@ -4,7 +4,6 @@ date: 2026-10-26
 description: "The Hugging Face case and October's incidents explained without jargon, and a lab where an agent leaks a .env and then gets contained with four simple controls."
 translationKey: agents-dont-escape
 tags: ['AI', 'Architecture', 'Observability']
-draft: true
 ---
 
 Every time an AI agent shows up where it shouldn't, the headline is the same: the agent "escaped". But when you read the report, there is almost never a genius model cracking a safe. There is a door someone left open.
