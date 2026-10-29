@@ -30,24 +30,8 @@
   {{- partial "article-talks.html" . }}
   {{- partial "newsletter.html" . }}
 
-  {{- /* Series: every part in order, current one highlighted. */}}
-  {{- with .GetTerms "series" }}
-  {{- $term := index . 0 }}
-  {{- $parts := $term.Pages.ByDate }}
-  {{- $current := 0 }}
-  {{- range $i, $p := $parts }}{{ if eq $p.RelPermalink $page.RelPermalink }}{{ $current = add $i 1 }}{{ end }}{{ end }}
-  {{- if gt (len $parts) 1 }}
-  <aside class="article-series">
-    <p class="article-series-kicker">{{ i18n "seriesPart" (dict "N" $current "Total" (len $parts)) }}</p>
-    <h2><a href="{{ $term.RelPermalink }}">{{ $term.LinkTitle }}</a></h2>
-    <ol>
-      {{- range $parts }}
-      <li{{ if eq .RelPermalink $page.RelPermalink }} class="is-current" aria-current="page"{{ end }}>{{ if eq .RelPermalink $page.RelPermalink }}<span>{{ .Title }}</span>{{ else }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}</li>
-      {{- end }}
-    </ol>
-  </aside>
-  {{- end }}
-  {{- end }}
+  {{- /* Series: name, description and every part in order (see the partial). */}}
+  {{- partial "article-series.html" . }}
 
   {{- /* Related articles: shared tags first, then series and date (see [related] in hugo.toml). */}}
   {{- with first 3 (site.RegularPages.Related . | complement (slice .)) }}

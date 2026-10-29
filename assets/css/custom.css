@@ -131,6 +131,11 @@ article img {
 .article-series li a { color: #475569; }
 .article-series li a:hover { color: #2563eb; }
 .article-series li.is-current { color: #111827; font-weight: 650; }
+.article-series-description { color: #475569; font-size: .92rem; line-height: 1.6; margin: -.4rem 0 .9rem; }
+.article-series-more { font-size: .88rem; margin: 0; }
+.article-series-more a { color: #2563eb; font-weight: 600; }
+.series-header > p.series-description { color: #475569; font-size: 1.05rem; line-height: 1.7; margin: .8rem 0 0; max-width: 620px; }
+.series-description + p:last-child { color: #94a3b8; font-size: .85rem; margin-top: .6rem; }
 /* Previous / next */
 .article-pager { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; margin-bottom: 2.5rem; }
 .article-pager a { border: 1px solid #e5e7eb; border-radius: .8rem; display: flex; flex-direction: column; gap: .35rem; padding: 1rem 1.2rem; transition: border-color .2s, box-shadow .2s; }

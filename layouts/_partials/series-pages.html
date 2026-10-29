@@ -1,0 +1,8 @@
+{{- /* Posts of a series term in reading order. Context: the term page.
+     Order is by date, unless the posts set `series_weight` in their front
+     matter (lower first), which lets an intro come before older posts. */ -}}
+{{- $pages := .Pages.ByDate -}}
+{{- if where $pages "Params.series_weight" "!=" nil -}}
+  {{- $pages = sort $pages "Params.series_weight" -}}
+{{- end -}}
+{{- return $pages -}}

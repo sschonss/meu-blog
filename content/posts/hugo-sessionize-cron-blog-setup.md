@@ -5,6 +5,8 @@ description: 'How I moved from Hashnode to a bilingual Hugo blog, with talks pul
 translationKey: hugo-sessionize-cron-blog-setup
 draft: false
 tags: ['Hugo', 'GitHub Actions']
+series: ['Studying out of curiosity']
+series_weight: 2
 lastmod: 2026-10-08
 ---
 
