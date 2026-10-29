@@ -1,0 +1,19 @@
+{
+  "name": "meu-blog-tests",
+  "private": true,
+  "description": "Testes do pipeline do blog (Playwright, Lighthouse CI, cspell). O site em si não usa nada daqui.",
+  "scripts": {
+    "build": "cd .. && hugo --minify --baseURL http://127.0.0.1:4173/ --destination tests/.site",
+    "serve": "http-server .site -p 4173 -a 127.0.0.1 -c-1",
+    "e2e": "playwright test",
+    "lhci": "lhci autorun --config=lighthouserc.cjs",
+    "spell": "cd .. && python3 scripts/check_spelling.py"
+  },
+  "devDependencies": {
+    "@cspell/dict-pt-br": "^2.4.4",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.64.1",
+    "cspell": "^9.8.0",
+    "http-server": "^14.1.1"
+  }
+}

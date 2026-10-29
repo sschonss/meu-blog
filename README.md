@@ -189,7 +189,50 @@ A cada push, o workflow `.github/workflows/check.yml` roda `scripts/check_site.p
 - imagem que não existe em `static/` ou sem `alt`;
 - link interno, imagem, script ou redirect que aponta para uma página que não existe (verificado no site gerado).
 
-A checagem não bloqueia o deploy, mas o commit ganha um X vermelho no GitHub e chega um e-mail com a lista de problemas. Para rodar localmente: `python3 scripts/check_site.py content`, depois `hugo` e `python3 scripts/check_site.py links`.
+Também falha com imagem PNG ou JPG acima de 300 KB em `static/images/posts/` (rode `python3 scripts/optimize_images.py`).
+
+Essa checagem faz parte dos testes do pipeline abaixo e bloqueia o deploy. Para rodar localmente: `python3 scripts/check_site.py content`, depois `hugo` e `python3 scripts/check_site.py links`.
+
+## Testes do pipeline
+
+O deploy (`hugo.yml`) chama o `check.yml` antes de publicar, em todo push na `main`, no disparo manual e no cron diário. Se um check que bloqueia falhar, o site não é publicado e o commit ganha um X vermelho. O `check.yml` também roda em push de outros branches e em PR.
+
+| Check | O que verifica | Bloqueia o deploy? |
+|---|---|---|
+| Artigos | `check_site.py content`: front matter, traduções, `alt`, imagens pesadas | Sim |
+| Build e links internos | `hugo --minify` e `check_site.py links` no site gerado | Sim |
+| Ortografia (cspell) | Português e inglês nos artigos novos ou alterados (PR e push) e nos que entram no ar no dia (cron) | Sim |
+| Navegador (Playwright) | Home, artigo, troca de idioma, séries, palestras, feedback, 404, RSS e sitemap em PT e EN, sem erro no console, com giscus e newsletter na página | Sim |
+| Links externos (lychee) | Links para outros sites no HTML gerado | Não, só avisa |
+| Lighthouse | Performance, acessibilidade, boas práticas e SEO da home PT, de um artigo PT e da home EN | Não, só avisa |
+
+Os dois últimos ficam em `.github/workflows/quality.yml` e rodam em push na `main`, em PR, toda segunda às 08:23 e manualmente. O resultado aparece no **Summary** do run. Não bloqueiam porque dependem de sites de terceiros e da máquina do runner.
+
+Detalhes:
+
+- **Ortografia:** só artigos novos ou alterados bloqueiam, para erro antigo não travar deploy. Palavra certa que o corretor não conhece (nome, ferramenta, jargão) vai em `tests/cspell-words.txt`, uma por linha. Para ignorar uma palavra só num artigo, use `<!-- cspell:ignore palavra -->` no texto. Código, URLs, caminhos e chaves do front matter são ignorados.
+- **Playwright:** roda só no Chromium, num build local do site (`tests/.site`). Pedidos para fora (giscus, Umami, Sessionize, Buttondown, fontes) são bloqueados de propósito, então o teste não depende de serviço externo. Erros no console vindos desses pedidos bloqueados são ignorados; qualquer outro erro do site falha o teste.
+- **lychee:** aceita 403 e 429 (site que bloqueia robô ou limita acesso), tenta de novo 3 vezes e guarda cache por 1 dia. Os sites excluídos estão em `lychee.toml`.
+- **Lighthouse:** os limites ficam em `tests/lighthouserc.cjs` (performance 80, acessibilidade 85, boas práticas 95, SEO 95), abaixo das notas medidas em 29/10/2026.
+
+Para rodar localmente (precisa de Node 20 ou mais novo):
+
+```bash
+npm ci --prefix tests                                   # uma vez
+npx --prefix tests playwright install chromium          # uma vez
+
+python3 scripts/check_site.py content
+hugo --minify && python3 scripts/check_site.py links
+
+python3 scripts/check_spelling.py                       # todos os artigos
+python3 scripts/check_spelling.py content/posts/meu-artigo.md
+
+npm run build --prefix tests                            # gera tests/.site
+(cd tests && npx playwright test)                       # Playwright
+(cd tests && npx lhci autorun --config=lighthouserc.cjs)  # Lighthouse
+
+lychee --config lychee.toml --root-dir "$PWD/public" public   # depois de rodar hugo
+```
 
 ## Rodando localmente
 
@@ -204,6 +247,6 @@ Para gerar os ícones a partir de uma imagem local, use `pip install pillow` e d
 
 ## Deploy e proteção da main
 
-- Todo push na `main` publica o site. Também é possível rodar manualmente em **Actions → Deploy Hugo site to Pages → Run workflow**.
+- Todo push na `main` publica o site, depois que os testes do pipeline passam. Também é possível rodar manualmente em **Actions → Deploy Hugo site to Pages → Run workflow**.
 - A `main` é protegida por um ruleset: só o dono do repositório pode enviar commits, e não é permitido force push nem apagar o branch.
 - O workflow não faz commits, só gera e publica o site.

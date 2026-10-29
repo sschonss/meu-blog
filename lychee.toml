@@ -1,0 +1,52 @@
+# Configuração do lychee (links externos). Usada por .github/workflows/check.yml
+# e localmente: lychee --config lychee.toml public
+# Links internos já são verificados por scripts/check_site.py links.
+
+# Cache dos resultados (arquivo .lycheecache) para não bater nos mesmos sites a cada run.
+cache = true
+max_cache_age = "1d"
+
+max_concurrency = 16
+max_retries = 3
+retry_wait_time = 2
+timeout = 20
+user_agent = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
+
+# Só links externos (http/https); mailto e arquivos locais ficam de fora.
+scheme = ["https", "http"]
+include_mail = false
+
+# Só as páginas HTML geradas (o Hugo também gera cópias .md dos artigos).
+extensions = ["html"]
+
+# 2xx são ok; 429 (rate limit) e 403 (sites que bloqueiam robôs) não quer dizer link quebrado.
+accept = ["200..=299", "403", "429"]
+
+exclude_all_private = true
+
+exclude = [
+  # O próprio site: links internos são verificados pelo check_site.py, e artigos
+  # agendados ainda não existem no ar.
+  '^https?://(www\.)?luizschons\.com',
+  # Endereços de exemplo e locais citados nos artigos.
+  '^https?://localhost',
+  '^https?://127\.',
+  '^https?://0\.0\.0\.0',
+  '^https?://([a-z0-9-]+\.)*example(\.com|\.org|\.net)?([/:]|$)',
+  '^https?://[a-z0-9-]+\.example([/:]|$)',
+  '^https?://(203\.0\.113|198\.51\.100|192\.0\.2)\.',
+  '^https?://shipping',
+  # Redes sociais que bloqueiam robôs ou exigem login.
+  '^https?://([a-z]+\.)?linkedin\.com',
+  '^https?://(www\.)?(x|twitter)\.com',
+  '^https?://wa\.me',
+  # Links de compartilhamento e serviços usados só pelo navegador.
+  '^https?://cloud\.umami\.is',
+  '^https?://giscus\.app',
+  '^https?://buttondown\.com/api',
+  '^https?://schema\.org',
+  '^https?://fonts\.(googleapis|gstatic)\.com',
+  '^https?://cdn\.jsdelivr\.net',
+  # Unsplash responde 401 para robôs (tela anti-bot), mesmo com o link funcionando.
+  '^https?://(www\.)?unsplash\.com',
+]

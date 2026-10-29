@@ -2,3 +2,9 @@
 public/
 resources/
 __pycache__/
+.lycheecache
+tests/node_modules/
+tests/.site/
+tests/test-results/
+tests/playwright-report/
+tests/.lighthouseci/

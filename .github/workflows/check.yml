@@ -1,17 +1,22 @@
 name: Check site
 
-# Runs on every push and pull request. A failure does not block the deploy,
-# but GitHub shows a red X on the commit and sends an email with the problems.
+# Checks que bloqueiam o deploy. Rodam em todo push (fora da main), em todo PR
+# e também são chamados pelo hugo.yml (workflow_call) antes de cada deploy,
+# inclusive no cron diário. Se algum falhar, o site não é publicado.
+# Os checks que só avisam (links externos e Lighthouse) ficam em quality.yml.
 on:
   push:
+    branches-ignore: [main]
   pull_request:
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
 
 jobs:
-  check:
+  site:
+    name: Artigos, build e links internos
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,3 +37,78 @@ jobs:
         # Not an error: just lists what the daily deploy will publish later.
         run: |
           hugo list future | tail -n +2 | cut -d, -f1 | sed 's/^/scheduled -> /' || true
+
+  spelling:
+    name: Ortografia (artigos novos ou alterados)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Histórico completo para comparar com a base do PR ou o push anterior.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: tests/package-lock.json
+      - name: Install test tools
+        run: npm ci --prefix tests
+      - name: cspell (PT e EN)
+        # PR: artigos alterados no PR. Push: artigos alterados no push.
+        # Cron e disparo manual: artigos com data de hoje ou ontem (os que entram no ar).
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          case "$EVENT" in
+            pull_request) python3 scripts/check_spelling.py --changed "origin/$BASE_REF" ;;
+            push) python3 scripts/check_spelling.py --changed "$BEFORE" ;;
+            *) python3 scripts/check_spelling.py --publishing ;;
+          esac
+
+  e2e:
+    name: Testes de navegador (Playwright)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'
+          extended: true
+      - name: Build for tests
+        run: hugo --minify --baseURL http://127.0.0.1:4173/ --destination tests/.site
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: tests/package-lock.json
+      - name: Install test tools
+        run: npm ci --prefix tests
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('tests/package-lock.json') }}
+      - name: Install Chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        working-directory: tests
+        run: npx playwright install --with-deps --only-shell chromium
+      - name: Install Chromium system deps
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        working-directory: tests
+        run: npx playwright install-deps chromium
+      - name: Playwright
+        working-directory: tests
+        run: npx playwright test
+      - name: Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: tests/playwright-report/
+          retention-days: 7

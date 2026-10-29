@@ -15,7 +15,13 @@ permissions:
   id-token: write
 
 jobs:
+  checks:
+    # Mesmos checks do check.yml (artigos, build, links internos, ortografia e
+    # Playwright). Se algum falhar, o deploy não roda, inclusive no cron.
+    uses: ./.github/workflows/check.yml
+
   deploy:
+    needs: checks
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

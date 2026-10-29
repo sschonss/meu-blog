@@ -1,0 +1,89 @@
+name: Quality (não bloqueia)
+
+# Checks que só avisam: links externos (lychee) e Lighthouse. Não bloqueiam o
+# deploy porque dependem de sites de terceiros e da máquina do runner.
+# O resultado aparece no resumo do run (Summary) e como aviso no commit/PR.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # Toda segunda às 08:23 em Brasília (11:23 UTC): link externo quebra sozinho.
+    - cron: '23 11 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  external-links:
+    name: Links externos (lychee)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'
+          extended: true
+      - name: Build
+        run: hugo --minify
+      - name: Cache lychee results
+        uses: actions/cache@v4
+        with:
+          path: .lycheecache
+          key: lychee-${{ github.sha }}
+          restore-keys: lychee-
+      - name: lychee
+        id: lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --config lychee.toml --root-dir ${{ github.workspace }}/public --no-progress public
+          fail: false
+          jobSummary: true
+      - name: Warn about broken links
+        if: steps.lychee.outputs.exit_code != '0'
+        run: echo "::warning title=Links externos::lychee encontrou links externos com erro. Veja o Summary deste run."
+
+  lighthouse:
+    name: Lighthouse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: 'latest'
+          extended: true
+      - name: Build for tests
+        run: hugo --minify --baseURL http://127.0.0.1:4173/ --destination tests/.site
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: tests/package-lock.json
+      - name: Install test tools
+        run: npm ci --prefix tests
+      - name: Lighthouse CI
+        id: lhci
+        # Limites como "warn": nota abaixo do limite vira aviso, não erro.
+        continue-on-error: true
+        working-directory: tests
+        run: npx lhci autorun --config=lighthouserc.cjs
+      - name: Scores
+        if: always()
+        run: python3 scripts/lighthouse_summary.py tests/.lighthouseci/reports/manifest.json >> "$GITHUB_STEP_SUMMARY"
+      - name: Warn if Lighthouse failed
+        if: steps.lhci.outcome == 'failure'
+        run: echo "::warning title=Lighthouse::Lighthouse CI não terminou. Veja o log do passo Lighthouse CI."
+      - name: Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: tests/.lighthouseci/
+          retention-days: 14
