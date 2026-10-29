@@ -1,0 +1,25 @@
+{{- /* Series box at the end of an article: series name, its description
+     (from content/series/<term>/_index*.md, when there is one) and, once the
+     series has more than one article, every part in order with the current
+     one highlighted. Context: the article page. */ -}}
+{{- $page := . -}}
+{{- with .GetTerms "series" }}
+{{- $term := index . 0 }}
+{{- $parts := partial "series-pages.html" $term }}
+{{- $current := 0 }}
+{{- range $i, $p := $parts }}{{ if eq $p.RelPermalink $page.RelPermalink }}{{ $current = add $i 1 }}{{ end }}{{ end }}
+<aside class="article-series">
+  <p class="article-series-kicker">{{ if gt (len $parts) 1 }}{{ i18n "seriesPart" (dict "N" $current "Total" (len $parts)) }}{{ else }}{{ i18n "seriesIntro" }}{{ end }}</p>
+  <h2><a href="{{ $term.RelPermalink }}">{{ $term.LinkTitle }}</a></h2>
+  {{- with $term.Description }}<p class="article-series-description">{{ . }}</p>{{ end }}
+  {{- if gt (len $parts) 1 }}
+  <ol>
+    {{- range $parts }}
+    <li{{ if eq .RelPermalink $page.RelPermalink }} class="is-current" aria-current="page"{{ end }}>{{ if eq .RelPermalink $page.RelPermalink }}<span>{{ .Title }}</span>{{ else }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}</li>
+    {{- end }}
+  </ol>
+  {{- else }}
+  <p class="article-series-more"><a href="{{ $term.RelPermalink }}">{{ i18n "viewSeries" }} →</a></p>
+  {{- end }}
+</aside>
+{{- end }}

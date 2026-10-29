@@ -5,6 +5,8 @@ description: 'Como saí do Hashnode para um blog em Hugo, em dois idiomas, com p
 translationKey: hugo-sessionize-cron-blog-setup
 draft: false
 tags: ['Hugo', 'GitHub Actions']
+series: ['Estudos por curiosidade']
+series_weight: 2
 lastmod: 2026-10-08
 ---
 

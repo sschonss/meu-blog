@@ -33,6 +33,7 @@ talksInvite: Para convites, entre em contato pelo LinkedIn.
 talksFallback: Não consegui carregar a lista atualizada agora. Veja todas as minhas palestras e eventos no meu perfil do Sessionize.
 onThisPage: Neste artigo
 seriesPart: "Parte {{ .N }} de {{ .Total }}"
+seriesIntro: Este artigo faz parte da série
 previousArticle: Artigo anterior
 nextArticle: Próximo artigo
 readTranslation: Read in English

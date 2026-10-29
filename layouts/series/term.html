@@ -5,10 +5,11 @@
   <header class="series-header series-term-header">
     <p class="series-kicker">{{ if eq site.Language.Lang "pt-br" }}SÉRIE{{ else }}SERIES{{ end }}</p>
     <h1>{{ .Title }}</h1>
-    <p>{{ len .Pages }} {{ if eq site.Language.Lang "pt-br" }}artigos sobre este tema.{{ else }}articles about this topic.{{ end }}</p>
+    {{- with .Description }}<p class="series-description">{{ . }}</p>{{ end }}
+    <p>{{ len .Pages }} {{ if eq (len .Pages) 1 }}{{ i18n "article" | lower }}{{ else }}{{ i18n "articles" | lower }}{{ end }}</p>
   </header>
   <div class="series-posts">
-    {{ range $index, $post := .Pages.ByDate }}
+    {{ range $index, $post := partial "series-pages.html" . }}
     <article class="series-post"><div class="series-post-number">{{ add $index 1 }}</div><div><p class="series-post-date">{{ partial "post-date.html" $post.Date }} · {{ i18n "readingTime" $post.ReadingTime }}</p><h2><a href="{{ $post.RelPermalink }}">{{ $post.Title }}</a></h2><p>{{ $post.Summary | plainify | truncate 180 }}</p></div></article>
     {{ end }}
   </div>
