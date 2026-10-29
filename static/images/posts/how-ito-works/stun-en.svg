@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 470" width="960" height="470" role="img" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title>STUN exchange: the phone asks the STUN server how it looks from outside. On the way, the router swaps 192.168.0.10:50000 for 203.0.113.5:61000, and the server answers with that address. The phone now has two candidates: the home one (host) and the public one (srflx)</title>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker><marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+<rect width="960" height="470" fill="#ffffff"/>
+<rect x="30" y="20" width="220" height="56" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="140.0" y="43.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Phone</text>
+<text x="140.0" y="61.5" text-anchor="middle" font-size="12" fill="#475569">192.168.0.10</text>
+<line x1="140" y1="78" x2="140" y2="290" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 4"/>
+<rect x="370" y="20" width="220" height="56" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="480.0" y="43.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Router (NAT)</text>
+<text x="480.0" y="61.5" text-anchor="middle" font-size="12" fill="#475569">203.0.113.5</text>
+<line x1="480" y1="78" x2="480" y2="290" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 4"/>
+<rect x="710" y="20" width="220" height="56" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="820.0" y="43.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">STUN server</text>
+<text x="820.0" y="61.5" text-anchor="middle" font-size="12" fill="#475569">e.g. stun.cloudflare.com</text>
+<line x1="820" y1="78" x2="820" y2="290" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 4"/>
+<line x1="144" y1="120" x2="476" y2="120" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ab)"/>
+<rect x="154" y="96" width="312" height="18" fill="#ffffff"/>
+<text x="310.0" y="110" text-anchor="middle" font-size="12" font-weight="600" fill="#111827">1 · “who am I?” (Binding request)</text>
+<text x="310.0" y="136" text-anchor="middle" font-size="11" font-weight="400" fill="#64748b">left from 192.168.0.10:50000</text>
+<line x1="484" y1="170" x2="816" y2="170" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ab)"/>
+<rect x="494" y="146" width="312" height="18" fill="#ffffff"/>
+<text x="650.0" y="160" text-anchor="middle" font-size="12" font-weight="600" fill="#111827">2 · same question, now from 203.0.113.5:61000</text>
+<text x="650.0" y="186" text-anchor="middle" font-size="11" font-weight="400" fill="#64748b">the router notes: 61000 → 192.168.0.10:50000</text>
+<line x1="816" y1="230" x2="484" y2="230" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ag)"/>
+<rect x="494" y="206" width="312" height="18" fill="#ffffff"/>
+<text x="650.0" y="220" text-anchor="middle" font-size="12" font-weight="600" fill="#111827">3 · “I see you at 203.0.113.5:61000”</text>
+<line x1="476" y1="280" x2="144" y2="280" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ag)"/>
+<rect x="154" y="256" width="312" height="18" fill="#ffffff"/>
+<text x="310.0" y="270" text-anchor="middle" font-size="12" font-weight="600" fill="#111827">4 · forwards the answer to 192.168.0.10:50000</text>
+<rect x="180" y="312" width="600" height="100" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+<text x="480.0" y="339.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">This phone's ICE candidates</text>
+<text x="480.0" y="357.5" text-anchor="middle" font-size="12" fill="#475569">host: 192.168.0.10:50000 (only works inside the home)</text>
+<text x="480.0" y="375.5" text-anchor="middle" font-size="12" fill="#475569">srflx: 203.0.113.5:61000 (found via STUN)</text>
+<text x="480.0" y="393.5" text-anchor="middle" font-size="12" fill="#475569">relay: an address borrowed from a TURN server, if any</text>
+<text x="480" y="446" text-anchor="middle" font-size="12" font-weight="400" fill="#64748b">Example addresses and ports. STUN answers one question only: it carries no game data.</text>
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 380" width="960" height="380" role="img" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title>As duas provas do Web Push: o JWT VAPID assinado com ES256 prova ao push service quem envia; a criptografia com p256dh e auth garante que só o navegador lê. O push service vê endpoint, cabeçalhos e bytes cifrados, não o texto</title>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker><marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+<rect width="960" height="380" fill="#ffffff"/>
+<rect x="30" y="150" width="230" height="70" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="145.0" y="180.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Servidor de aplicação</text>
+<text x="145.0" y="198.5" text-anchor="middle" font-size="12" fill="#475569">tem a chave privada VAPID</text>
+<rect x="365" y="136" width="230" height="98" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="480.0" y="162.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Push service (FCM)</text>
+<text x="480.0" y="180.5" text-anchor="middle" font-size="12" fill="#475569">vê: endpoint, cabeçalhos,</text>
+<text x="480.0" y="198.5" text-anchor="middle" font-size="12" fill="#475569">182 bytes cifrados</text>
+<text x="480.0" y="216.5" text-anchor="middle" font-size="12" fill="#475569">não vê: o texto</text>
+<rect x="700" y="150" width="230" height="70" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="815.0" y="171.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Navegador</text>
+<text x="815.0" y="189.5" text-anchor="middle" font-size="12" fill="#475569">tem a chave privada de p256dh</text>
+<text x="815.0" y="207.5" text-anchor="middle" font-size="12" fill="#475569">e o segredo auth</text>
+<line x1="262" y1="185" x2="363" y2="185" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ab)"/>
+<line x1="597" y1="185" x2="698" y2="185" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ab)"/>
+<rect x="30" y="30" width="565" height="58" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+<text x="312.5" y="54.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Prova 1 · VAPID: quem envia</text>
+<text x="312.5" y="72.5" text-anchor="middle" font-size="12" fill="#475569">JWT assinado com ES256 · o push service confere com a chave da inscrição</text>
+<line x1="145" y1="90" x2="145" y2="148" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="5 4"/>
+<line x1="480" y1="90" x2="480" y2="134" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="5 4"/>
+<rect x="30" y="280" width="900" height="58" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+<text x="480.0" y="304.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Prova 2 · criptografia: só o navegador lê</text>
+<text x="480.0" y="322.5" text-anchor="middle" font-size="12" fill="#475569">ECDH com p256dh + HKDF com auth + AES-128-GCM (aes128gcm)</text>
+<line x1="145" y1="222" x2="145" y2="278" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="5 4"/>
+<line x1="815" y1="222" x2="815" y2="278" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="480" y="268" text-anchor="middle" font-size="12" font-weight="400" fill="#64748b">O push service carrega o envelope, mas não tem a chave para abrir.</text>
+</svg>
