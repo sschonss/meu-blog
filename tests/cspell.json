@@ -1,0 +1,102 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "import": [
+    "@cspell/dict-pt-br/cspell-ext.json"
+  ],
+  "dictionaryDefinitions": [
+    {
+      "name": "blog-words",
+      "path": "./cspell-words.txt",
+      "addWords": true
+    }
+  ],
+  "dictionaries": [
+    "blog-words",
+    "softwareTerms",
+    "fullstack",
+    "php",
+    "python",
+    "typescript",
+    "node",
+    "npm",
+    "docker",
+    "k8s",
+    "aws",
+    "companies",
+    "bash",
+    "golang",
+    "sql",
+    "html",
+    "css",
+    "markdown",
+    "en-common-misspellings"
+  ],
+  "minWordLength": 4,
+  "ignoreRegExpList": [
+    "FrontMatterKeys",
+    "MarkdownCodeBlocks",
+    "MarkdownInlineCode",
+    "HtmlTagAttributes",
+    "Urls",
+    "Email",
+    "HugoShortcode",
+    "MarkdownLinkTarget",
+    "ImagePath",
+    "HtmlCodeBlock",
+    "HtmlEntity",
+    "Hex",
+    "FrontMatterAliasPaths"
+  ],
+  "patterns": [
+    {
+      "name": "FrontMatterKeys",
+      "pattern": "/^(translationKey|series_weight|translation|draft|date|tags|series|image|aliases|slug|weight|lastmod|cover|canonical|toc)\\s*:.*$/gm"
+    },
+    {
+      "name": "MarkdownCodeBlocks",
+      "pattern": "/^\\s*(```|~~~)[\\s\\S]*?^\\s*\\1/gm"
+    },
+    {
+      "name": "MarkdownInlineCode",
+      "pattern": "/`[^`\\n]+`/g"
+    },
+    {
+      "name": "HtmlTagAttributes",
+      "pattern": "/<[a-zA-Z][^>]*>|<\\/[a-zA-Z]+>/g"
+    },
+    {
+      "name": "HugoShortcode",
+      "pattern": "/\\{\\{[<%][\\s\\S]*?[%>]\\}\\}/g"
+    },
+    {
+      "name": "MarkdownLinkTarget",
+      "pattern": "/\\]\\([^)\\s]+(\\s+\"[^\"]*\")?\\)/g"
+    },
+    {
+      "name": "ImagePath",
+      "pattern": "/\\/images\\/[^\\s)\"']+/g"
+    },
+    {
+      "name": "HtmlCodeBlock",
+      "pattern": "/<(pre|code)\\b[\\s\\S]*?<\\/\\1>/g"
+    },
+    {
+      "name": "HtmlEntity",
+      "pattern": "/&[a-z]+;/g"
+    },
+    {
+      "name": "FrontMatterAliasPaths",
+      "pattern": "/^\\s*-\\s*[\"']?\\/[^\\n]*$/gm"
+    }
+  ],
+  "overrides": [
+    {
+      "filename": "**/*.md",
+      "language": "en,pt-BR"
+    }
+  ],
+  "ignorePaths": [
+    "**/_index*.md"
+  ]
+}

@@ -1,0 +1,70 @@
+# Palavras do blog que o corretor (cspell) não conhece: nomes, ferramentas e
+# jargão técnico. Uma por linha. Adicione aqui quando o check de ortografia
+# acusar uma palavra que está certa (veja "Testes do pipeline" no README).
+
+# Pessoas
+Dehghani
+Edsger
+Griffiths
+Hoare
+Kiehl
+Luiz
+Nygard
+Nygard's
+pulpmatrix
+Sadalage
+Schons
+sschonss
+Wallach
+
+# Ferramentas, serviços e empresas
+Buttondown
+Canva
+Deptrac
+dunst
+giscus
+Hashnode
+Hextra
+Hyperf
+Hyperf's
+luizschons
+METR
+Nostr
+Ollama
+opentelemetry
+pthreads
+Sessionize
+Swoole
+swoole
+Thoughtworks
+Trystero
+Trystero's
+Umami
+WebRTC
+xmur
+
+# Termos técnicos (inglês)
+anonymization
+CGNAT
+ciphertext
+Exfiltrating
+resends
+subarrays
+subproblems
+versionable
+
+# Jargão técnico em português
+anonimização
+commitada
+commitar
+corrotina
+entregável
+Exfiltrar
+mensageria
+retentativas
+scriptado
+versionável
+
+# Códigos de exemplo que aparecem em capturas de tela
+FVGZ
+FYFH
