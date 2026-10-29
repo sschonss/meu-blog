@@ -1,4 +1,10 @@
+{{- /* Produção: libera tudo. Outros ambientes (prévias na Vercel): bloqueia indexação. */ -}}
+{{- if hugo.IsProduction -}}
 User-agent: *
 Allow: /
 
 Sitemap: {{ "sitemap.xml" | absURL }}
+{{- else -}}
+User-agent: *
+Disallow: /
+{{- end }}

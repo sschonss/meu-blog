@@ -148,6 +148,7 @@ Páginas com tradução trazem um aviso escondido (`layouts/_partials/lang-sugge
 ## Estrutura
 
 ```
+config/preview/     ajustes do ambiente de prévia (Vercel)
 content/            artigos, palestras, contato (EN + PT)
 data/               sessionize.json (cópia dos dados do Sessionize)
 layouts/            layouts próprios (home, posts, séries, temas, palestras, contato, 404)
@@ -160,6 +161,7 @@ i18n/               textos em EN e PT
 scripts/            sync_sessionize.py, build_favicons.py, check_site.py, optimize_images.py, send_newsletter.py, sync_hashnode.py
 static/             favicons, imagens, site.webmanifest
 themes/hextra/      tema (submódulo git)
+vercel.json         prévias de PR na Vercel (sem deploy de produção)
 ```
 
 O menu de celular (hambúrguer) usa a barra lateral do Hextra. Por isso todo layout próprio inclui `{{ partial "sidebar.html" ... }}`, que fica escondida no desktop.
@@ -250,3 +252,26 @@ Para gerar os ícones a partir de uma imagem local, use `pip install pillow` e d
 - Todo push na `main` publica o site, depois que os testes do pipeline passam. Também é possível rodar manualmente em **Actions → Deploy Hugo site to Pages → Run workflow**.
 - A `main` é protegida por um ruleset: só o dono do repositório pode enviar commits, e não é permitido force push nem apagar o branch.
 - O workflow não faz commits, só gera e publica o site.
+
+## Prévia de PR na Vercel
+
+A produção continua no GitHub Pages (`luizschons.com`, pelo `hugo.yml`). A Vercel serve só para prévias: todo PR (e cada commit novo nele) ganha uma URL de prévia, e o bot da Vercel comenta o link no PR.
+
+- **Projeto:** `meu-blog` na conta pessoal da Vercel (plano Hobby), ligado a este repositório pelo app da Vercel no GitHub.
+- **Sem produção na Vercel:** o `vercel.json` desliga deploys da `main` (`git.deploymentEnabled`), e o projeto também tem um "Ignored Build Step" que pula qualquer build de produção. Assim não existe uma segunda cópia pública do site competindo na busca.
+- **Acesso:** as prévias ficam atrás do Vercel Authentication (Deployment Protection, padrão "Standard Protection"). Só quem está logado na minha conta da Vercel abre o link; os outros recebem 401 ou a tela de login.
+- **Build:** `hugo --gc --minify -e preview`, saída em `public/`. A versão do Hugo (extended) vem da variável `HUGO_VERSION` nas configurações do projeto na Vercel. Para trocar de versão, mude essa variável. O tema vem do submódulo, que a Vercel baixa sozinha. Os dados do Sessionize são os de `data/sessionize.json` já commitados.
+- **Ambiente `preview`:** `config/preview/hugo.toml` só vale nas prévias e sobrescreve o `hugo.toml`:
+  - mostra artigos agendados (data futura) e rascunhos (`buildFuture` e `buildDrafts`), para revisar o artigo antes de ele entrar no ar;
+  - `baseURL = '/'`, então a prévia funciona tanto na URL do deploy quanto na URL da branch;
+  - desliga comentários (giscus), newsletter (Buttondown) e o formulário de feedback das palestras, para a prévia não gravar nada em dados de produção.
+- **Sem indexação:** o `vercel.json` manda o cabeçalho `X-Robots-Tag: noindex, nofollow` em tudo, o `robots.txt` fora de produção bloqueia tudo (`Disallow: /`) e o tema já coloca `<meta name="robots" content="noindex, nofollow">` fora de produção.
+- **Sem analytics:** o Umami só entra com `hugo.IsProduction`, então as visitas nas prévias não contam.
+
+O build de produção (`hugo --minify`, sem `-e`) não usa nada disso e gera exatamente o mesmo site de antes.
+
+Para ver a prévia de um PR localmente, sem a Vercel:
+
+```bash
+hugo server -e preview
+```

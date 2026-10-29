@@ -1,0 +1,23 @@
+# Ambiente "preview": usado só nas prévias de PR na Vercel (vercel.json roda
+# `hugo -e preview`). O deploy de produção (GitHub Pages) continua usando só o
+# hugo.toml da raiz, sem este arquivo. Valores aqui sobrescrevem os da raiz.
+
+# Endereço relativo: a mesma prévia abre pela URL do deploy e pela URL da branch.
+baseURL = '/'
+
+# Mostra artigos agendados (data futura) e rascunhos para revisar no PR.
+buildFuture = true
+buildDrafts = true
+
+# Nada na prévia escreve em dados de produção:
+# comentários (giscus grava nas Discussions do repo), newsletter (Buttondown
+# cadastraria inscritos de verdade) e feedback de palestras (Google Form).
+# Com o valor vazio os partials não renderizam o bloco.
+[params.giscus]
+  categoryId = ''
+
+[params.newsletter]
+  username = ''
+
+[params.feedback]
+  form = ''
