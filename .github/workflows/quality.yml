@@ -76,7 +76,7 @@ jobs:
         run: npx lhci autorun --config=lighthouserc.cjs
       - name: Scores
         if: always()
-        run: python3 scripts/lighthouse_summary.py tests/.lighthouseci/reports/manifest.json >> "$GITHUB_STEP_SUMMARY"
+        run: python3 scripts/lighthouse_summary.py tests/.lighthouseci/reports/manifest.json | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Warn if Lighthouse failed
         if: steps.lhci.outcome == 'failure'
         run: echo "::warning title=Lighthouse::Lighthouse CI não terminou. Veja o log do passo Lighthouse CI."
@@ -86,4 +86,5 @@ jobs:
         with:
           name: lighthouse-reports
           path: tests/.lighthouseci/
+          include-hidden-files: true
           retention-days: 14
