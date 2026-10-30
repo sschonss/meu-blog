@@ -192,6 +192,19 @@ Using two boards has an interesting side effect: the same person can arrive twic
 
 The redundancy showed up in the lab itself: on the test network, no public MQTT broker accepted a connection, and the room opened anyway, through Nostr alone.
 
+### Which boards, and what the screen shows while searching
+
+On its own, Trystero uses a default list of boards, and some relays on that list had already gone offline or started requiring a login to accept notes. That's why Ito ships its own list: **8 Nostr relays**, picked because they accept anonymous writes (no account, no authentication), and **4 MQTT brokers**.
+
+The 8 relays answer on **port 443**. A port is the number that says which service on a server you want to talk to, and 443 is the HTTPS one, the same as any website. That matters because many mobile and corporate networks only let web traffic out and cut every other port. Three of the four MQTT brokers use ports outside the web standard (8081, 8084 and 8884), so on a network like that the Nostr relays carry the signaling, just like in the lab described above.
+
+Finding the room can also take a while. If nobody shows up within 15 seconds, the app joins the board again on its own, up to 3 times, and shows which attempt it's on ("Tentativa 2 de 4", attempt 2 of 4, counting the first join). Meanwhile, the screen tells four situations apart, because each one calls for a different response (the game's interface is in Portuguese; the meaning is what matters here):
+
+- **No internet:** the connection library didn't even load. The problem is the phone's own network.
+- **Searching for the room:** the phone is on the boards, waiting for someone from the room to appear.
+- **Almost there:** there's already a channel to someone in the room, but the host's signed state hasn't arrived yet. If it never arrives, the screen says exactly that ("the host's state didn't arrive") instead of pretending the room doesn't exist.
+- **Room not found:** the attempts ran out and nobody appeared. The screen suggests checking that whoever created the room has Ito open, and a "try again" button restarts the search.
+
 ## What the lab showed: the connection went through TURN
 
 The test opened the published Ito in two browser windows on the same lab machine, one as host and one as guest, and read `getStats()`, the WebRTC API that reports which candidate pair was chosen. The summary, with addresses masked:
@@ -263,6 +276,39 @@ It's the same algorithm (ECDSA on the P-256 curve) the server uses to stamp each
 The host stamps (signs) every state, and everyone checks it. The state carries the room owner's public key, and the invite link carries its **fingerprint** (a short digest of the key). So whoever joins through the invite already knows which stamp to expect. Each player's introduction (`hello`) is signed too, so nobody can take someone else's seat.
 
 The project itself is clear about the limit: this protects against a fake host, **not** against someone already in the room. Since cards are computed on the phone, someone who knows how to inspect the code in the browser could find out the numbers. Preventing that would require a server holding the cards. For a game among friends, it's an acceptable trade-off.
+
+## When not everyone can reach the host: the mesh
+
+So far, the story had the host connected directly to each guest. In practice, not every pair of phones can open a channel: the hard NATs and UDP-blocking networks from the first part of the article apply to each pair separately. João (the host) might have a channel to Maria, Maria might have a channel to a third player, Pedro, and Pedro might have no channel to João at all.
+
+That's why Ito works as a **mesh**: a network in which each phone connects to whoever it can, and messages hop from one to the next until they arrive. The host is still the only source of truth and still signs the state. What changes is the route: whoever receives a signed state newer than the one they had forwards the same packet to the phones connected to them.
+
+![Sequence diagram with three columns: João, the host; Maria, with a channel to both João and Pedro; and Pedro, with no direct channel to João. 1: João sends the state at version 12, signed, and Maria checks it and accepts because 12 is greater than 11. 2: Maria forwards the same signed packet, and Pedro checks João's signature. 3, in red: version 12 arrives again through the other network and Maria drops it without forwarding. 4: Pedro sends a hint signed by him, with an id. 5: Maria forwards the action untouched and João applies it once, moving to version 13. 6 and 7: state 13 goes from João to Maria and from Maria to Pedro. Pedro's screen shows "connected via Maria". At the bottom: whoever is in the middle only forwards and cannot change anything; and, in red, the limit: if Pedro has no channel to anyone in the room, there is no path to forward through, and TURN is what solves it](/images/posts/how-ito-works/mesh-en.svg)
+
+### The state going out: from João to Maria, and from Maria to Pedro
+
+In the diagram's example, João applies a move and sends the state at version 12, signed. Maria checks the signature, sees that 12 is greater than the 11 she had, accepts it and forwards the packet **exactly as it arrived**, with João's signature. Pedro runs the same check with João's public key, not Maria's. For him, it doesn't matter which way the state came: the stamp is the host's.
+
+Two rules hold this together:
+
+- **The version sits inside the signed part.** The version number (`ver`) is the counter that grows with every state change, as in the section about the host. Since it's part of what João signed, nobody in the middle can swap 12 for 99 without breaking the signature.
+- **Only a strictly greater version is forwarded.** If version 12 arrives again (through the other signaling network, or back from Pedro himself), it isn't greater than the 12 Maria has already seen, so it isn't forwarded. That prevents two problems. A **loop**, where a message keeps going around between Maria and Pedro forever. And a **replay**, where someone keeps an old, genuine, properly signed state and sends it again later to rewind the game. The old signature is still valid, but the old version doesn't get through.
+
+Since the game runs over HTTPS, every state is signed, and whoever is in the middle can't change a card, a point or the order: any change invalidates the stamp, and the state is dropped.
+
+### Actions coming back the same way
+
+The way back mirrors it. When Pedro gives a hint, plays his card, rearranges the order, votes, changes his name, leaves the room or writes in the chat, the request goes out signed with **Pedro's** key and carries an `id`, a unique identifier for that request. Maria checks the signature with Pedro's key, which she knows because the state's player list carries each player's public key, and forwards it to João without touching anything.
+
+The `id` deals with duplicates: in a mesh, the same request can arrive through more than one path. João applies each `id` only once, so Pedro's hint never counts twice. And the signature stops Maria from inventing a move in Pedro's name or swapping his hint for another one.
+
+Pedro's screen shows a discreet note, "conectado via Maria" (connected via Maria), so he knows he's playing through someone else. And the warning that the host dropped only shows up if that indirect path disappears too: as long as João's periodic check (the `tick`) keeps arriving through Maria, nobody takes his place.
+
+### What the mesh doesn't solve
+
+The mesh only helps someone who has a channel to **someone** in the room. If Pedro can't open a channel to anyone, there's no path to forward through, and he stays out. That's the case of hard NATs and UDP-blocking networks, and what solves it is Cloudflare's TURN, covered at the start: it gives Pedro a path to at least one of the other phones. One complements the other; neither replaces the other.
+
+And Maria, even though she can't forge or change anything, can still simply stop forwarding. In that case Pedro gets no news, as if the connection had dropped.
 
 ## What if the host drops?
 

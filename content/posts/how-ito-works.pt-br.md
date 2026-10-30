@@ -192,6 +192,19 @@ Usar dois murais tem um efeito colateral interessante: a mesma pessoa pode chega
 
 A redundância apareceu no próprio lab: na rede do teste, nenhum broker MQTT público aceitou conexão, e a sala abriu do mesmo jeito, só pelo Nostr.
 
+### Quais murais, e o que a tela mostra enquanto procura
+
+Sozinho, o Trystero usa uma lista padrão de murais, e alguns relays dessa lista já tinham saído do ar ou passaram a exigir login para aceitar bilhetes. Por isso o Ito leva a própria lista: **8 relays Nostr**, escolhidos por aceitarem escrita anônima (sem conta nem autenticação), e **4 brokers MQTT**.
+
+Os 8 relays atendem na **porta 443**. Porta é o número que diz com qual serviço de um servidor você quer falar, e a 443 é a do HTTPS, a mesma de qualquer site. Isso importa porque muitas redes móveis e corporativas só deixam sair tráfego web e cortam as outras portas. Três dos quatro brokers MQTT usam portas fora do padrão web (8081, 8084 e 8884), então numa rede assim quem segura a sinalização são os relays Nostr, como aconteceu no lab contado acima.
+
+Achar a sala também pode demorar. Se ninguém aparece em 15 segundos, o app entra no mural de novo sozinho, até 3 vezes, e mostra em qual tentativa está ("Tentativa 2 de 4", contando a primeira entrada). Enquanto isso, a tela separa quatro situações, porque cada uma pede uma atitude diferente:
+
+- **Sem internet:** a biblioteca de conexão nem carregou. O problema está na rede do próprio celular.
+- **Procurando a sala:** o celular está nos murais, esperando alguém da sala aparecer.
+- **Quase lá:** já existe canal com alguém da sala, mas o estado assinado do anfitrião ainda não chegou. Se ele não chegar, a tela diz exatamente isso ("Estado do anfitrião não chegou"), em vez de fingir que a sala não existe.
+- **Não achamos a sala:** as tentativas acabaram e ninguém apareceu. A tela sugere conferir se quem criou a sala está com o Ito aberto, e o botão "Tentar de novo" recomeça a busca.
+
 ## O que o lab mostrou: a conexão passou pelo TURN
 
 O teste abriu o Ito publicado em duas janelas de navegador na mesma máquina de lab, uma como anfitrião e outra como convidado, e leu o `getStats()`, a API do WebRTC que conta qual par de candidatos foi escolhido. O resumo, com os endereços mascarados:
@@ -263,6 +276,39 @@ Na primeira vez que abre o jogo, cada celular gera um par de chaves **ECDSA P-25
 O anfitrião carimba (assina) cada estado, e todos conferem. O estado leva a chave pública do dono da sala, e o link de convite leva a **impressão digital** dela (um resumo curto da chave). Assim, quem entra pelo convite já sabe qual carimbo esperar. A apresentação de cada jogador (`hello`) também é assinada, para ninguém ocupar o lugar de outra pessoa.
 
 O próprio projeto deixa claro o limite: isso protege contra um anfitrião falso, **não** contra quem já está na sala. Como as cartas são calculadas no celular, alguém que saiba inspecionar o código no navegador poderia descobrir os números. Impedir isso exigiria um servidor guardando as cartas. Para um jogo entre amigos, é um trade-off aceitável.
+
+## Quando nem todo mundo alcança o anfitrião: a malha
+
+Até aqui, a história tinha o anfitrião ligado direto a cada convidado. Na prática, nem todo par de celulares consegue abrir um canal: os NATs difíceis e as redes que bloqueiam UDP, da primeira parte do artigo, valem para cada par separadamente. Pode acontecer de o João (anfitrião) ter canal com a Maria, a Maria ter canal com um terceiro jogador, o Pedro, e o Pedro não ter canal nenhum com o João.
+
+Por isso o Ito funciona como uma **malha** (mesh, em inglês): uma rede em que cada celular se liga a quem conseguir, e os recados vão passando de um para outro até chegar. O anfitrião continua sendo a única fonte da verdade e continua assinando o estado. O que muda é o caminho: quem recebe um estado assinado mais novo do que o que já tinha repassa o mesmo pacote para os celulares ligados a ele.
+
+![Diagrama de sequência com três colunas: João, o anfitrião; Maria, com canal com João e com Pedro; e Pedro, sem canal direto com João. 1: João manda o estado na versão 12, assinado, e Maria confere e aceita porque 12 é maior que 11. 2: Maria repassa o mesmo pacote assinado, e Pedro confere a assinatura de João. 3, em vermelho: a versão 12 chega de novo pela outra rede e Maria descarta sem repassar. 4: Pedro manda uma dica assinada por ele, com um id. 5: Maria repassa a ação intacta e João aplica uma vez, indo para a versão 13. 6 e 7: o estado 13 vai de João para Maria e de Maria para Pedro. Na tela de Pedro aparece "conectado via Maria". Embaixo: quem está no meio só repassa e não consegue mudar nada; e, em vermelho, o limite: se Pedro não tiver canal com ninguém da sala, não há por onde repassar, e quem resolve é o TURN](/images/posts/how-ito-works/mesh-pt.svg)
+
+### O estado indo: de João para Maria, e de Maria para Pedro
+
+No exemplo do desenho, o João aplica uma jogada e manda o estado na versão 12, assinado. A Maria confere a assinatura, vê que 12 é maior do que a 11 que ela tinha, aceita e repassa o pacote **do jeito que chegou**, com a assinatura do João. O Pedro faz a mesma conferência com a chave pública do João, não com a da Maria. Para ele, tanto faz por onde o estado veio: o carimbo é do anfitrião.
+
+Duas regras seguram esse esquema:
+
+- **A versão fica dentro da parte assinada.** O número de versão (`ver`) é o contador que cresce a cada mudança do estado, como na seção sobre o anfitrião. Como ele faz parte do que o João assinou, ninguém no meio troca o 12 por 99 sem quebrar a assinatura.
+- **Só se repassa versão estritamente maior.** Se a versão 12 chega de novo (pela outra rede de sinalização, ou de volta pelo próprio Pedro), ela não é maior do que a 12 que a Maria já viu, então não é repassada. Isso evita dois problemas. O **loop**, em que um recado fica dando voltas para sempre entre a Maria e o Pedro. E o **replay** ("repetição"), em que alguém guarda um estado antigo, verdadeiro e bem assinado, e o reenvia mais tarde para fazer a partida voltar no tempo. A assinatura velha continua válida, mas a versão velha não passa.
+
+Como o jogo roda em HTTPS, todo estado vai assinado, e quem está no meio não consegue mudar uma carta, um ponto ou a ordem: qualquer alteração invalida o carimbo, e o estado é descartado.
+
+### As ações voltando pelo mesmo caminho
+
+O caminho de volta é o espelho. Quando o Pedro dá uma dica, baixa a carta, mexe na ordem, vota, troca de nome, sai da sala ou escreve no chat, o pedido sai assinado com a chave **do Pedro** e leva um `id`, um identificador único daquele pedido. A Maria confere a assinatura com a chave do Pedro, que ela conhece porque a lista de jogadores do estado traz a chave pública de cada um, e repassa ao João sem tocar em nada.
+
+O `id` resolve a duplicação: numa malha, o mesmo pedido pode chegar por mais de um caminho. O João aplica cada `id` uma vez só, então a dica do Pedro não conta em dobro. E a assinatura impede a Maria de inventar uma jogada em nome do Pedro ou de trocar a dica dele por outra.
+
+Na tela do Pedro aparece um aviso discreto, "conectado via Maria", para ele saber que está jogando por tabela. E o aviso de que o anfitrião caiu só aparece se esse caminho indireto também sumir: enquanto a conferência periódica do João (o `tick`) continua chegando pela Maria, ninguém assume o lugar dele.
+
+### O que a malha não resolve
+
+A malha só ajuda quem tem canal com **alguém** da sala. Se o Pedro não conseguir abrir canal com ninguém, não há por onde repassar, e ele continua de fora. Esse é o caso dos NATs difíceis e das redes que bloqueiam UDP, e quem resolve é o TURN da Cloudflare, visto lá no começo: ele dá ao Pedro um caminho até pelo menos um dos outros celulares. Um complementa o outro, nenhum substitui o outro.
+
+E a Maria, mesmo sem conseguir forjar ou alterar nada, ainda pode simplesmente parar de repassar. Nesse caso o Pedro fica sem notícias, como se a conexão tivesse caído.
 
 ## E se o anfitrião cair?
 
