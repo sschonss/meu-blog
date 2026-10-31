@@ -194,7 +194,7 @@ The redundancy showed up in the lab itself: on the test network, no public MQTT 
 
 ### Which boards, and what the screen shows while searching
 
-On its own, Trystero uses a default list of boards, and some relays on that list had already gone offline or started requiring a login to accept notes. That's why Ito ships its own list: **8 Nostr relays**, picked because they accept anonymous writes (no account, no authentication), and **4 MQTT brokers**.
+On its own, Trystero uses a default list of boards, and some relays on that list had already gone offline or started requiring a login to accept notes. That's why Ito ships its own list: **8 Nostr relays**, picked because they accept anonymous writes (no account, no authentication), and **4 MQTT brokers**. The list lives in the `RELAYS` constant, in [js/core.js](https://github.com/sschonss/ito/blob/main/js/core.js), and is handed to Trystero in full, replacing the default list.
 
 The 8 relays answer on **port 443**. A port is the number that says which service on a server you want to talk to, and 443 is the HTTPS one, the same as any website. That matters because many mobile and corporate networks only let web traffic out and cut every other port. Three of the four MQTT brokers use ports outside the web standard (8081, 8084 and 8884), so on a network like that the Nostr relays carry the signaling, just like in the lab described above.
 
@@ -204,6 +204,8 @@ Finding the room can also take a while. If nobody shows up within 15 seconds, th
 - **Searching for the room:** the phone is on the boards, waiting for someone from the room to appear.
 - **Almost there:** there's already a channel to someone in the room, but the host's signed state hasn't arrived yet. If it never arrives, the screen says exactly that ("the host's state didn't arrive") instead of pretending the room doesn't exist.
 - **Room not found:** the attempts ran out and nobody appeared. The screen suggests checking that whoever created the room has Ito open, and a "try again" button restarts the search.
+
+To see the code: the 15 seconds and the limit of 3 extra attempts are the `CONNECT_TIMEOUT` and `SEEK_TRIES` constants, in [js/core.js](https://github.com/sschonss/ito/blob/main/js/core.js), and joining the board again happens in the `armSeek` function, in [js/net.js](https://github.com/sschonss/ito/blob/main/js/net.js).
 
 ## What the lab showed: the connection went through TURN
 
@@ -251,9 +253,11 @@ Each change bumps the state version (`ver`), and the host sends the full state. 
 ```javascript
 // on a guest, on every tick from the host
 if (msg.ver !== my.ver || msg.h !== stateHash(my)) {
-  sendTo(host, { t: 'pull' }); // "send me the state again"
+  guestSend({ t: 'pull' }); // "send me the state again"
 }
 ```
+
+The snippet is a simplified version of the `dispatch` function, in [js/net.js](https://github.com/sschonss/ito/blob/main/js/net.js), and the `tick` comes from the `syncTick` function, in the same file. The `pull` request doesn't go only to the host: it goes out signed to every connected phone, which will matter in the section about the mesh.
 
 The full cycle, including the signature covered in the next section:
 
@@ -304,6 +308,8 @@ The `id` deals with duplicates: in a mesh, the same request can arrive through m
 
 Pedro's screen shows a discreet note, "conectado via Maria" (connected via Maria), so he knows he's playing through someone else. And the warning that the host dropped only shows up if that indirect path disappears too: as long as João's periodic check (the `tick`) keeps arriving through Maria, nobody takes his place.
 
+To see the code: forwarding the state (`spreadState`) and the actions lives in [js/net.js](https://github.com/sschonss/ito/blob/main/js/net.js), signing each request (`seal`) lives in [js/crypto.js](https://github.com/sschonss/ito/blob/main/js/crypto.js), and the full design of the mesh is in [docs/p2p.md](https://github.com/sschonss/ito/blob/main/docs/p2p.md) (in Portuguese), in the "Malha" section.
+
 ### What the mesh doesn't solve
 
 The mesh only helps someone who has a channel to **someone** in the room. If Pedro can't open a channel to anyone, there's no path to forward through, and he stays out. That's the case of hard NATs and UDP-blocking networks, and what solves it is Cloudflare's TURN, covered at the start: it gives Pedro a path to at least one of the other phones. One complements the other; neither replaces the other.
@@ -314,7 +320,7 @@ And Maria, even though she can't forge or change anything, can still simply stop
 
 The host is the source of truth, so it's also a single point of failure. If the host's phone loses its connection (on both networks) and doesn't come back within about 5 seconds, the connected player with the lowest seat number becomes the **provisional host**. Only someone who received the current state in this session takes over, and they bump the version (`ver + 1`) so everyone recognizes the new state.
 
-When the room owner comes back, they wait a moment to get the newest state from the provisional host and **take over again**. The game continues where it stopped, without losing moves. Signatures cover this case too: the provisional host's state is only accepted while the owner is away, and with a key everyone already knew.
+When the room owner comes back, they wait a moment to get the newest state from the provisional host and **take over again**. The game continues where it stopped, without losing moves. Signatures cover this case too: the provisional host's state is only accepted while the owner is away, and with a key everyone already knew. The host handover lives in the `considerHostLost` and `finishReclaim` functions, in [js/net.js](https://github.com/sschonss/ito/blob/main/js/net.js).
 
 ## How to test something that depends on public networks
 

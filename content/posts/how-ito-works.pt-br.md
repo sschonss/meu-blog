@@ -194,7 +194,7 @@ A redundância apareceu no próprio lab: na rede do teste, nenhum broker MQTT p�
 
 ### Quais murais, e o que a tela mostra enquanto procura
 
-Sozinho, o Trystero usa uma lista padrão de murais, e alguns relays dessa lista já tinham saído do ar ou passaram a exigir login para aceitar bilhetes. Por isso o Ito leva a própria lista: **8 relays Nostr**, escolhidos por aceitarem escrita anônima (sem conta nem autenticação), e **4 brokers MQTT**.
+Sozinho, o Trystero usa uma lista padrão de murais, e alguns relays dessa lista já tinham saído do ar ou passaram a exigir login para aceitar bilhetes. Por isso o Ito leva a própria lista: **8 relays Nostr**, escolhidos por aceitarem escrita anônima (sem conta nem autenticação), e **4 brokers MQTT**. A lista fica na constante `RELAYS`, em [js/core.js](https://github.com/sschonss/ito/blob/main/js/core.js), e vai inteira para o Trystero no lugar da lista padrão.
 
 Os 8 relays atendem na **porta 443**. Porta é o número que diz com qual serviço de um servidor você quer falar, e a 443 é a do HTTPS, a mesma de qualquer site. Isso importa porque muitas redes móveis e corporativas só deixam sair tráfego web e cortam as outras portas. Três dos quatro brokers MQTT usam portas fora do padrão web (8081, 8084 e 8884), então numa rede assim quem segura a sinalização são os relays Nostr, como aconteceu no lab contado acima.
 
@@ -204,6 +204,8 @@ Achar a sala também pode demorar. Se ninguém aparece em 15 segundos, o app ent
 - **Procurando a sala:** o celular está nos murais, esperando alguém da sala aparecer.
 - **Quase lá:** já existe canal com alguém da sala, mas o estado assinado do anfitrião ainda não chegou. Se ele não chegar, a tela diz exatamente isso ("Estado do anfitrião não chegou"), em vez de fingir que a sala não existe.
 - **Não achamos a sala:** as tentativas acabaram e ninguém apareceu. A tela sugere conferir se quem criou a sala está com o Ito aberto, e o botão "Tentar de novo" recomeça a busca.
+
+Para ver o código: os 15 segundos e o limite de 3 novas tentativas são as constantes `CONNECT_TIMEOUT` e `SEEK_TRIES`, em [js/core.js](https://github.com/sschonss/ito/blob/main/js/core.js), e a nova entrada no mural acontece na função `armSeek`, em [js/net.js](https://github.com/sschonss/ito/blob/main/js/net.js).
 
 ## O que o lab mostrou: a conexão passou pelo TURN
 
@@ -251,9 +253,11 @@ Cada mudança aumenta a versão do estado (`ver`), e o anfitrião manda o estado
 ```javascript
 // no convidado, a cada tick do anfitrião
 if (msg.ver !== my.ver || msg.h !== stateHash(my)) {
-  sendTo(host, { t: 'pull' }); // "me manda o estado de novo"
+  guestSend({ t: 'pull' }); // "me manda o estado de novo"
 }
 ```
+
+O trecho é uma versão simplificada da função `dispatch`, em [js/net.js](https://github.com/sschonss/ito/blob/main/js/net.js), e o `tick` sai da função `syncTick`, no mesmo arquivo. O pedido `pull` não vai só para o anfitrião: ele sai assinado para todos os celulares ligados, e isso vai fazer diferença na seção sobre a malha.
 
 O ciclo completo, com a assinatura que aparece na próxima seção:
 
@@ -304,6 +308,8 @@ O `id` resolve a duplicação: numa malha, o mesmo pedido pode chegar por mais d
 
 Na tela do Pedro aparece um aviso discreto, "conectado via Maria", para ele saber que está jogando por tabela. E o aviso de que o anfitrião caiu só aparece se esse caminho indireto também sumir: enquanto a conferência periódica do João (o `tick`) continua chegando pela Maria, ninguém assume o lugar dele.
 
+Para ver o código: o repasse do estado (`spreadState`) e das ações fica em [js/net.js](https://github.com/sschonss/ito/blob/main/js/net.js), a assinatura de cada pedido (`seal`) fica em [js/crypto.js](https://github.com/sschonss/ito/blob/main/js/crypto.js), e o desenho completo da malha está em [docs/p2p.md](https://github.com/sschonss/ito/blob/main/docs/p2p.md), na seção "Malha".
+
 ### O que a malha não resolve
 
 A malha só ajuda quem tem canal com **alguém** da sala. Se o Pedro não conseguir abrir canal com ninguém, não há por onde repassar, e ele continua de fora. Esse é o caso dos NATs difíceis e das redes que bloqueiam UDP, e quem resolve é o TURN da Cloudflare, visto lá no começo: ele dá ao Pedro um caminho até pelo menos um dos outros celulares. Um complementa o outro, nenhum substitui o outro.
@@ -314,7 +320,7 @@ E a Maria, mesmo sem conseguir forjar ou alterar nada, ainda pode simplesmente p
 
 O anfitrião é a fonte da verdade, então ele também é um ponto único de falha. Se o celular dele perde a conexão (nas duas redes) e não volta em uns 5 segundos, o jogador conectado com o menor número de lugar vira **anfitrião provisório**. Só assume quem recebeu o estado atual nesta sessão, e ele aumenta a versão (`ver + 1`) para que todos reconheçam o estado novo.
 
-Quando o dono da sala volta, ele espera um instante para pegar o estado mais novo do provisório e **reassume**. A partida continua de onde parou, sem perder jogadas. As assinaturas também cobrem esse caso: o estado do provisório só é aceito enquanto o dono está fora, e com a chave que todos já conheciam.
+Quando o dono da sala volta, ele espera um instante para pegar o estado mais novo do provisório e **reassume**. A partida continua de onde parou, sem perder jogadas. As assinaturas também cobrem esse caso: o estado do provisório só é aceito enquanto o dono está fora, e com a chave que todos já conheciam. A troca de anfitrião está nas funções `considerHostLost` e `finishReclaim`, em [js/net.js](https://github.com/sschonss/ito/blob/main/js/net.js).
 
 ## Como testar algo que depende de redes públicas
 
