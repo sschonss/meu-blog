@@ -91,3 +91,11 @@ feedbackCtaLink: Leave your feedback
 tagTermDescription: "Articles about {{ .Name }} by Luiz Schons: software engineering, architecture and AI."
 seriesTermDescription: "{{ .Name }}: a series of articles by Luiz Schons, to read in order."
 tagArticleOne: "1 article about this topic."
+books: Books
+booksKicker: BOOKS
+booksListTitle: Recommended reading
+booksTags: Topics
+booksNewTab: opens in a new tab
+booksEmptyTitle: No books here yet.
+booksEmptyText: I am still putting this list together. Come back soon, or read the latest articles in the meantime.
+booksEmptyCta: See the articles

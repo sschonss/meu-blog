@@ -67,18 +67,22 @@ buildFuture = false
   pageRef = '/speakers/'
   weight = 2
 [[languages.en.menu.main]]
-  name = 'Contact'
-  pageRef = '/contact/'
+  name = 'Books'
+  pageRef = '/books/'
   weight = 3
 [[languages.en.menu.main]]
-  name = 'Search'
+  name = 'Contact'
+  pageRef = '/contact/'
   weight = 4
+[[languages.en.menu.main]]
+  name = 'Search'
+  weight = 5
   [languages.en.menu.main.params]
     type = 'search'
     icon = 'search'
 [[languages.en.menu.main]]
   name = 'Language'
-  weight = 5
+  weight = 6
   [languages.en.menu.main.params]
     type = 'language-switch'
     icon = 'translate'
@@ -92,18 +96,22 @@ buildFuture = false
   pageRef = '/speakers/'
   weight = 2
 [[languages."pt-br".menu.main]]
-  name = 'Contato'
-  pageRef = '/contact/'
+  name = 'Livros'
+  pageRef = '/books/'
   weight = 3
 [[languages."pt-br".menu.main]]
-  name = 'Buscar'
+  name = 'Contato'
+  pageRef = '/contact/'
   weight = 4
+[[languages."pt-br".menu.main]]
+  name = 'Buscar'
+  weight = 5
   [languages."pt-br".menu.main.params]
     type = 'search'
     icon = 'search'
 [[languages."pt-br".menu.main]]
   name = 'Idioma'
-  weight = 5
+  weight = 6
   [languages."pt-br".menu.main.params]
     type = 'language-switch'
     icon = 'translate'
