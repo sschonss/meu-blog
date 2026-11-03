@@ -1,0 +1,88 @@
+{{- /*
+  "Where I've spoken" map for the talks page.
+  Input: the past Sessionize events (already filtered by the caller).
+  Dots come from data/talk_locations.yaml, matched by the event's Sessionize
+  "location" text; the outline is data/brazil_map.json (scripts/build_brazil_map.py).
+  Static inline SVG: no tiles, no scripts, no third-party requests.
+*/ -}}
+{{- $pt := eq site.Language.Lang "pt-br" -}}
+{{- $known := site.Data.talk_locations | default dict -}}
+{{- $map := site.Data.brazil_map -}}
+{{- $p := $map.projection -}}
+
+{{- /* Group events by location: one entry per city, in the order of the most events. */ -}}
+{{- $byPlace := dict -}}
+{{- $noPlace := slice -}}
+{{- range $e := . -}}
+  {{- with $e.location -}}
+    {{- $list := index $byPlace . | default slice -}}
+    {{- $byPlace = merge $byPlace (dict . ($list | append $e)) -}}
+  {{- end -}}
+{{- end -}}
+{{- $places := slice -}}
+{{- range $loc, $evs := $byPlace -}}
+  {{- $info := index $known $loc -}}
+  {{- $name := $loc -}}
+  {{- if $pt }}{{ $name = replace $name ", Brazil" ", Brasil" }}{{ end -}}
+  {{- $entry := dict "loc" $loc "events" (sort $evs "eventStartDate" "desc") "count" (len $evs) "name" $name -}}
+  {{- with $info -}}
+    {{- $x := add (mul (sub (float .lon) $p.lon0) $p.kx) $p.pad -}}
+    {{- $y := add (mul (sub $p.lat0 (float .lat)) $p.ky) $p.pad -}}
+    {{- $entry = merge $entry (dict "name" (printf "%s, %s" .name .state) "city" .name "x" $x "y" $y "label" (.label | default "right")) -}}
+  {{- else -}}
+    {{- warnf "talk map: no coordinates for Sessionize location %q; add it to data/talk_locations.yaml" $loc -}}
+  {{- end -}}
+  {{- $places = $places | append $entry -}}
+{{- end -}}
+{{- $places = sort (sort $places "name") "count" "desc" -}}
+{{- range . }}{{ if not .location }}{{ $noPlace = $noPlace | append . }}{{ end }}{{ end -}}
+{{- $noPlace = sort $noPlace "eventStartDate" "desc" -}}
+
+{{- with $places }}
+<section class="profile-section talk-map" aria-labelledby="talk-map-title">
+  <h2 id="talk-map-title">{{ i18n "talkMapTitle" }}</h2>
+  <p class="talk-map-intro">{{ i18n "talkMapIntro" (dict "Count" (len $places)) }}</p>
+  <div class="talk-map-body">
+    <figure class="talk-map-figure">
+      <svg viewBox="0 0 {{ $map.width }} {{ $map.height }}" role="img" aria-labelledby="talk-map-svg-title" focusable="false">
+        <title id="talk-map-svg-title">{{ i18n "talkMapAlt" }}</title>
+        <g class="talk-map-states">
+          {{- range $map.states }}<path d="{{ .d }}"><title>{{ .name }}</title></path>{{ end -}}
+        </g>
+        <g class="talk-map-dots">
+          {{- range $places }}{{ if .x }}
+          {{- $r := add 7 (mul 2 (math.Min 4 (sub .count 1))) -}}
+          {{- $left := eq .label "left" -}}
+          <g class="talk-map-dot" data-city="{{ .city }}">
+            <title>{{ .name }}: {{ i18n "talkMapEvents" .count }}</title>
+            <circle class="talk-map-halo" cx="{{ printf "%.1f" .x }}" cy="{{ printf "%.1f" .y }}" r="{{ add $r 6 }}"/>
+            <circle cx="{{ printf "%.1f" .x }}" cy="{{ printf "%.1f" .y }}" r="{{ $r }}"/>
+            <text x="{{ printf "%.1f" (cond $left (sub .x (add $r 8)) (add .x (add $r 8))) }}" y="{{ printf "%.1f" (add .y 7) }}" text-anchor="{{ cond $left "end" "start" }}">{{ .city }}</text>
+          </g>
+          {{- end }}{{ end }}
+        </g>
+      </svg>
+      <figcaption>{{ i18n "talkMapCaption" }}</figcaption>
+    </figure>
+    <ul class="talk-map-list">
+      {{- range $places }}
+      <li>
+        <span class="talk-map-city">{{ .name }}</span>
+        <span class="talk-map-count">{{ i18n "talkMapEvents" .count }}</span>
+        <ul>
+          {{- range .events }}<li>{{ .name }}</li>{{ end }}
+        </ul>
+      </li>
+      {{- end }}
+      {{- with $noPlace }}
+      <li class="talk-map-elsewhere">
+        <span class="talk-map-city">{{ i18n "talkMapNoCity" }}</span>
+        <ul>
+          {{- range . }}<li>{{ .name }}</li>{{ end }}
+        </ul>
+      </li>
+      {{- end }}
+    </ul>
+  </div>
+</section>
+{{- end }}
