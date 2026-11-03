@@ -146,6 +146,12 @@ A página de palestras mostra "Onde já palestrei": um mapa do Brasil em SVG est
 
 A home mostra os próximos eventos do Sessionize (até 3), sem os que duram o ano todo. A lista vem do build e é atualizada no navegador junto com a foto (`assets/js/sessionize-photo.js`); quando não há evento futuro, o bloco some.
 
+## Livros
+
+A aba **Livros** (`/pt-br/books/`) / **Books** (`/books/`) lista livros que recomendo. Tudo vem de `data/books.yaml`; a página em si fica em `layouts/books/list.html` e o texto do topo em `content/books/_index.md` (EN) e `_index.pt-br.md` (PT).
+
+Cada livro tem `title` (original), `title_pt` (edição brasileira, opcional), `authors`, `links` (rótulo em PT e EN mais a URL), `note_pt`/`note_en` (uma frase sobre o livro), `tags` (cada uma com `pt` e `en`) e `cover` (opcional, só imagem própria em `static/`). O formato está comentado no topo do arquivo. Os links da Amazon usam a forma curta `/dp/<ASIN>`, sem tag de afiliado. Se a lista ficar vazia (`books: []`), a página mostra uma mensagem de "ainda não há livros" em vez de quebrar.
+
 ## Para agentes de IA
 
 - `/llms.txt` (e `/pt-br/llms.txt`) segue o formato do [llmstxt.org](https://llmstxt.org): descreve o blog e lista todos os artigos dos dois idiomas, com link para a versão em Markdown.
@@ -160,7 +166,7 @@ Páginas com tradução trazem um aviso escondido (`layouts/_partials/lang-sugge
 ```
 config/preview/     ajustes do ambiente de prévia (Vercel)
 content/            artigos, palestras, contato (EN + PT)
-data/               sessionize.json (cópia dos dados do Sessionize), talk_locations.yaml e brazil_map.json (mapa das palestras)
+data/               sessionize.json (cópia dos dados do Sessionize), talk_locations.yaml e brazil_map.json (mapa das palestras), books.yaml (livros recomendados)
 layouts/            layouts próprios (home, posts, séries, temas, palestras, contato, 404)
   _partials/        datas, eventos, linha de artigo, comentários, favicons, imagem de prévia, SEO
 assets/css/         custom.css (estilos do site)

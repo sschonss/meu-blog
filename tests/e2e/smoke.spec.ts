@@ -91,6 +91,40 @@ for (const path of ['/speakers/', '/pt-br/speakers/']) {
   });
 }
 
+const BOOKS = [
+  { path: '/books/', lang: 'en', menu: 'Books', br: 'Amazon Brazil', us: 'Amazon US' },
+  { path: '/pt-br/books/', lang: 'pt', menu: 'Livros', br: 'Amazon Brasil', us: 'Amazon EUA' },
+];
+
+for (const b of BOOKS) {
+  test(`livros ${b.path} mostra os cards com links da Amazon (ou o estado vazio)`, async ({ page, consoleErrors }) => {
+    const res = await page.goto(b.path);
+    expect(res?.status()).toBe(200);
+    await expect(page.locator('.profile-header h1')).toHaveText(b.menu);
+    // A aba aparece no menu principal.
+    expect(await page.locator(`a[href$="${b.path}"]`).count()).toBeGreaterThan(0);
+
+    const cards = page.locator('.book-card');
+    const total = await cards.count();
+    if (total === 0) {
+      await expect(page.locator('.books-empty')).toBeVisible();
+    } else {
+      await expect(page.locator('.books-empty')).toHaveCount(0);
+      for (let i = 0; i < total; i++) {
+        const card = cards.nth(i);
+        await expect(card.locator('.book-title')).not.toBeEmpty();
+        await expect(card.locator('.book-authors')).not.toBeEmpty();
+        const br = card.locator('a.book-link', { hasText: b.br });
+        const us = card.locator('a.book-link', { hasText: b.us });
+        await expect(br).toHaveAttribute('href', /^https:\/\/www\.amazon\.com\.br\/dp\/[0-9A-Z]{10}$/);
+        await expect(us).toHaveAttribute('href', /^https:\/\/www\.amazon\.com\/dp\/[0-9A-Z]{10}$/);
+      }
+    }
+    await page.waitForLoadState('load');
+    expect(consoleErrors, 'erros no console').toEqual([]);
+  });
+}
+
 test('feedback /pt-br/feedback/ renderiza o formulário com palestras e eventos', async ({ page }) => {
   const res = await page.goto('/pt-br/feedback/');
   expect(res?.status()).toBe(200);

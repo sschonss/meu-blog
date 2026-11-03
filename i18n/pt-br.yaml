@@ -101,3 +101,11 @@ talkMapEvents:
   one: "{{ .Count }} evento"
   other: "{{ .Count }} eventos"
 talkMapNoCity: Online ou sem cidade informada
+books: Livros
+booksKicker: LIVROS
+booksListTitle: Leituras recomendadas
+booksTags: Temas
+booksNewTab: abre em uma nova aba
+booksEmptyTitle: Ainda não há livros por aqui.
+booksEmptyText: Estou montando esta lista. Volte em breve ou, enquanto isso, leia os artigos mais recentes.
+booksEmptyCta: Ver os artigos

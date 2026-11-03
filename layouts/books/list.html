@@ -1,0 +1,42 @@
+{{ define "main" }}
+{{ partial "sidebar.html" (dict "context" . "disableSidebar" true) }}{{/* mobile menu (hamburger) */}}
+{{- $pt := eq site.Language.Lang "pt-br" -}}
+{{- $books := site.Data.books.books | default slice -}}
+<div class="profile-page books-page">
+  <header class="profile-header"><p class="profile-kicker">{{ i18n "booksKicker" }}</p><h1>{{ .Title }}</h1><p>{{ .Description }}</p></header>
+  <section class="profile-section" aria-labelledby="books-list-title">
+    <h2 id="books-list-title">{{ i18n "booksListTitle" }}</h2>
+    {{- if $books }}
+    <ul class="book-grid">
+      {{- range $books }}
+      {{- $title := cond (and $pt .title_pt) .title_pt .title -}}
+      {{- $note := cond $pt .note_pt .note_en -}}
+      <li class="book-card">
+        {{- with .cover }}<img class="book-cover" src="{{ . | relURL }}" alt="" loading="lazy" width="96" height="144">{{ end }}
+        <div class="book-body">
+          <h3 class="book-title">{{ $title }}</h3>
+          {{- if and $pt .title_pt (ne .title_pt .title) }}<p class="book-original" lang="en">{{ .title }}</p>{{ end }}
+          <p class="book-authors">{{ delimit .authors ", " (cond $pt " e " " and ") }}</p>
+          {{- with $note }}<p class="book-note">{{ . }}</p>{{ end }}
+          {{- with .tags }}<ul class="book-tags" aria-label="{{ i18n "booksTags" }}">{{ range . }}<li>{{ if reflect.IsMap . }}{{ cond $pt .pt .en }}{{ else }}{{ . }}{{ end }}</li>{{ end }}</ul>{{ end }}
+          {{- with .links }}
+          <p class="book-links">
+            {{- range . }}
+            <a class="book-link" href="{{ .url }}" rel="noopener" target="_blank">{{ cond $pt .label_pt .label_en }}<span class="visually-hidden"> ({{ i18n "booksNewTab" }})</span> <b aria-hidden="true">↗</b></a>
+            {{- end }}
+          </p>
+          {{- end }}
+        </div>
+      </li>
+      {{- end }}
+    </ul>
+    {{- else }}
+    <div class="books-empty" role="status">
+      <p class="books-empty-title">{{ i18n "booksEmptyTitle" }}</p>
+      <p>{{ i18n "booksEmptyText" }}</p>
+      <p><a href="{{ "posts/" | relLangURL }}">{{ i18n "booksEmptyCta" }} →</a></p>
+    </div>
+    {{- end }}
+  </section>
+</div>
+{{ end }}
