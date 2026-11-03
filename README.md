@@ -132,6 +132,16 @@ Links para fora do blog abrem em nova aba (também em `site.js`), para quem est�
 
 `data/talk_articles.yaml` liga cada palestra do Sessionize (pelo id da sessão) a artigos do blog, pelo `translationKey`, ou a uma série inteira (`series_from`). Na página de palestras, cada card ganha "Leia mais no blog" com esses artigos; nos artigos, aparece "Essa ideia virou palestra". Para uma palestra nova, basta acrescentar o id dela no arquivo (o id está no JSON do Sessionize, em `data/sessionize.json`).
 
+### Mapa das palestras
+
+A página de palestras mostra "Onde já palestrei": um mapa do Brasil em SVG estático, com um ponto por cidade dos eventos que já passaram (ponto maior para mais eventos) e, ao lado, a mesma lista em texto. Não usa tiles, scripts nem serviços de fora, então não rastreia ninguém e funciona sem JS.
+
+- As cidades vêm do campo `location` de cada evento em `data/sessionize.json` (por exemplo `Maringá, Brazil`).
+- As coordenadas ficam em `data/talk_locations.yaml`, com a chave igual ao texto do Sessionize. Evento novo numa cidade que já está no arquivo entra no mapa sozinho no próximo deploy.
+- Cidade nova: acrescente uma entrada (nome, UF, `lat`, `lon` e `label: left` ou `right`). Até lá o evento aparece só na lista, e o build mostra um aviso com o nome da cidade.
+- Eventos sem cidade no Sessionize (online, vários lugares) ficam na lista, em "Online ou sem cidade informada".
+- O contorno do mapa é `data/brazil_map.json`, gerado por `scripts/build_brazil_map.py` a partir do Natural Earth (domínio público). Só precisa rodar de novo para mudar o desenho.
+
 ### Onde me encontrar
 
 A home mostra os próximos eventos do Sessionize (até 3), sem os que duram o ano todo. A lista vem do build e é atualizada no navegador junto com a foto (`assets/js/sessionize-photo.js`); quando não há evento futuro, o bloco some.
@@ -156,7 +166,7 @@ Páginas com tradução trazem um aviso escondido (`layouts/_partials/lang-sugge
 ```
 config/preview/     ajustes do ambiente de prévia (Vercel)
 content/            artigos, palestras, contato (EN + PT)
-data/               sessionize.json (cópia dos dados do Sessionize), books.yaml (livros recomendados)
+data/               sessionize.json (cópia dos dados do Sessionize), talk_locations.yaml e brazil_map.json (mapa das palestras), books.yaml (livros recomendados)
 layouts/            layouts próprios (home, posts, séries, temas, palestras, contato, 404)
   _partials/        datas, eventos, linha de artigo, comentários, favicons, imagem de prévia, SEO
 assets/css/         custom.css (estilos do site)

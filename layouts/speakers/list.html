@@ -94,6 +94,9 @@
     {{- end }}
   </div>
 
+  {{- /* Built from the data above; the live refresh in talks.js leaves it alone. */ -}}
+  {{ partial "talk-map.html" $past }}
+
   {{- with site.Params.feedback }}{{ if .form }}
   <p class="talk-feedback-cta">{{ i18n "feedbackCta" }} <a href="{{ "feedback/" | relLangURL }}">{{ i18n "feedbackCtaLink" }} →</a></p>
   {{- end }}{{ end }}
