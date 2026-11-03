@@ -397,3 +397,30 @@ html.img-zoom-open { overflow: hidden; }
 .talk-feedback-cta { color: #64748b; font-size: .9rem; margin: 1rem 0 0; }
 .talk-feedback-cta a { color: #2563eb; font-weight: 600; }
 @media (max-width: 640px) { .feedback-row { grid-template-columns: 1fr; } }
+
+/* Talks map (layouts/_partials/talk-map.html): static SVG, no external requests. */
+.talk-map-intro { color: #64748b; margin: 0 0 1.2rem; }
+.talk-map-body { align-items: start; display: grid; gap: 1.5rem 2rem; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); }
+.talk-map-figure { margin: 0; }
+.talk-map-figure svg { display: block; height: auto; max-width: 100%; width: 100%; }
+.talk-map-figure figcaption { color: #94a3b8; font-size: .8rem; margin-top: .4rem; text-align: center; }
+.talk-map-states path { fill: #f1f5f9; stroke: #cbd5e1; stroke-linejoin: round; stroke-width: 1; }
+.talk-map-dot circle { fill: #2563eb; stroke: #fff; stroke-width: 2.5; }
+.talk-map-dot .talk-map-halo { fill: rgba(37, 99, 235, .18); stroke: none; }
+.talk-map-dot text { fill: #111827; font-size: 22px; font-weight: 650; paint-order: stroke; stroke: #fff; stroke-linejoin: round; stroke-width: 5px; }
+.talk-map-list { list-style: none; margin: 0; padding: 0; }
+.talk-map-list > li { border-bottom: 1px solid #f1f5f9; padding: .7rem 0; }
+.talk-map-list > li:first-child { padding-top: 0; }
+.talk-map-city { color: #111827; font-weight: 650; }
+.talk-map-count { color: #2563eb; font-size: .8rem; font-weight: 600; margin-left: .5rem; }
+.talk-map-list ul { color: #64748b; font-size: .85rem; line-height: 1.5; list-style: none; margin: .25rem 0 0; padding: 0; }
+.talk-map-elsewhere .talk-map-city { color: #64748b; font-weight: 600; }
+.dark .talk-map-intro, .dark .talk-map-list ul { color: #94a3b8; }
+.dark .talk-map-states path { fill: #1e293b; stroke: #334155; }
+.dark .talk-map-dot circle { fill: #60a5fa; stroke: #0f172a; }
+.dark .talk-map-dot .talk-map-halo { fill: rgba(96, 165, 250, .2); }
+.dark .talk-map-dot text { fill: #f1f5f9; stroke: #0f172a; }
+.dark .talk-map-city { color: #f1f5f9; }
+.dark .talk-map-list > li { border-color: #1e293b; }
+.dark .talk-map-count { color: #60a5fa; }
+@media (max-width: 640px) { .talk-map-body { grid-template-columns: 1fr; } .talk-map-figure { margin: 0 auto; max-width: 420px; } .talk-map-dot text { font-size: 30px; stroke-width: 6px; } }

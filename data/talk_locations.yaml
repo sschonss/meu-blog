@@ -1,0 +1,44 @@
+# Coordinates for the "Where I've spoken" map on the talks page (/speakers/).
+#
+# The map is built from the past events in data/sessionize.json (refreshed by
+# the daily deploy). Each event's Sessionize "location" (e.g. "Maringá, Brazil")
+# is looked up here by that exact text, so a new event in a city listed below
+# shows up on the map by itself. For a new city, add an entry with:
+#   name:   city name shown on the map and in the list
+#   state:  state (UF) abbreviation
+#   lat/lon: decimal degrees (the city center is enough)
+#   label:  "left" or "right" of the dot, to keep nearby labels apart
+# Events whose location is not listed here still appear in the text list,
+# without a dot, and the build prints a warning naming the location.
+# Events with no location on Sessionize (online, several cities) are listed
+# apart, under "online or no city listed".
+"Maringá, Brazil":
+  name: Maringá
+  state: PR
+  lat: -23.4205
+  lon: -51.9333
+  label: left
+"Londrina, Brazil":
+  name: Londrina
+  state: PR
+  lat: -23.3045
+  lon: -51.1696
+  label: right
+"Guarapuava, Brazil":
+  name: Guarapuava
+  state: PR
+  lat: -25.3935
+  lon: -51.4562
+  label: right
+"Chapecó, Brazil":
+  name: Chapecó
+  state: SC
+  lat: -27.1004
+  lon: -52.6152
+  label: left
+"Parnaíba, Brazil":
+  name: Parnaíba
+  state: PI
+  lat: -2.9055
+  lon: -41.7734
+  label: left

@@ -68,6 +68,29 @@ for (const path of ['/speakers/', '/pt-br/speakers/']) {
   });
 }
 
+for (const path of ['/speakers/', '/pt-br/speakers/']) {
+  test(`palestras ${path} mostra o mapa de cidades com a lista em texto`, async ({ page, consoleErrors }) => {
+    const requests: string[] = [];
+    page.on('request', (req) => requests.push(req.url()));
+    const res = await page.goto(path);
+    expect(res?.status()).toBe(200);
+    const map = page.locator('section.talk-map');
+    await expect(map.locator('h2')).not.toBeEmpty();
+    // SVG estático com um ponto por cidade conhecida, e a mesma informação em texto.
+    await expect(map.locator('svg[role=img] title').first()).not.toBeEmpty();
+    const dots = await map.locator('.talk-map-dot').count();
+    expect(dots).toBeGreaterThan(0);
+    expect(await map.locator('.talk-map-list > li:not(.talk-map-elsewhere)').count()).toBeGreaterThanOrEqual(dots);
+    for (const city of await map.locator('.talk-map-dot').evaluateAll((els) => els.map((e) => e.getAttribute('data-city') || ''))) {
+      await expect(map.locator('.talk-map-list')).toContainText(city);
+    }
+    await page.waitForLoadState('load');
+    // O mapa não carrega nada de fora (tiles, fontes, scripts de mapa).
+    expect(requests.filter((u) => /tile|openstreetmap|leaflet|mapbox|googleapis/i.test(u))).toEqual([]);
+    expect(consoleErrors, 'erros no console').toEqual([]);
+  });
+}
+
 test('feedback /pt-br/feedback/ renderiza o formulário com palestras e eventos', async ({ page }) => {
   const res = await page.goto('/pt-br/feedback/');
   expect(res?.status()).toBe(200);

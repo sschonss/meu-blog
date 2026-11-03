@@ -91,3 +91,13 @@ feedbackCtaLink: Leave your feedback
 tagTermDescription: "Articles about {{ .Name }} by Luiz Schons: software engineering, architecture and AI."
 seriesTermDescription: "{{ .Name }}: a series of articles by Luiz Schons, to read in order."
 tagArticleOne: "1 article about this topic."
+talkMapTitle: Where I've spoken
+talkMapIntro:
+  one: Events I've spoken at, in {{ .Count }} city.
+  other: Events I've spoken at, in {{ .Count }} cities.
+talkMapAlt: Map of Brazil with a dot on each city where I've given a talk. The same cities are listed next to the map.
+talkMapCaption: Bigger dots mean more events in that city.
+talkMapEvents:
+  one: "{{ .Count }} event"
+  other: "{{ .Count }} events"
+talkMapNoCity: Online or no city listed
