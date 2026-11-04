@@ -1,6 +1,6 @@
 ---
 title: 'Ito por debaixo dos panos: multiplayer P2P no navegador sem servidor de jogo'
-date: 2026-11-02
+date: 2026-11-03
 description: 'Como vários celulares jogam juntos a partir de um site estático: WebRTC, sinalização por Nostr e MQTT, STUN e TURN, um baralho que ninguém envia e um anfitrião que assina o estado.'
 translationKey: how-ito-works
 tags: ['WebRTC', 'Arquitetura']

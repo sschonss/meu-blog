@@ -1,6 +1,6 @@
 ---
 title: 'Web Push por debaixo dos panos: como uma notificação chega com a aba fechada'
-date: 2026-11-02
+date: 2026-11-03
 description: 'Os três atores do Web Push, a assinatura VAPID, a criptografia e o que muda com um PWA instalado, com as saídas reais de um lab no Chrome contra o FCM.'
 translationKey: how-web-push-works
 tags: ['Arquitetura']

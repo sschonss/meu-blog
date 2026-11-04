@@ -1,6 +1,6 @@
 ---
 title: 'Web Push under the hood: how a notification arrives with the tab closed'
-date: 2026-11-02
+date: 2026-11-03
 description: "Web Push's three players, the VAPID signature, the encryption and what changes with an installed PWA, with real outputs from a lab in Chrome against FCM."
 translationKey: how-web-push-works
 tags: ['Architecture']

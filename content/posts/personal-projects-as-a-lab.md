@@ -1,6 +1,6 @@
 ---
 title: 'Programming is still fun: the joy of building things in the AI era'
-date: 2026-11-02
+date: 2026-11-03
 description: 'Work teaches a lot, but building things out of curiosity is another way to learn. With AI, getting an idea out of the drawer got easy, and programming became play again.'
 translationKey: personal-projects-as-a-lab
 tags: ['Career', 'AI']

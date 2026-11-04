@@ -1,6 +1,6 @@
 ---
 title: 'Ito under the hood: browser P2P multiplayer with no game server'
-date: 2026-11-02
+date: 2026-11-03
 description: 'How several phones play together from a static site: WebRTC, signaling over Nostr and MQTT, STUN and TURN, a deck nobody sends and a host that signs the state.'
 translationKey: how-ito-works
 tags: ['WebRTC', 'Architecture']

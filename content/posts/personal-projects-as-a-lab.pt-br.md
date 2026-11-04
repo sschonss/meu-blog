@@ -1,6 +1,6 @@
 ---
 title: 'Programar ainda é divertido: o prazer de criar coisas na era da IA'
-date: 2026-11-02
+date: 2026-11-03
 description: 'O trabalho ensina muito, mas criar coisas por curiosidade é outro jeito de aprender. Com a IA, tirar uma ideia da gaveta ficou fácil, e programar voltou a ser uma brincadeira.'
 translationKey: personal-projects-as-a-lab
 tags: ['Carreira', 'IA']
