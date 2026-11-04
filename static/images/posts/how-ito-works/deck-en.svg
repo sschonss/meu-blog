@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="960" height="420" role="img" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title>The cards don't travel: the text code|game|round goes through xmur3, mulberry32 and Fisher-Yates, and every phone gets the same deck. Only decisions cross the network</title>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker><marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+<rect width="960" height="420" fill="#ffffff"/>
+<rect x="30" y="30" width="180" height="76" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="120.0" y="54.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Seed</text>
+<text x="120.0" y="72.5" text-anchor="middle" font-size="12" fill="#475569">KQXT-AVCR|1|2</text>
+<text x="120.0" y="90.5" text-anchor="middle" font-size="12" fill="#475569">code|game|round</text>
+<rect x="270" y="30" width="180" height="76" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="360.0" y="63.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">xmur3</text>
+<text x="360.0" y="81.5" text-anchor="middle" font-size="12" fill="#475569">hash: text becomes a number</text>
+<rect x="510" y="30" width="180" height="76" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="600.0" y="54.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">mulberry32</text>
+<text x="600.0" y="72.5" text-anchor="middle" font-size="12" fill="#475569">makes numbers that look</text>
+<text x="600.0" y="90.5" text-anchor="middle" font-size="12" fill="#475569">random, always the same</text>
+<rect x="750" y="30" width="180" height="76" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="840.0" y="63.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Fisher-Yates</text>
+<text x="840.0" y="81.5" text-anchor="middle" font-size="12" fill="#475569">shuffles cards 1 to 100</text>
+<line x1="212" y1="68" x2="268" y2="68" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="452" y1="68" x2="508" y2="68" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="692" y1="68" x2="748" y2="68" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
+<path d="M840,108 L840,140 M150,140 L810,140" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
+<text x="480" y="132" text-anchor="middle" font-size="12" font-weight="400" fill="#64748b">the same computation runs on every phone</text>
+<path d="M150,140 L810,140 L840,140" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
+<line x1="180" y1="140" x2="180" y2="178" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="480" y1="140" x2="480" y2="178" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="780" y1="140" x2="780" y2="178" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
+<rect x="60" y="180" width="240" height="60" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="180.0" y="205.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Phone A</text>
+<text x="180.0" y="223.5" text-anchor="middle" font-size="12" fill="#475569">same deck</text>
+<rect x="360" y="180" width="240" height="60" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="480.0" y="205.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Phone B</text>
+<text x="480.0" y="223.5" text-anchor="middle" font-size="12" fill="#475569">same deck</text>
+<rect x="660" y="180" width="240" height="60" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="780.0" y="205.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Phone C</text>
+<text x="780.0" y="223.5" text-anchor="middle" font-size="12" fill="#475569">same deck</text>
+<line x1="180" y1="242" x2="180" y2="296" stroke="#16a34a" stroke-width="1.5" marker-start="url(#ag)" marker-end="url(#ag)"/>
+<line x1="480" y1="242" x2="480" y2="296" stroke="#16a34a" stroke-width="1.5" marker-start="url(#ag)" marker-end="url(#ag)"/>
+<line x1="780" y1="242" x2="780" y2="296" stroke="#16a34a" stroke-width="1.5" marker-start="url(#ag)" marker-end="url(#ag)"/>
+<rect x="60" y="298" width="840" height="58" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+<text x="480.0" y="322.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Only decisions cross the network</text>
+<text x="480.0" y="340.5" text-anchor="middle" font-size="12" fill="#475569">play a card · arrange the order · votes · clues</text>
+<text x="60" y="392" text-anchor="start" font-size="12" font-weight="400" fill="#64748b">The cards never travel: each phone computes the deck on its own, from the room code.</text>
+</svg>

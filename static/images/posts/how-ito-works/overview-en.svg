@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" width="960" height="500" role="img" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title>Ito overview: phones use Nostr relays and MQTT brokers only to find each other; then they talk over a direct, encrypted WebRTC channel. STUN and TURN help cross the network</title>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker><marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#16a34a"/></marker><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+<rect width="960" height="500" fill="#ffffff"/>
+<rect x="380" y="14" width="200" height="52" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="480.0" y="35.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">GitHub Pages</text>
+<text x="480.0" y="53.5" text-anchor="middle" font-size="12" fill="#475569">only serves the site files</text>
+<line x1="380" y1="50" x2="128" y2="226" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<line x1="580" y1="50" x2="832" y2="226" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="232" y="120" text-anchor="middle" font-size="12" font-weight="400" fill="#64748b">files</text>
+<text x="728" y="120" text-anchor="middle" font-size="12" font-weight="400" fill="#64748b">files</text>
+<text x="480" y="100" text-anchor="middle" font-size="13" font-weight="700" fill="#111827">1 · Signaling: only to find each other</text>
+<rect x="295" y="112" width="175" height="58" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="382.5" y="136.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Nostr relays</text>
+<text x="382.5" y="154.5" text-anchor="middle" font-size="12" fill="#475569">public bulletin board</text>
+<rect x="490" y="112" width="175" height="58" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="577.5" y="136.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">MQTT brokers</text>
+<text x="577.5" y="154.5" text-anchor="middle" font-size="12" fill="#475569">public bulletin board</text>
+<rect x="30" y="228" width="190" height="64" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="125.0" y="255.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Host</text>
+<text x="125.0" y="273.5" text-anchor="middle" font-size="12" fill="#475569">created the room</text>
+<rect x="740" y="228" width="190" height="64" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+<text x="835.0" y="255.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Guest</text>
+<text x="835.0" y="273.5" text-anchor="middle" font-size="12" fill="#475569">joined via the invite</text>
+<line x1="222" y1="236" x2="330" y2="172" stroke="#94a3b8" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<line x1="738" y1="236" x2="630" y2="172" stroke="#94a3b8" stroke-width="1.5" marker-start="url(#a)" marker-end="url(#a)"/>
+<text x="232" y="200" text-anchor="start" font-size="11" font-weight="400" fill="#64748b">SDP + ICE candidates</text>
+<text x="728" y="200" text-anchor="end" font-size="11" font-weight="400" fill="#64748b">SDP + ICE candidates</text>
+<line x1="224" y1="270" x2="736" y2="270" stroke="#2563eb" stroke-width="2.5" marker-start="url(#ab)" marker-end="url(#ab)"/>
+<text x="480" y="260" text-anchor="middle" font-size="13" font-weight="700" fill="#2563eb">2 · Direct WebRTC channel, encrypted (DTLS)</text>
+<text x="480" y="290" text-anchor="middle" font-size="12" font-weight="400" fill="#475569">moves, signed state, chat</text>
+<text x="470" y="336" text-anchor="start" font-size="13" font-weight="700" fill="#111827">3 · Crossing the network (NAT)</text>
+<rect x="30" y="350" width="250" height="64" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="155.0" y="377.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">STUN</text>
+<text x="155.0" y="395.5" text-anchor="middle" font-size="12" fill="#475569">“from outside, I see you at this address”</text>
+<rect x="355" y="350" width="250" height="80" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="480.0" y="376.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Cloudflare TURN</text>
+<text x="480.0" y="394.5" text-anchor="middle" font-size="12" fill="#475569">relays if the direct path fails</text>
+<text x="480.0" y="412.5" text-anchor="middle" font-size="12" fill="#475569">data stays encrypted</text>
+<rect x="680" y="350" width="250" height="80" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="805.0" y="376.5" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Cloudflare Worker</text>
+<text x="805.0" y="394.5" text-anchor="middle" font-size="12" fill="#475569">hands out 24 h credentials</text>
+<text x="805.0" y="412.5" text-anchor="middle" font-size="12" fill="#475569">the secret key lives only here</text>
+<line x1="125" y1="294" x2="125" y2="348" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4" marker-start="url(#a)" marker-end="url(#a)"/>
+<line x1="200" y1="294" x2="420" y2="348" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4" marker-start="url(#a)" marker-end="url(#a)"/>
+<line x1="835" y1="294" x2="835" y2="348" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<line x1="678" y1="390" x2="607" y2="390" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="642" y="382" text-anchor="middle" font-size="11" font-weight="400" fill="#64748b">credentials</text>
+<text x="30" y="470" text-anchor="start" font-size="12" font-weight="400" fill="#64748b">Once the direct channel opens, relays and brokers step aside. If the Worker fails, the room opens with the direct connection only.</text>
+</svg>
