@@ -9,9 +9,9 @@ series_weight: 1
 draft: false
 ---
 
-It's been a long time since I had this much fun programming. Really. Those ideas that sat on the shelf for years, the "someday I'd like to understand how that works" kind, now become something running in a single evening. And along the way I end up learning a lot, almost without noticing.
+It's been a long time since I had this much fun programming. Really. Those ideas that sat on the shelf for years, the "someday I'd like to understand how that works" kind, now turn into something that runs in a single evening. And along the way I end up learning a lot, almost without noticing.
 
-This isn't a tutorial. It's more of an excited account from someone who rediscovered the joy of **building things just because**, and how that became my favorite way to study.
+This isn't a tutorial. It's more of an excited account from someone who rediscovered the joy of **building things just because**, and of how that became my favorite way to study.
 
 ## Work teaches a lot, too
 
