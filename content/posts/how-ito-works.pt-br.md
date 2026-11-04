@@ -13,7 +13,7 @@ O [Ito](https://sschonss.github.io/ito/) é um jogo de cartas cooperativo em que
 
 O site é só um punhado de arquivos estáticos no [GitHub Pages](https://pages.github.com/). Não existe um servidor central cuidando da partida. Mesmo assim, até dez celulares jogam juntos, em tempo real, conversando direto entre si.
 
-Este artigo conta como isso funciona, e o código está aberto no [repositório do Ito](https://github.com/sschonss/ito). Ele faz par com [Trabalhar não é estudar](/pt-br/posts/personal-projects-as-a-lab/), em que eu falo de onde o estudo foi parar na era da IA.
+Este artigo conta como isso funciona, e o código está aberto no [repositório do Ito](https://github.com/sschonss/ito). Ele faz par com [Programar ainda é divertido](/pt-br/posts/personal-projects-as-a-lab/), em que eu conto por que crio coisas por curiosidade e por que, na era da IA, isso virou outro jeito de aprender.
 
 Não é tutorial: é uma explicação com diagramas, capturas reais de um lab e trechos de código simplificados. Não precisa entender de redes. Cada sigla é explicada na primeira vez que aparece, e se alguma escapar, o [glossário rápido](#glossary) no fim do artigo resume todas em uma linha.
 
@@ -419,7 +419,7 @@ A ideia, sem matemática, usa um par de chaves (é a [criptografia de chave púb
 - A **chave privada** é um carimbo que só você tem e nunca sai do aparelho.
 - A **chave pública** é uma cópia do desenho do carimbo. Todo mundo pode usar para conferir se um documento foi carimbado por você, mas ninguém consegue carimbar com ela.
 
-Na primeira vez que abre o jogo, cada celular gera o seu par de chaves usando a [WebCrypto](https://developer.mozilla.org/pt-BR/docs/Web/API/SubtleCrypto/sign), a API de criptografia que já vem no navegador (o código está em [js/crypto.js](https://github.com/sschonss/ito/blob/main/js/crypto.js)).
+Na primeira vez que abre o jogo, cada celular gera o seu par de chaves usando a [WebCrypto](https://developer.mozilla.org/pt-BR/docs/Web/API/SubtleCrypto/sign), a API de criptografia que já vem no navegador e só fica disponível em páginas seguras, servidas por HTTPS (o código está em [js/crypto.js](https://github.com/sschonss/ito/blob/main/js/crypto.js)).
 
 O tipo de chave é **ECDSA P-256**. ECDSA (Elliptic Curve Digital Signature Algorithm) é um algoritmo de assinatura baseado em curvas elípticas, e P-256 é a curva usada. É o mesmo algoritmo que o servidor usa para carimbar cada envio no [Web Push](/pt-br/posts/how-web-push-works/).
 
@@ -463,7 +463,7 @@ A segunda regra evita dois problemas:
 - O **loop**, em que um recado fica dando voltas para sempre entre a Maria e o Pedro.
 - O **replay** ("repetição"), em que alguém guarda um estado antigo, verdadeiro e bem assinado, e o reenvia mais tarde para fazer a partida voltar no tempo. A assinatura velha continua válida, mas a versão velha não passa.
 
-Como o jogo roda em HTTPS, todo estado vai assinado. Quem está no meio não consegue mudar uma carta, um ponto ou a ordem: qualquer alteração invalida o carimbo, e o estado é descartado.
+Como o jogo é servido por HTTPS, o navegador libera a WebCrypto, e por isso todo estado vai assinado (numa página sem HTTPS, o código seguiria sem assinar). Quem está no meio não consegue mudar uma carta, um ponto ou a ordem: qualquer alteração invalida o carimbo, e o estado é descartado.
 
 ### As ações voltando pelo mesmo caminho
 
@@ -525,7 +525,7 @@ O que eu levo do laboratório:
 - **Uma fonte da verdade com versão e conferência resolve muito:** antes de buscar um algoritmo de consenso, vale perguntar se não basta um chefe e uma checagem a cada 2 segundos.
 - **Ser honesto sobre as dependências:** nomear o que é de terceiros ajuda a decidir o que testar todo dia.
 
-Abra o [Ito](https://sschonss.github.io/ito/), crie uma sala e chame os amigos: tudo o que está aqui acontece de verdade no seu celular. E, se ainda não leu, o contexto de por que eu fiz isso está em [Trabalhar não é estudar](/pt-br/posts/personal-projects-as-a-lab/). Se você já brincou com WebRTC ou tem uma ideia de jogo P2P, me conta nos comentários.
+Abra o [Ito](https://sschonss.github.io/ito/), crie uma sala e chame os amigos: tudo o que está aqui acontece de verdade no seu celular. E, se ainda não leu, o contexto de por que eu fiz isso está em [Programar ainda é divertido](/pt-br/posts/personal-projects-as-a-lab/). Se você já brincou com WebRTC ou tem uma ideia de jogo P2P, me conta nos comentários.
 
 ## Glossário rápido {#glossary}
 

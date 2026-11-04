@@ -13,15 +13,15 @@ draft: false
 
 The site is just a handful of static files on [GitHub Pages](https://pages.github.com/). There is no central server running the match. Even so, up to ten phones play together in real time, talking directly to each other.
 
-This article explains how that works, and the code is open in the [Ito repository](https://github.com/sschonss/ito). It's a companion to [Working is not studying](/posts/personal-projects-as-a-lab/), where I talk about where learning went in the AI era.
+This article explains how that works, and the code is open in the [Ito repository](https://github.com/sschonss/ito). It's a companion to [Programming is still fun](/posts/personal-projects-as-a-lab/), where I explain why I build things out of curiosity and why, in the AI era, that became another way to learn.
 
-It isn't a tutorial: it's an explanation with diagrams, real captures from a lab and simplified code snippets. You don't need to know networking. Every acronym is explained the first time it shows up, and if one slips by, the [quick glossary](#glossary) at the end sums them all up in one line each.
+It isn't a tutorial: it's an explanation with diagrams, real output captured in a lab and simplified code snippets. You don't need to know networking. Every acronym is explained the first time it shows up, and if one slips by, the [quick glossary](#glossary) at the end sums them all up in one line each.
 
 ### The game in five moments
 
 So you don't get lost among the terms, the article follows one game from start to finish. Each moment pulls in a piece of the tech:
 
-1. **João creates the room.** His phone becomes the host, the owner of the game.
+1. **João creates the room.** His phone becomes the host, the room owner.
 2. **Maria types the code and joins.** The two phones have to find each other over the internet. This is the networking, connection and signaling part.
 3. **The cards are dealt.** Without anyone sending a single card.
 4. **Maria plays a card.** The move goes to the host, and the new game state comes back to everyone, signed.
@@ -31,7 +31,7 @@ So you don't get lost among the terms, the article follows one game from start t
 
 The traditional way to build a multiplayer game is to put a server in the middle. Each phone sends its move to the server, and the server relays it to the others. It's like a group of friends who only talk through a mediator.
 
-GitHub Pages doesn't run my code: it only serves files (HTML, CSS, JavaScript). So the lab question was: can the phones talk **directly to each other**, with no mediator?
+GitHub Pages doesn't run my code: it only serves files (HTML, CSS, JavaScript). So the question for the lab was: can the phones talk **directly to each other**, with no mediator?
 
 They can, with [WebRTC](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API) (Web Real-Time Communication). It's the technology browsers use for video calls, and it ships with every modern browser, with nothing to install.
 
@@ -53,11 +53,11 @@ Don't worry if half the names in the drawing don't make sense yet. Each one come
 
 ### What the game looks like
 
-To get a feel for what is being synchronized, these are real captures of the published Ito, taken in a browser with a phone-sized screen (the game's interface is in Portuguese only).
+To get a feel for what is being synchronized, these are real screenshots of the live version of Ito, taken in a browser with a phone-sized screen (the game's interface is in Portuguese only).
 
 On the left, the home screen, where you create a room. On the right, the room with two people: the room code at the top, the invite buttons and the list of who has joined, with the host marked.
 
-![Two real captures of Ito on a phone, side by side, with the interface in Portuguese. On the left, the home screen, with the headline "Pense no número. Fale o tema." (think of the number, say the theme) and the "Criar sala" (create room) card, with the number of rounds and the theme categories. On the right, the room as seen by the host: the code FVGZ-FYFH at the top, the Copy, QR code and Invite buttons, and the "Na sala" (in the room) list with João, marked as you and host, and Maria, both with a green connected dot. At the bottom, the "Começar partida" (start game) button](/images/posts/how-ito-works/ito-telas-inicio-sala.webp)
+![Two real screenshots of Ito on a phone, side by side, with the interface in Portuguese. On the left, the home screen, with the headline "Pense no número. Fale o tema." (think of the number, say the theme) and the "Criar sala" (create room) card, with the number of rounds and the theme categories. On the right, the room as seen by the host: the code FVGZ-FYFH at the top, the Copy, QR code and Invite buttons, and the "Na sala" (in the room) list with João, marked as you and host, and Maria, both with a green connected dot. At the bottom, the "Começar partida" (start game) button](/images/posts/how-ito-works/ito-telas-inicio-sala.webp)
 
 Those two people were two browser windows in the lab, each pretending to be a phone. Maria's name showed up on the host's list because the two browsers managed to open the direct channel. How that happens is the subject from here on.
 
@@ -140,7 +140,7 @@ Notice the side effect: by asking the question, the phone also left a note with 
 
 This technique is informally called *hole punching*.
 
-STUN is cheap: it answers one question and carries no game data. Ito uses Trystero's default STUN servers (the library I'll get to shortly): Google's (`stun.l.google.com` and variants) and Cloudflare's (`stun.cloudflare.com`).
+STUN is cheap: it answers one question and carries no game data. Ito uses the default STUN servers from Trystero (a library I'll get to shortly): Google's (`stun.l.google.com` and variants) and Cloudflare's (`stun.cloudflare.com`).
 
 ### When the direct path fails: TURN
 
@@ -150,7 +150,7 @@ Hole punching doesn't always work. The most common cases:
 - **Corporate and university networks:** many block [UDP](https://developer.mozilla.org/en-US/docs/Glossary/UDP), the kind of packet WebRTC prefers (fast, with no delivery confirmation, good for real time). They only let web traffic out, on ports 80 and 443.
 - **Carrier CGNAT:** with thousands of customers behind the same address, the carrier's NAT tends to be stricter, and the direct path between two phones on 4G may not open.
 
-For these cases there is [**TURN**](https://developer.mozilla.org/en-US/docs/Glossary/TURN) (Traversal Using Relays around NAT). Instead of trying to get into each other, both phones open a connection **outward**, to a TURN server, which almost every network allows. TURN forwards the packets from one to the other.
+For these cases there is [**TURN**](https://developer.mozilla.org/en-US/docs/Glossary/TURN) (Traversal Using Relays around NAT). Instead of trying to reach each other directly, both phones open a connection **outward**, to a TURN server, which almost every network allows. TURN forwards the packets from one to the other.
 
 It's a mail carrier, not a reader. The channel stays DTLS-encrypted end to end, so TURN sees encrypted bytes, not the moves.
 
@@ -161,7 +161,7 @@ Ito's TURN is [Cloudflare Realtime TURN](https://developers.cloudflare.com/realt
 The solution was a [Cloudflare Worker](https://workers.cloudflare.com/), a small function that runs on Cloudflare with no server to maintain:
 
 - The app asks the Worker for temporary credentials, valid for 24 hours, and reuses them until about 5 minutes before they expire.
-- The secret key lives only in the Worker, which only answers the game's address and `localhost`.
+- The secret key lives only in the Worker, which only answers requests from the game's origin and `localhost`.
 
 The details are in [docs/turn.md](https://github.com/sschonss/ito/blob/main/docs/turn.md) (in Portuguese).
 
@@ -179,7 +179,7 @@ So that first exchange goes through a third party. It's called [**signaling**](h
 
 ### What needs to be exchanged
 
-There are two kinds of note:
+There are two kinds of notes:
 
 - **SDP offer and answer**, the "what I can do". [SDP](https://developer.mozilla.org/en-US/docs/Glossary/SDP) (Session Description Protocol) is a spec sheet: "I want to open a data channel, these are my security parameters". One side sends the **offer**, the other sends back the **answer**, and that's how both agree on the shape of the conversation.
 - **ICE candidates**, the "where you can find me": the list of addresses from the previous section.
@@ -189,7 +189,7 @@ There are two kinds of note:
 The best image I found is a **cork bulletin board** in a busy hallway. Anyone can pin a note and anyone can read it. Ito uses the board like this:
 
 1. **The room code is the board's name.** Whoever knows the code (`FVGZ-FYFH`, for example) knows which board to look at.
-2. **Each one pins an "I'm here"** on the board, with a random identifier.
+2. **Each phone pins an "I'm here"** on the board, with a random identifier.
 3. **Each one also has a personal mailbox**, another name derived from the board plus their own identifier. Whoever sees someone's "I'm here" leaves the **offer** in that person's mailbox. The person answers in the offerer's mailbox, and the ICE candidates follow the same route.
 4. **The notes are encrypted.** The key comes from the room code, so anyone walking past the board without the code sees only meaningless letters and numbers.
 5. **The board never carries the game.** As soon as the direct channel opens, nobody looks at it again. No move, card or chat message goes through it.
@@ -206,7 +206,7 @@ A detail that often gets oversimplified: it isn't always the host who sends the 
 
 ### Who plays the board
 
-Ito uses the [Trystero](https://github.com/dmotz/trystero) library, which does this signaling over public networks that already exist. It joins two at the same time:
+Ito uses the [Trystero](https://github.com/dmotz/trystero) library, which does this signaling over public networks that already exist. It uses two of them at the same time:
 
 - **[Nostr](https://nostr.com/):** an open protocol for decentralized social networks. Messages travel through **relays**, public servers that store and pass on notes to whoever asks.
 - **[MQTT](https://mqtt.org/):** a lightweight messaging protocol used in IoT (the internet of things: sensors, smart bulbs). In it, **brokers**, also public servers, deliver each message to whoever subscribes to a topic.
@@ -286,7 +286,7 @@ The redundancy showed up in the lab itself: on the test network, no public MQTT 
 
 ### Which boards, and what the screen shows while searching
 
-On its own, Trystero uses a default list of boards, and some relays on that list had already gone offline or started requiring a login to accept notes.
+Out of the box, Trystero uses a default list of boards, and some relays on that list had already gone offline or started requiring a login to accept notes.
 
 That's why Ito ships its own list: **8 Nostr relays**, picked because they accept anonymous writes (no account, no authentication), and **4 MQTT brokers**. The list lives in the `RELAYS` constant, in [js/core.js](https://github.com/sschonss/ito/blob/main/js/core.js), and is handed to Trystero in full, replacing the default list.
 
@@ -309,7 +309,7 @@ To see the code: the 15 seconds and the limit of 3 extra attempts are the `CONNE
 
 ## What the lab showed: the connection went through TURN
 
-The test opened the published Ito in two browser windows on the same lab machine, one as host and one as guest. Then it read [`getStats()`](https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/getStats), the WebRTC function that reports which candidate pair was chosen.
+The test opened the live Ito in two browser windows on the same lab machine, one as host and one as guest. Then it read [`getStats()`](https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/getStats), the WebRTC function that reports which candidate pair was chosen.
 
 The summary is below, with addresses masked. The lines that matter are the first one, which shows the chosen pair (relay to relay), and the third one, which shows how TURN was reached.
 
@@ -325,9 +325,9 @@ The `rtt` ([round-trip time](https://developer.mozilla.org/en-US/docs/Glossary/R
 
 The lab network blocked outgoing UDP, like many corporate networks. ICE found no direct path, and the connection went out through Cloudflare's TURN **over TLS on port 443**, the same port as a regular HTTPS site.
 
-That's exactly the scenario from the previous section: TURN kept the game going, and DTLS still held inside.
+That's exactly the scenario from the previous section: TURN kept the game going, and DTLS still protected everything inside the tunnel.
 
-The test couldn't show the direct path. Even in a second run, with both windows on the same machine, the browser didn't produce local UDP candidates on that network, so the only possible pair was relay to relay. On a regular home Wi-Fi, the expected outcome is ICE picking a `host` or `srflx` pair, with no TURN, but the lab didn't record that.
+The test couldn't show the direct path. Even in a second run, with both windows on the same machine, the browser didn't produce local UDP candidates on that network, so the only possible pair was relay to relay. On a regular home Wi-Fi network, the expected outcome is ICE picking a `host` or `srflx` pair, with no TURN, but the lab didn't record that.
 
 ## The card trick: nobody sends the cards
 
@@ -406,7 +406,7 @@ It isn't a fancy consensus algorithm (the kind that gets several machines to agr
 
 You can see the difference in roles on screen. In the same round, captured in the lab, the host has the "Revelar nessa ordem" (reveal in this order) button and can change the theme; the guest only sees a note saying that, once everyone agrees, João reveals:
 
-![Two real captures of the same Ito round, side by side, with the interface in Portuguese. On the left, the host's screen, João: the theme "Programas de TV de domingo" (Sunday TV shows), from 1, "sono" (boring), to 100, "imperdível" (must-watch), the "Mudar tema" (change theme) button, the face-down card and the red "Revelar nessa ordem" (reveal in this order) button. On the right, the guest's screen, Maria: the same theme and the same round 1 of 5, the face-down card and, instead of the button, the note "Quando todos concordarem, João revela" (when everyone agrees, João reveals)](/images/posts/how-ito-works/ito-partida-anfitriao-convidado.webp)
+![Two real screenshots of the same Ito round, side by side, with the interface in Portuguese. On the left, the host's screen, João: the theme "Programas de TV de domingo" (Sunday TV shows), from 1, "sono" (boring), to 100, "imperdível" (must-watch), the "Mudar tema" (change theme) button, the face-down card and the red "Revelar nessa ordem" (reveal in this order) button. On the right, the guest's screen, Maria: the same theme and the same round 1 of 5, the face-down card and, instead of the button, the note "Quando todos concordarem, João revela" (when everyone agrees, João reveals)](/images/posts/how-ito-works/ito-partida-anfitriao-convidado.webp)
 
 **In short:** only the host changes the state. Guests request actions, receive the versioned state and, every 2 seconds, check that they're up to date.
 
@@ -419,7 +419,7 @@ The idea, without the math, uses a key pair (this is [public-key cryptography](h
 - The **private key** is a stamp only you have, and it never leaves the device.
 - The **public key** is a copy of the stamp's design. Anyone can use it to check whether a document was stamped by you, but nobody can stamp with it.
 
-The first time it opens the game, each phone generates its key pair using [WebCrypto](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/sign), the cryptography API built into the browser (the code is in [js/crypto.js](https://github.com/sschonss/ito/blob/main/js/crypto.js)).
+The first time it opens the game, each phone generates its key pair using [WebCrypto](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/sign), the cryptography API built into the browser, available only on secure pages served over HTTPS (the code is in [js/crypto.js](https://github.com/sschonss/ito/blob/main/js/crypto.js)).
 
 The key type is **ECDSA P-256**. ECDSA (Elliptic Curve Digital Signature Algorithm) is a signature algorithm based on elliptic curves, and P-256 is the curve used. It's the same algorithm the server uses to stamp each send in [Web Push](/posts/how-web-push-works/).
 
@@ -437,7 +437,7 @@ Preventing that would require a server holding the cards. For a game among frien
 
 ## When not everyone can reach the host: the mesh
 
-So far, the story had the host connected directly to each guest. In practice, not every pair of phones can open a channel: the hard NATs and UDP-blocking networks from the first part of the article apply to each pair separately.
+So far, the story assumed the host was connected directly to each guest. In practice, not every pair of phones can open a channel: the hard NATs and UDP-blocking networks from the first part of the article apply to each pair separately.
 
 Imagine a third player, Pedro, joins the room. João (the host) might have a channel to Maria, Maria might have a channel to Pedro, and Pedro might have no channel to João at all.
 
@@ -463,11 +463,11 @@ The second rule prevents two problems:
 - A **loop**, where a message keeps going around between Maria and Pedro forever.
 - A **replay**, where someone keeps an old, genuine, properly signed state and sends it again later to rewind the game. The old signature is still valid, but the old version doesn't get through.
 
-Since the game runs over HTTPS, every state is signed. Whoever is in the middle can't change a card, a point or the order: any change invalidates the stamp, and the state is dropped.
+Because the game is served over HTTPS, the browser makes WebCrypto available, and so every state is signed (on a page without HTTPS, the code would carry on without signing). Whoever is in the middle can't change a card, a point or the order: any change invalidates the stamp, and the state is dropped.
 
 ### Actions coming back the same way
 
-The way back mirrors it. When Pedro gives a hint, plays his card, rearranges the order, votes, changes his name, leaves the room or writes in the chat, the request:
+The return path mirrors this. When Pedro gives a hint, plays his card, rearranges the order, votes, changes his name, leaves the room or writes in the chat, the request:
 
 - goes out signed with **Pedro's** key;
 - carries an `id`, a unique identifier for that request.
@@ -503,7 +503,7 @@ When João, the room owner, comes back, he waits a moment to get the newest stat
 
 Signatures cover this case too: the provisional host's state is only accepted while the owner is away, and with a key everyone already knew. The host handover lives in the `considerHostLost` and `finishReclaim` functions, in [js/net.js](https://github.com/sschonss/ito/blob/main/js/net.js).
 
-**In short:** if the host disappears, another player holds the game until he's back, and nobody loses a move.
+**In short:** if the host disappears, another player holds the game until João is back, and nobody loses a move.
 
 ## How to test something that depends on public networks
 
@@ -521,11 +521,11 @@ All of them are third parties and can go down. The two networks and the fallback
 What I take from the lab:
 
 - **The browser knows a lot more than I imagined:** encrypted P2P connections and real cryptography, with nothing to install.
-- **Sometimes the best way to sync is not to send:** the deterministic deck removed a whole category of problems.
+- **Sometimes the best way to sync is not to send anything at all:** the deterministic deck removed a whole category of problems.
 - **One source of truth with versions and a check goes a long way:** before reaching for a consensus algorithm, ask whether a boss and a check every 2 seconds are enough.
 - **Be honest about dependencies:** naming what belongs to third parties helps decide what to test every day.
 
-Open [Ito](https://sschonss.github.io/ito/), create a room and call your friends: everything here really happens on your phone. And if you haven't read it yet, the context for why I built this is in [Working is not studying](/posts/personal-projects-as-a-lab/). If you've played with WebRTC or have an idea for a P2P game, tell me in the comments.
+Open [Ito](https://sschonss.github.io/ito/), create a room and call your friends: everything here really happens on your phone. And if you haven't read it yet, the context for why I built this is in [Programming is still fun](/posts/personal-projects-as-a-lab/). If you've played with WebRTC or have an idea for a P2P game, tell me in the comments.
 
 ## Quick glossary {#glossary}
 

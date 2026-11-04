@@ -1,7 +1,7 @@
 ---
 title: 'Programming is still fun: the joy of building things in the AI era'
 date: 2026-11-03
-description: 'Work teaches a lot, but building things out of curiosity is another way to learn. With AI, getting an idea out of the drawer got easy, and programming became play again.'
+description: 'Work teaches a lot, but building things out of curiosity is another way to learn. With AI, dusting off an old idea is easy, and programming feels like play again.'
 translationKey: personal-projects-as-a-lab
 tags: ['Career', 'AI']
 series: ['Studying out of curiosity']
@@ -9,17 +9,17 @@ series_weight: 1
 draft: false
 ---
 
-It's been a long time since I had this much fun programming. Really. Those ideas that sat in a drawer for years, the "someday I'd like to understand how that works" kind, now turn into something running in one evening. And along the way I end up learning a lot, almost without noticing.
+It's been a long time since I had this much fun programming. Really. Those ideas that sat on the shelf for years, the "someday I'd like to understand how that works" kind, now become something running in a single evening. And along the way I end up learning a lot, almost without noticing.
 
 This isn't a tutorial. It's more of an excited account from someone who rediscovered the joy of **building things just because**, and how that became my favorite way to study.
 
-## Work teaches too (a lot)
+## Work teaches a lot, too
 
-First things first: I learn a lot at work. That's where the real problems show up, with real users, production, deadlines and a whole team reviewing what I do. A lot of what I know today came from a bug in production or a really thorough code review. The [series on AI-friendly architecture](/series/ai-friendly-architecture/) I wrote here on the blog was born exactly from that.
+First things first: I learn a lot at work. That's where the real problems show up, with real users, production, deadlines and a whole team reviewing what I do. A lot of what I know today came from a bug in production or a really thorough code review. The [series on AI-friendly architecture](/series/ai-friendly-architecture/) I wrote here on the blog grew directly out of that.
 
-But work has its own way of teaching. The problem comes ready-made, the stack is the team's, and it makes total sense to choose the safest path. I learn what the problem asks for.
+But work has its own way of teaching. The problem is handed to me, the stack is the team's, and it makes total sense to choose the safest path. I learn what the problem asks for.
 
-In a personal project, the logic flips. I pick the question. The stack is the one that made me curious. And if everything goes wrong, that's fine, the mistakes are part of the fun. It's not a better or worse way to learn, it's **another way**, looser, more like play. And the two complement each other: what I discover while playing comes back to work, and what work teaches me makes the play more ambitious.
+In a personal project, the logic flips. I pick the question. The stack is the one that made me curious. And if everything goes wrong, that's fine: the mistakes are part of the fun. It's not a better or worse way to learn; it's **a different way**, looser and more playful. And the two complement each other: what I discover while playing comes back to work, and what work teaches me makes the play more ambitious.
 
 ## Building got easy, and that's great
 
@@ -33,23 +33,23 @@ Some people feel AI took the fun out of programming. For me it was the opposite.
 
 When you build something out of curiosity, the questions show up on their own. You don't read about WebRTC because it's on a syllabus; you read about it because your game won't connect over 4G and you want to know why. That kind of question sticks in your head in a way no course can match.
 
-There's one catch, though. If I let the agent do everything, I end up with a working project and no idea how it works. In January 2026, Anthropic published an [experiment](https://www.anthropic.com/research/AI-assistance-coding-skills) with developers learning a new Python library: those who only asked the AI for code did worse on the quiz about the concepts, especially on debugging. Those who used AI to **ask questions and request explanations** kept their learning ([full paper](https://arxiv.org/abs/2601.20245)).
+There's one catch, though. If I let the agent do everything, I end up with a working project and no idea how it works. In January 2026, Anthropic published an [experiment](https://www.anthropic.com/research/AI-assistance-coding-skills) with developers learning a new Python library: those who only asked the AI for code did worse on the quiz about the concepts, especially on debugging. Those who used AI to **ask questions and request explanations** still learned the material ([full paper](https://arxiv.org/abs/2601.20245)).
 
 So I follow a simple rule:
 
-> **I let the agent do what I already know how to do. I do by hand, or read line by line, what I want to learn.**
+> **I let the agent do what I already know how to do. What I want to learn, I do by hand or read line by line.**
 
 In practice, the agent builds the UI and the deploy workflow. When I reach the piece that made me curious, I slow down: I ask "why this way?" until it makes sense, I break it on purpose to watch the error happen, I read the spec and, at the end, I write about what I learned. Writing is the best test of "did I really get it?".
 
 ## Things I built just because
 
-**This blog.** I wanted to know how far a static site, which is just a bunch of HTML files with no server at all, could behave like a living system. It's generated by [Hugo](https://gohugo.io/), a static site generator, and hosted for free on GitHub Pages. Every morning, a GitHub Actions workflow runs on its own: it fetches my talks from the public API of [Sessionize](https://sessionize.com/), the platform events use to manage their talks, rebuilds the site and publishes the posts scheduled for that day. After the deploy, a script prepares the newsletter for new posts in [Buttondown](https://buttondown.com/). No database, no server, and the site changes on its own. The details are in [Hugo, Sessionize and a cron](/posts/hugo-sessionize-cron-blog-setup/).
+**This blog.** I wanted to know how close a static site, which is just a bunch of HTML files with no server at all, could get to behaving like a living system. It's generated by [Hugo](https://gohugo.io/), a static site generator, and hosted for free on GitHub Pages. Every morning, a GitHub Actions workflow runs on its own: it fetches my talks from the public API of [Sessionize](https://sessionize.com/), the platform conferences use to manage speakers and sessions, rebuilds the site and publishes the posts scheduled for that day. After the deploy, a script drafts a [Buttondown](https://buttondown.com/) newsletter for each new post. No database, no server, and the site updates itself. The details are in [Hugo, Sessionize and a cron](/posts/hugo-sessionize-cron-blog-setup/).
 
-**[Ito](/posts/how-ito-works/).** A game you play with friends, each on their own phone, built **peer-to-peer** (P2P): the phones talk directly to each other, with no game server in the middle. The curiosity came from FIFA, now EA FC. In P2P matches, [according to EA itself](https://www.ea.com/games/battlefield/news/pitch-notes-fifa20-game-data-center), one of the players becomes the host of the match. I wanted to understand how that works, and the questions kept coming: with no server, how do two phones find each other on the internet? And what stops one of them from cheating? The next post in the series tells what I found out.
+**[Ito](/posts/how-ito-works/).** A game you play with friends, each on their own phone, built **peer-to-peer** (P2P): the phones talk directly to each other, with no game server in the middle. The idea came from FIFA (now EA Sports FC). In P2P matches, [according to EA itself](https://www.ea.com/games/battlefield/news/pitch-notes-fifa20-game-data-center), one of the players becomes the host of the match. I wanted to understand how that works, and the questions kept coming: with no server, how do two phones find each other on the internet? And what stops one of them from cheating? A later post in the series covers what I found out.
 
-**A [Web Push](/posts/how-web-push-works/) lab.** I was always intrigued by how a notification arrives with the tab closed. The lab became a PWA, which is the site installed as an app, and it showed you can send notifications without paying for any notification service: the browser's own push service delivers them at no cost, and the message is encrypted in a way that not even that service can read. On the sender's side, all you need is a small server and a pair of keys.
+**A [Web Push](/posts/how-web-push-works/) lab.** I was always intrigued by how a notification arrives with the tab closed. The lab turned into a PWA (a website you can install as an app), and it showed you can send notifications without paying for any notification service: the browser's own push service delivers them at no cost, and the message is encrypted so that not even that service can read it. On the sender's side, all you need is a small server and a pair of keys.
 
-None of these projects will change my job tomorrow. And that's fine. They exist because I got curious, and each one taught me more than plenty of tutorials.
+None of these projects will change my job tomorrow. And that's fine. They exist because I got curious, and each one taught me more than many tutorials ever did.
 
 ## If you want to try
 
@@ -60,6 +60,6 @@ None of these projects will change my job tomorrow. And that's fine. They exist 
 
 ## Wrapping up
 
-Chris Kiehl wrote a piece with a title I really like: [It's still OK to enjoy programming](https://chriskiehl.com/article/it-is-still-ok-to-enjoy-programming). I'd go further: maybe it has never been this good to enjoy programming. Building got easy, and when building gets easy, there's room left for curiosity.
+Chris Kiehl wrote a piece with a title I really like: [It's still OK to enjoy programming](https://chriskiehl.com/article/it-is-still-ok-to-enjoy-programming). I'd go further: there may never have been a better time to enjoy programming. Building got easy, and when building gets easy, there's room left for curiosity.
 
 So here's the question: **what would you build today, just to find out how it works?** Tell me in the comments or on [LinkedIn](https://www.linkedin.com/in/luiz-schons/).
