@@ -91,3 +91,21 @@ feedbackCtaLink: Deixe sua avaliação
 tagTermDescription: "Artigos sobre {{ .Name }} por Luiz Schons: engenharia de software, arquitetura e IA."
 seriesTermDescription: "{{ .Name }}: uma série de artigos por Luiz Schons, para ler em ordem."
 tagArticleOne: "1 artigo sobre este tema."
+talkMapTitle: Onde já palestrei
+talkMapIntro:
+  one: Eventos em que palestrei, em {{ .Count }} cidade.
+  other: Eventos em que palestrei, em {{ .Count }} cidades.
+talkMapAlt: Mapa do Brasil com um ponto em cada cidade onde já dei palestra. As mesmas cidades estão listadas ao lado do mapa.
+talkMapCaption: Pontos maiores indicam mais eventos na cidade.
+talkMapEvents:
+  one: "{{ .Count }} evento"
+  other: "{{ .Count }} eventos"
+talkMapNoCity: Online ou sem cidade informada
+books: Livros
+booksKicker: LIVROS
+booksListTitle: Leituras recomendadas
+booksTags: Temas
+booksNewTab: abre em uma nova aba
+booksEmptyTitle: Ainda não há livros por aqui.
+booksEmptyText: Estou montando esta lista. Volte em breve ou, enquanto isso, leia os artigos mais recentes.
+booksEmptyCta: Ver os artigos

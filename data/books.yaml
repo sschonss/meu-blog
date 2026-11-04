@@ -1,0 +1,61 @@
+# Livros recomendados, exibidos em /books/ (EN) e /pt-br/books/ (PT).
+#
+# Para adicionar um livro, copie um bloco abaixo. Campos:
+#   title      título original (obrigatório)
+#   title_pt   título da edição brasileira (opcional; usado na versão PT)
+#   authors    lista de autores (obrigatório)
+#   links      lista de { label_pt, label_en, url } (ao menos um)
+#   cover      caminho de uma imagem em static/ (opcional; só imagens próprias)
+#   note_pt    uma frase sobre o livro, em português
+#   note_en    a mesma frase, em inglês
+#   tags       lista curta de temas, cada um como { pt, en } (ou só um texto)
+#
+# Se a lista ficar vazia (books: []), a página mostra uma mensagem amigável.
+books:
+  - title: "Clean Architecture"
+    title_pt: "Arquitetura Limpa"
+    authors: ["Robert C. Martin"]
+    links:
+      - { label_pt: "Amazon Brasil", label_en: "Amazon Brazil", url: "https://www.amazon.com.br/dp/8550804606" }
+      - { label_pt: "Amazon EUA", label_en: "Amazon US", url: "https://www.amazon.com/dp/0134494164" }
+    note_pt: "Princípios para organizar sistemas em camadas e manter as regras de negócio independentes de frameworks, banco de dados e interface."
+    note_en: "Principles for organizing systems into layers and keeping business rules independent of frameworks, databases and the user interface."
+    tags:
+      - { pt: "arquitetura", en: "architecture" }
+      - { pt: "design", en: "design" }
+
+  - title: "Software Architecture: The Hard Parts"
+    title_pt: "Arquitetura de Software: As Partes Difíceis"
+    authors: ["Neal Ford", "Mark Richards", "Pramod Sadalage", "Zhamak Dehghani"]
+    links:
+      - { label_pt: "Amazon Brasil", label_en: "Amazon Brazil", url: "https://www.amazon.com.br/dp/8550819840" }
+      - { label_pt: "Amazon EUA", label_en: "Amazon US", url: "https://www.amazon.com/dp/1492086894" }
+    note_pt: "Análise de trade-offs em arquiteturas distribuídas, como decompor serviços, dividir dados e coordenar fluxos entre eles."
+    note_en: "Trade-off analysis for distributed architectures, covering how to break apart services, split data and coordinate workflows between them."
+    tags:
+      - { pt: "arquitetura", en: "architecture" }
+      - { pt: "sistemas distribuídos", en: "distributed systems" }
+
+  - title: "The Phoenix Project"
+    title_pt: "O Projeto Fênix"
+    authors: ["Gene Kim", "Kevin Behr", "George Spafford"]
+    links:
+      - { label_pt: "Amazon Brasil", label_en: "Amazon Brazil", url: "https://www.amazon.com.br/dp/8550814067" }
+      - { label_pt: "Amazon EUA", label_en: "Amazon US", url: "https://www.amazon.com/dp/1942788290" }
+    note_pt: "Romance sobre uma empresa em crise que usa ideias de DevOps e fluxo de trabalho para colocar a área de TI de volta nos trilhos."
+    note_en: "A novel about a company in crisis that uses DevOps and flow of work ideas to get its IT department back on track."
+    tags:
+      - { pt: "devops", en: "devops" }
+      - { pt: "gestão", en: "management" }
+
+  - title: "Grokking Algorithms (2nd edition)"
+    title_pt: "Entendendo Algoritmos (2ª edição)"
+    authors: ["Aditya Bhargava"]
+    links:
+      - { label_pt: "Amazon Brasil", label_en: "Amazon Brazil", url: "https://www.amazon.com.br/dp/857522929X" }
+      - { label_pt: "Amazon EUA", label_en: "Amazon US", url: "https://www.amazon.com/dp/1633438538" }
+    note_pt: "Introdução ilustrada a algoritmos e estruturas de dados, como busca, ordenação, grafos e programação dinâmica."
+    note_en: "An illustrated introduction to algorithms and data structures such as search, sorting, graphs and dynamic programming."
+    tags:
+      - { pt: "algoritmos", en: "algorithms" }
+      - { pt: "fundamentos", en: "fundamentals" }

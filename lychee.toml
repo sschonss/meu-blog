@@ -47,6 +47,9 @@ exclude = [
   '^https?://schema\.org',
   '^https?://fonts\.(googleapis|gstatic)\.com',
   '^https?://cdn\.jsdelivr\.net',
+  # Amazon responde 503 para robôs com frequência. Os links de livros (data/books.yaml)
+  # foram conferidos à mão.
+  '^https?://(www\.)?amazon\.com(\.br)?/',
   # Unsplash responde 401 para robôs (tela anti-bot), mesmo com o link funcionando.
   '^https?://(www\.)?unsplash\.com',
 ]
