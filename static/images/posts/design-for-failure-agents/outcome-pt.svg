@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360" role="img" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title>Resultado registrado, desconhecido e conhecido de um único estorno</title>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker></defs>
+<rect width="900" height="360" fill="#ffffff"/>
+<text x="32" y="40" font-size="15" font-weight="700" fill="#111827">Resposta perdida não é o mesmo que estorno recusado</text>
+<rect x="32" y="120" width="240" height="96" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
+<text x="152" y="158" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">REGISTRADO</text>
+<text x="152" y="182" text-anchor="middle" font-size="12" fill="#64748b">intenção salva, nada enviado</text>
+<rect x="330" y="120" width="240" height="96" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+<text x="450" y="158" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">DESCONHECIDO</text>
+<text x="450" y="182" text-anchor="middle" font-size="12" fill="#64748b">saiu, resposta não gravada</text>
+<rect x="628" y="120" width="240" height="96" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+<text x="748" y="158" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">CONHECIDO</text>
+<text x="748" y="182" text-anchor="middle" font-size="12" fill="#64748b">sucesso ou falha confirmados</text>
+<line x1="274" y1="156" x2="328" y2="156" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="301" y="144" text-anchor="middle" font-size="11" fill="#64748b">enviou</text>
+<line x1="572" y1="156" x2="626" y2="156" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
+<text x="599" y="144" text-anchor="middle" font-size="11" fill="#64748b">confirmou</text>
+<text x="330" y="260" font-size="13" font-weight="600" fill="#dc2626">Não abra um segundo estorno em DESCONHECIDO.</text>
+<text x="32" y="304" font-size="13" fill="#64748b">Confirme lendo o provedor, ou repetindo o mesmo id onde a API permitir.</text>
+<text x="32" y="330" font-size="13" fill="#64748b">Um id para o caso inteiro. Um id novo seria um segundo estorno.</text>
+</svg>

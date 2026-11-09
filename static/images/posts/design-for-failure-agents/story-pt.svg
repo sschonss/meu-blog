@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 430" width="920" height="430" role="img" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<title>Pedido 1842, fictício: o resumo que o assistente leu não bate com o pagamento</title>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+<rect width="920" height="430" fill="#ffffff"/>
+<text x="32" y="36" font-size="15" font-weight="700" fill="#111827">O pedido 1842 é fictício. As duas fotos não batem.</text>
+<rect x="32" y="58" width="410" height="268" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+<text x="52" y="92" font-size="14" font-weight="700" fill="#111827">O que o assistente leu</text>
+<text x="52" y="114" font-size="12" fill="#64748b">resumo do pedido, tirado às 10:02</text>
+<text x="52" y="162" font-size="16" font-weight="600" fill="#111827">Pedido 1842</text>
+<text x="52" y="194" font-size="15" fill="#111827">Uma cobrança de 120</text>
+<text x="52" y="226" font-size="15" fill="#111827">Estorno: nenhum</text>
+<text x="52" y="286" font-size="13" fill="#92400e">O assistente trata isso como cobrança aberta.</text>
+<rect x="478" y="58" width="410" height="268" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+<text x="498" y="92" font-size="14" font-weight="700" fill="#111827">O que o pagamento sabe às 10:04</text>
+<text x="498" y="114" font-size="12" fill="#64748b">o assistente não perguntou de novo</text>
+<text x="498" y="162" font-size="16" font-weight="600" fill="#111827">Pedido 1842</text>
+<text x="498" y="194" font-size="15" fill="#111827">Uma cobrança de 120</text>
+<text x="498" y="226" font-size="15" fill="#111827">Estorno de 120, em processamento</text>
+<text x="498" y="286" font-size="13" fill="#166534">Um segundo estorno pagaria 120 duas vezes.</text>
+<text x="32" y="368" font-size="13" fill="#64748b">120 é um valor inventado. As chamadas feitas podem continuar com HTTP 200.</text>
+<text x="32" y="398" font-size="13" font-weight="600" fill="#dc2626">Um estorno novo é outra operação, não um retry da leitura.</text>
+</svg>
