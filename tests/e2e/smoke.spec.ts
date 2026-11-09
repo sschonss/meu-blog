@@ -135,6 +135,82 @@ test('feedback /pt-br/feedback/ renderiza o formulário com palestras e eventos'
   expect(await form.locator('select[name=event] option').count()).toBeGreaterThan(2);
 });
 
+for (const pageInfo of [
+  { path: '/speakers/', role: 'Organizer' },
+  { path: '/pt-br/speakers/', role: 'Organizador' },
+]) {
+  test(`palestras ${pageInfo.path} mostra DevParaná Conference como ${pageInfo.role}`, async ({ page }) => {
+    const res = await page.goto(pageInfo.path);
+    expect(res?.status()).toBe(200);
+    const organized = page.locator('section[data-organized]');
+    await expect(organized.locator('h2')).toHaveText(pageInfo.role);
+    await expect(organized).toContainText('DevParaná Conference 2026');
+    await expect(organized).toContainText('DevParaná Conference 2025');
+    // Lista de palestras, números e mapa ficam só com eventos em que ele palestrou.
+    const live = await page.locator('[data-slot="live"]').innerText();
+    const map = await page.locator('section.talk-map').innerText();
+    for (const name of ['DevParaná Conference 2026', 'DevParaná Conference 2025']) {
+      expect(live).not.toContain(name);
+      expect(map).not.toContain(name);
+    }
+  });
+}
+
+test('atualização ao vivo ignora DevParaná Conference na lista de palestras e na home', async ({ page }) => {
+  const payload = {
+    speaker: { tagline: 'Senior Software Engineer @ PicPay' },
+    sessions: [{ id: 1, title: 'Live only talk', description: 'Hello from the test.', sessionUrl: 'https://sessionize.com/sschonss/' }],
+    events: [
+      {
+        id: 1019933,
+        name: 'DevParaná Conference 2026',
+        eventStartDate: '2026-12-01T00:00:00Z',
+        eventEndDate: '2026-12-01T00:00:00Z',
+        location: 'Maringá, Brazil',
+        website: 'https://devpr.org',
+      },
+      {
+        id: 1019926,
+        name: 'PHP Conference Brasil 2026',
+        eventStartDate: '2026-12-02T00:00:00Z',
+        eventEndDate: '2026-12-02T00:00:00Z',
+        location: 'Maringá, Brazil',
+        website: 'https://phpconference.com.br/',
+      },
+    ],
+  };
+  // The fixture blocks Sessionize. This route is registered later, so it answers first.
+  await page.route('https://sessionize.com/**', (route) => route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify(payload),
+  }));
+
+  await page.goto('/speakers/');
+  const live = page.locator('[data-slot="live"]');
+  await expect(live).toContainText('Live only talk');
+  await expect(live).toContainText('PHP Conference Brasil 2026');
+  await expect(live).not.toContainText('DevParaná Conference 2026');
+  await expect(page.locator('section[data-organized]')).toContainText('DevParaná Conference 2026');
+  await expect(page.locator('section.talk-map')).not.toContainText('DevParaná Conference 2026');
+
+  await page.goto('/');
+  const home = page.locator('[data-home-events]');
+  await expect(home).toContainText('PHP Conference Brasil 2026');
+  await expect(home).not.toContainText('DevParaná Conference');
+});
+
+for (const path of ['/feedback/', '/pt-br/feedback/']) {
+  test(`feedback ${path} não lista DevParaná Conference como evento de palestra`, async ({ page }) => {
+    const res = await page.goto(path);
+    expect(res?.status()).toBe(200);
+    const events = page.locator('form.feedback-form select[name=event]');
+    await expect(events).not.toContainText('DevParaná Conference 2026');
+    await expect(events).not.toContainText('DevParaná Conference 2025');
+    await expect(events).toContainText('PHP Conference Brasil 2025');
+  });
+}
+
 test('página que não existe devolve 404 e leva para a home', async ({ page }) => {
   const res = await page.request.get('/esta-pagina-nao-existe/');
   expect(res.status()).toBe(404);

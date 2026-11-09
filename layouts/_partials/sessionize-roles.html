@@ -1,0 +1,33 @@
+{{- /*
+  Splits the Sessionize profile into talks and organizer-only events.
+  Organizer ids live in data/sessionize_overrides.yaml. The sync script
+  stores those events under "organized"; this also catches them if a raw
+  profile still has them inside "events".
+  Returns dict "talks" "organized".
+*/ -}}
+{{- $skip := site.Data.sessionize_overrides.organizer | default slice -}}
+{{- $data := site.Data.sessionize | default dict -}}
+{{- $talks := slice -}}
+{{- $organized := slice -}}
+{{- $seen := dict -}}
+{{- range $data.organized -}}
+  {{- $key := printf "%d" (int .id) -}}
+  {{- if not (index $seen $key) -}}
+    {{- $seen = merge $seen (dict $key true) -}}
+    {{- $organized = $organized | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- range $data.events -}}
+  {{- $key := printf "%d" (int .id) -}}
+  {{- $isOrg := false -}}
+  {{- range $skip }}{{ if eq (printf "%d" (int .)) $key }}{{ $isOrg = true }}{{ end }}{{ end -}}
+  {{- if $isOrg -}}
+    {{- if not (index $seen $key) -}}
+      {{- $seen = merge $seen (dict $key true) -}}
+      {{- $organized = $organized | append . -}}
+    {{- end -}}
+  {{- else -}}
+    {{- $talks = $talks | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- return (dict "talks" $talks "organized" $organized) -}}

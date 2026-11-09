@@ -68,8 +68,14 @@
     return text.slice(0, max).replace(/\s+\S*$/, '') + ' …';
   }
 
+  // Organizer-only ids (data/sessionize_overrides.yaml). The live API has no
+  // role field, so without this list the daily profile would show them as talks.
+  var organizerIds = {};
+  (t.organizerIds || []).forEach(function (id) { organizerIds[String(id)] = true; });
+
   function render(data) {
-    var events = data.events || [], sessions = data.sessions || [];
+    var events = (data.events || []).filter(function (e) { return !organizerIds[String(e.id)]; });
+    var sessions = data.sessions || [];
     var now = new Date();
     var today = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
     var upcoming = [], past = [], cities = {};

@@ -44,14 +44,6 @@
   ],
   "events": [
     {
-      "id": 1019933,
-      "name": "DevParaná Conference 2026",
-      "eventStartDate": "2026-11-07T00:00:00Z",
-      "eventEndDate": "2026-11-07T00:00:00Z",
-      "location": "Maringá, Brazil",
-      "website": "https://devpr.org"
-    },
-    {
       "id": 1019926,
       "name": "PHP Conference Brasil 2026",
       "eventStartDate": "2026-10-19T00:00:00Z",
@@ -90,14 +82,6 @@
       "eventEndDate": "2025-10-04T00:00:00Z",
       "location": "Parnaíba, Brazil",
       "website": "https://phppiaui.com.br"
-    },
-    {
-      "id": 1019934,
-      "name": "DevParaná Conference 2025",
-      "eventStartDate": "2025-09-13T00:00:00Z",
-      "eventEndDate": "2025-09-13T00:00:00Z",
-      "location": "Maringá, Brazil",
-      "website": "https://devpr.org"
     },
     {
       "id": 1019938,
@@ -162,6 +146,24 @@
       "eventEndDate": "2024-05-18T00:00:00Z",
       "location": "Chapecó, Brazil",
       "website": "https://phpvelhoeste.com.br/2024/"
+    }
+  ],
+  "organized": [
+    {
+      "id": 1019933,
+      "name": "DevParaná Conference 2026",
+      "eventStartDate": "2026-11-07T00:00:00Z",
+      "eventEndDate": "2026-11-07T00:00:00Z",
+      "location": "Maringá, Brazil",
+      "website": "https://devpr.org"
+    },
+    {
+      "id": 1019934,
+      "name": "DevParaná Conference 2025",
+      "eventStartDate": "2025-09-13T00:00:00Z",
+      "eventEndDate": "2025-09-13T00:00:00Z",
+      "location": "Maringá, Brazil",
+      "website": "https://devpr.org"
     }
   ]
 }

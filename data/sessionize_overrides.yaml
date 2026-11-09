@@ -1,0 +1,7 @@
+# Events on the Sessionize profile where Luiz was an organizer, not a speaker.
+# scripts/sync_sessionize.py moves these ids out of "events" and into
+# "organized", so the daily sync cannot list them as talks again.
+# The talks page, the home page and the feedback form use the same ids.
+organizer:
+  - 1019933 # DevParaná Conference 2026
+  - 1019934 # DevParaná Conference 2025

@@ -86,6 +86,9 @@ A página separa os eventos assim:
 - **Próximos e em andamento:** eventos cuja data de fim é hoje ou depois.
 - **Palestras:** os resumos cadastrados no Sessionize.
 - **Eventos em que palestrei:** os passados, agrupados por ano.
+- **Organizador / Organizer:** eventos em que eu organizei e não palestrei.
+
+O Sessionize não distingue palestrante de organizador. Essa separação fica em `data/sessionize_overrides.yaml`, na lista `organizer`, pelo id do evento. `scripts/sync_sessionize.py` tira esses ids de `events` e guarda em `organized`, então o sync diário não os devolve como palestra. A página de palestras, o mapa, os números, o formulário de feedback e o bloco "Onde me encontrar" usam só `events`. O navegador, ao buscar a API de novo, ignora os mesmos ids.
 
 As datas e as cidades são traduzidas, por exemplo `19–24 out 2026 · Maringá, Brasil`. Eventos que duram o ano todo aparecem como "Ao longo de 2026".
 
@@ -166,7 +169,7 @@ Páginas com tradução trazem um aviso escondido (`layouts/_partials/lang-sugge
 ```
 config/preview/     ajustes do ambiente de prévia (Vercel)
 content/            artigos, palestras, contato (EN + PT)
-data/               sessionize.json (cópia dos dados do Sessionize), talk_locations.yaml e brazil_map.json (mapa das palestras), books.yaml (livros recomendados)
+data/               sessionize.json (cópia dos dados do Sessionize), sessionize_overrides.yaml (eventos como organizador), talk_locations.yaml e brazil_map.json (mapa das palestras), books.yaml (livros recomendados)
 layouts/            layouts próprios (home, posts, séries, temas, palestras, contato, 404)
   _partials/        datas, eventos, linha de artigo, comentários, favicons, imagem de prévia, SEO
 assets/css/         custom.css (estilos do site)
