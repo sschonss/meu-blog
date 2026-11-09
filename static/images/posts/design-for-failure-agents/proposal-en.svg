@@ -4,16 +4,16 @@
 <rect width="960" height="700" fill="#ffffff"/>
 <text x="36" y="36" font-size="15" font-weight="700" fill="#111827">The model writes the proposal. It does not send the money.</text>
 <rect x="36" y="60" width="360" height="72" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
-<text x="56" y="90" font-size="14" font-weight="700" fill="#111827">1 · Ana's request</text>
+<text x="56" y="90" font-size="14" font-weight="700" fill="#111827">1 · User request</text>
 <text x="56" y="112" font-size="13" fill="#475569">order 1842, "I was charged twice"</text>
 <line x1="216" y1="132" x2="216" y2="162" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
 <rect x="36" y="164" width="360" height="84" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
 <text x="56" y="196" font-size="14" font-weight="700" fill="#111827">2 · Agent writes a proposal</text>
-<text x="56" y="218" font-size="13" fill="#475569">refund 120, from the 10:02 summary</text>
+<text x="56" y="218" font-size="13" fill="#475569">refund R$120, from the 10:02 summary</text>
 <line x1="216" y1="248" x2="216" y2="278" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
 <rect x="36" y="280" width="360" height="84" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
 <text x="56" y="312" font-size="14" font-weight="700" fill="#111827">3 · Policy, in application code</text>
-<text x="56" y="334" font-size="13" fill="#475569">identity, amount, and which approval</text>
+<text x="56" y="334" font-size="13" fill="#475569">identity, amount, and required approval</text>
 <line x1="396" y1="322" x2="548" y2="322" stroke="#d97706" stroke-width="1.5" marker-end="url(#ao)"/>
 <rect x="424" y="294" width="96" height="16" fill="#ffffff"/>
 <text x="472" y="307" text-anchor="middle" font-size="12" fill="#92400e">not allowed</text>
@@ -21,14 +21,16 @@
 <text x="570" y="312" font-size="14" font-weight="700" fill="#111827">Review queue</text>
 <text x="570" y="334" font-size="13" fill="#475569">a person sees the proposal and the gap</text>
 <line x1="216" y1="364" x2="216" y2="400" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
-<text x="232" y="388" font-size="12" fill="#64748b">yes, and the approval matches this proposal</text>
+<text x="232" y="388" font-size="12" fill="#64748b">allowed and, if required, approved</text>
 <rect x="36" y="402" width="360" height="84" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
-<text x="56" y="434" font-size="14" font-weight="700" fill="#111827">4 · Executor reads payment again</text>
-<text x="56" y="456" font-size="13" fill="#475569">the 10:02 summary can be stale</text>
+<text x="56" y="434" font-size="14" font-weight="700" fill="#111827">4 · Recheck payment and policy</text>
+<text x="56" y="456" font-size="13" fill="#475569">refund processing? stop the action</text>
 <line x1="216" y1="486" x2="216" y2="516" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
 <rect x="36" y="518" width="520" height="64" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
-<text x="56" y="556" font-size="14" font-weight="700" fill="#111827">5 · Save one operation id, then send</text>
+<text x="56" y="556" font-size="14" font-weight="700" fill="#111827">5 · Record intent and key, then send</text>
 <line x1="216" y1="582" x2="216" y2="612" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
 <rect x="36" y="614" width="520" height="64" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
-<text x="56" y="652" font-size="14" font-weight="700" fill="#111827">6 · Answer lost? Reconcile with that same id</text>
+<text x="56" y="652" font-size="14" font-weight="700" fill="#111827">6 · Response lost? Reconcile the same operation</text>
+<path d="M396,444 H735 V366" fill="none" stroke="#d97706" stroke-width="1.5" marker-end="url(#ao)"/>
+<text x="500" y="432" font-size="12" fill="#92400e">blocked</text>
 </svg>

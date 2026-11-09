@@ -7,16 +7,16 @@
 <text x="52" y="92" font-size="14" font-weight="700" fill="#111827">What the assistant read</text>
 <text x="52" y="114" font-size="12" fill="#64748b">order summary taken at 10:02</text>
 <text x="52" y="162" font-size="16" font-weight="600" fill="#111827">Order 1842</text>
-<text x="52" y="194" font-size="15" fill="#111827">One charge of 120</text>
+<text x="52" y="194" font-size="15" fill="#111827">One charge of R$120</text>
 <text x="52" y="226" font-size="15" fill="#111827">Refund: none</text>
-<text x="52" y="286" font-size="13" fill="#92400e">The assistant treats this as an open charge.</text>
+<text x="52" y="286" font-size="13" fill="#92400e">The assistant proposes another refund.</text>
 <rect x="478" y="58" width="410" height="268" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
 <text x="498" y="92" font-size="14" font-weight="700" fill="#111827">What payment knows at 10:04</text>
 <text x="498" y="114" font-size="12" fill="#64748b">the assistant did not ask again</text>
 <text x="498" y="162" font-size="16" font-weight="600" fill="#111827">Order 1842</text>
-<text x="498" y="194" font-size="15" fill="#111827">One charge of 120</text>
-<text x="498" y="226" font-size="15" fill="#111827">Refund of 120, processing</text>
-<text x="498" y="286" font-size="13" fill="#166534">A second refund would pay 120 twice.</text>
-<text x="32" y="368" font-size="13" fill="#64748b">120 is a made-up amount. Calls the assistant did make can still return HTTP 200.</text>
+<text x="498" y="194" font-size="15" fill="#111827">One charge of R$120</text>
+<text x="498" y="226" font-size="15" fill="#111827">Refund of R$120, processing</text>
+<text x="498" y="286" font-size="13" fill="#166534">Another proposal must be blocked.</text>
+<text x="32" y="368" font-size="13" fill="#64748b">Illustrative amounts and times (BRT). Queries can still return HTTP 200.</text>
 <text x="32" y="398" font-size="13" font-weight="600" fill="#dc2626">A new refund is a new business operation, not a retry of the read.</text>
 </svg>

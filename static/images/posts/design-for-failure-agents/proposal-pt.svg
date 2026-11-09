@@ -4,30 +4,32 @@
 <rect width="960" height="700" fill="#ffffff"/>
 <text x="36" y="36" font-size="15" font-weight="700" fill="#111827">O modelo escreve a proposta. Quem envia o dinheiro é outra parte.</text>
 <rect x="36" y="60" width="380" height="72" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
-<text x="56" y="90" font-size="14" font-weight="700" fill="#111827">1 · Pedido da Ana</text>
-<text x="56" y="112" font-size="13" fill="#475569">pedido 1842, "fui cobrada duas vezes"</text>
+<text x="56" y="90" font-size="14" font-weight="700" fill="#111827">1 · Solicitação do usuário</text>
+<text x="56" y="112" font-size="13" fill="#475569">pedido 1842, "fui cobrado duas vezes"</text>
 <line x1="226" y1="132" x2="226" y2="162" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
 <rect x="36" y="164" width="380" height="84" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
 <text x="56" y="196" font-size="14" font-weight="700" fill="#111827">2 · O agente escreve a proposta</text>
-<text x="56" y="218" font-size="13" fill="#475569">estorno de 120, com o resumo das 10:02</text>
+<text x="56" y="218" font-size="13" fill="#475569">estorno de R$ 120, resumo das 10:02</text>
 <line x1="226" y1="248" x2="226" y2="278" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
 <rect x="36" y="280" width="380" height="84" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
 <text x="56" y="312" font-size="14" font-weight="700" fill="#111827">3 · Política, no código</text>
-<text x="56" y="334" font-size="13" fill="#475569">identidade, valor e qual aprovação</text>
+<text x="56" y="334" font-size="13" fill="#475569">identidade, valor e aprovação exigida</text>
 <line x1="416" y1="322" x2="548" y2="322" stroke="#d97706" stroke-width="1.5" marker-end="url(#ao)"/>
 <text x="424" y="308" font-size="12" fill="#92400e">não, ou falta algo</text>
 <rect x="550" y="280" width="370" height="84" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
 <text x="570" y="312" font-size="14" font-weight="700" fill="#111827">Fila de revisão</text>
 <text x="570" y="334" font-size="13" fill="#475569">uma pessoa vê a proposta e o que falta</text>
 <line x1="226" y1="364" x2="226" y2="400" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
-<text x="242" y="388" font-size="12" fill="#64748b">sim, e a aprovação é desta proposta</text>
+<text x="242" y="388" font-size="12" fill="#64748b">permitido e, se exigida, aprovado</text>
 <rect x="36" y="402" width="400" height="84" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
-<text x="56" y="434" font-size="14" font-weight="700" fill="#111827">4 · O executor lê o pagamento de novo</text>
-<text x="56" y="456" font-size="13" fill="#475569">o resumo das 10:02 pode estar velho</text>
+<text x="56" y="434" font-size="14" font-weight="700" fill="#111827">4 · Executor revalida pagamento e regras</text>
+<text x="56" y="456" font-size="13" fill="#475569">estorno em andamento? interrompe</text>
 <line x1="226" y1="486" x2="226" y2="516" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
 <rect x="36" y="518" width="560" height="64" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
-<text x="56" y="556" font-size="14" font-weight="700" fill="#111827">5 · Grava um id da operação e só então envia</text>
+<text x="56" y="556" font-size="14" font-weight="700" fill="#111827">5 · Grava intenção e chave; depois envia</text>
 <line x1="226" y1="582" x2="226" y2="612" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
 <rect x="36" y="614" width="560" height="64" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
-<text x="56" y="652" font-size="14" font-weight="700" fill="#111827">6 · Resposta perdida? Reconcilia com o mesmo id</text>
+<text x="56" y="652" font-size="14" font-weight="700" fill="#111827">6 · Resposta perdida? Confere a mesma operação</text>
+<path d="M436,444 H735 V366" fill="none" stroke="#d97706" stroke-width="1.5" marker-end="url(#ao)"/>
+<text x="500" y="432" font-size="12" fill="#92400e">bloqueado</text>
 </svg>

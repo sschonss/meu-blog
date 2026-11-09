@@ -6,7 +6,7 @@
 <text x="516" y="36" font-size="15" font-weight="700" fill="#111827">A decision is wrong</text>
 <line x1="480" y1="58" x2="480" y2="300" stroke="#e2e8f0" stroke-width="1.5"/>
 <circle cx="78" cy="128" r="10" fill="none" stroke="#111827" stroke-width="1.5"/><path d="M61,164 Q61,142 78,142 Q95,142 95,164 z" fill="none" stroke="#111827" stroke-width="1.5"/>
-<text x="78" y="186" text-anchor="middle" font-size="12" fill="#64748b">Ana</text>
+<text x="78" y="186" text-anchor="middle" font-size="12" fill="#64748b">User</text>
 <line x1="108" y1="140" x2="168" y2="140" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
 <rect x="170" y="112" width="120" height="56" rx="8" fill="#f8fafc" stroke="#111827" stroke-width="1.5"/>
 <text x="230" y="145" text-anchor="middle" font-size="14" font-weight="600" fill="#111827">Store</text>
@@ -15,9 +15,9 @@
 <text x="405" y="136" text-anchor="middle" font-size="14" font-weight="600" fill="#111827">Shipping</text>
 <text x="405" y="154" text-anchor="middle" font-size="11" fill="#64748b">down</text>
 <text x="36" y="236" font-size="13" font-weight="600" fill="#dc2626">You can see it: timeout or HTTP 500.</text>
-<text x="36" y="262" font-size="13" fill="#64748b">Retry and fallback belong on this side.</text>
+<text x="36" y="262" font-size="13" fill="#64748b">The call needs protection.</text>
 <circle cx="558" cy="128" r="10" fill="none" stroke="#111827" stroke-width="1.5"/><path d="M541,164 Q541,142 558,142 Q575,142 575,164 z" fill="none" stroke="#111827" stroke-width="1.5"/>
-<text x="558" y="186" text-anchor="middle" font-size="12" fill="#64748b">Ana</text>
+<text x="558" y="186" text-anchor="middle" font-size="12" fill="#64748b">User</text>
 <line x1="588" y1="140" x2="648" y2="140" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a)"/>
 <rect x="650" y="104" width="130" height="72" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
 <text x="715" y="132" text-anchor="middle" font-size="14" font-weight="600" fill="#111827">Assistant</text>
@@ -26,8 +26,8 @@
 <rect x="840" y="112" width="96" height="56" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
 <text x="888" y="136" text-anchor="middle" font-size="13" font-weight="600" fill="#111827">Payment</text>
 <text x="888" y="154" text-anchor="middle" font-size="11" fill="#166534">HTTP 200</text>
-<text x="516" y="236" font-size="13" font-weight="600" fill="#166534">The calls succeed.</text>
-<text x="516" y="262" font-size="13" font-weight="600" fill="#dc2626">The refund would still be wrong.</text>
+<text x="516" y="236" font-size="13" font-weight="600" fill="#166534">The queries succeed.</text>
+<text x="516" y="262" font-size="13" font-weight="600" fill="#dc2626">The refund proposal is wrong.</text>
 <text x="36" y="330" font-size="14" font-weight="600" fill="#111827">Same customer. Different kind of failure.</text>
 <text x="36" y="358" font-size="13" fill="#64748b">The left side is the store from the first Design for Failure article, drawn smaller.</text>
 </svg>

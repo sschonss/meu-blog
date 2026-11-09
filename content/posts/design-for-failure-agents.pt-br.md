@@ -1,151 +1,133 @@
 ---
 title: 'De microservices a agentes: Design for Failure quando o sistema decide sozinho'
 date: 2026-11-16T07:00:00-03:00
-description: 'Um assistente de atendimento pode receber HTTP 200 em toda chamada e ainda estornar o mesmo pedido duas vezes. Uma compra fictícia, passo a passo: evidência, proposta, orçamento, retry e resposta perdida.'
+description: 'As chamadas deram certo, mas o agente sugeriu o estorno errado. Uma história passo a passo sobre limites, tentativas, aprovação e como recuperar uma operação sem repeti-la.'
 translationKey: design-for-failure-agents
 draft: false
 tags: ['Arquitetura', 'IA', 'Microservices']
 ---
 
-A Ana escreve para a loja: "fui cobrada duas vezes."
+"Fui cobrado duas vezes."
 
-O assistente consulta o pedido, as chamadas dão certo e a tela continua verde. Aí ele prepara um segundo estorno para um pagamento que já está sendo estornado.
+O usuário abre o atendimento da loja, o assistente consulta o pedido e sugere um estorno. Parece uma tarefa resolvida. Só tem um detalhe: aquele pagamento já estava sendo estornado.
 
-Nada caiu. A cliente ainda pode sair no prejuízo.
+Nenhum servidor caiu. Nenhuma chamada deu erro. Mesmo assim, a proposta estava errada.
 
-No artigo [Design for Failure: como assim meu sistema falha?](/pt-br/posts/design-for-failure/) eu falei de retry, fallback, circuit breaker e saga: o que o resto do sistema deve fazer quando uma dependência falha. Esses padrões continuam valendo. Um agente (um programa que pergunta a um modelo qual é o próximo passo) não conserta a rede e não torna um pagamento seguro para repetir.
+No artigo [Design for Failure: como assim meu sistema falha?](/pt-br/posts/design-for-failure/), a pergunta era o que acontece com o resto da loja quando uma dependência para de responder. Agora quero continuar a conversa com outra pergunta: **o que acontece quando tudo responde, mas o sistema escolhe o próximo passo errado?**
 
-Ele acrescenta uma segunda pergunta. **O que acontece quando as chamadas funcionam e a decisão está errada?**
+É uma parte do problema de colocar agentes de IA (inteligência artificial) em uma aplicação. Aqui, agente é um programa que usa um modelo de linguagem para escolher ações, como consultar um pedido, buscar mais informações ou preparar uma resposta. Ele não substitui a loja inteira. Entra em um pedaço do atendimento.
 
-Este artigo acompanha um pedido fictício, da mensagem até o estorno, e para ali. Não transforma a loja inteira em agentes. Cada sigla aparece explicada na primeira vez, e o [glossário](#glossary) no fim repete cada uma numa linha. O valor 120 e os horários são inventados, para a história ficar fácil de seguir. Não são medições.
+Vamos acompanhar esse pedaço do começo ao fim. O pedido, os valores e os horários abaixo são fictícios. Servem para explicar o desenho, não são um relato de produção nem resultados de um laboratório.
 
-## Um pedido, das 10:01 às 10:05
+## Um pedido em cinco momentos
 
-Vamos ficar com a Ana. Pedido 1842. Uma compra de 120.
+O pedido é o **1842**, uma compra de **R$ 120**. Os horários são ilustrativos, no horário de Brasília (BRT).
 
-1. **10:01.** A Ana paga 120. O serviço de pagamento (o sistema que de fato mexe no dinheiro) registra uma cobrança que deu certo.
-2. **10:03.** Um estorno desses mesmos 120 começa. Pode ser que o item tenha acabado no estoque. O pagamento agora sabe que há um estorno em processamento. A Ana não sabe.
-3. **10:04.** A Ana escreve "fui cobrada duas vezes." Ela descreve a sensação, não o extrato.
-4. **10:04, alguns segundos depois.** O assistente lê um resumo do pedido montado às 10:02. Esse resumo diz: uma cobrança, nenhum estorno.
-5. **10:05.** O assistente propõe outro estorno de 120. Ele não pergunta de novo ao serviço de pagamento.
+1. **Às 10:01, o pagamento é confirmado.** A loja registra uma cobrança de R$ 120.
+2. **Às 10:02, um resumo do pedido é atualizado.** Naquele momento, ele mostra uma cobrança e nenhum estorno.
+3. **Às 10:03, a loja inicia o estorno.** O serviço de pagamento, que mantém o registro da movimentação financeira, já sabe disso. O resumo ainda não foi atualizado.
+4. **Às 10:04, o usuário pede ajuda.** Ele diz que foi cobrado duas vezes. O assistente consulta o resumo das 10:02, mas não consulta o estado atual do pagamento.
+5. **Às 10:05, o assistente sugere outro estorno.** Ele transformou uma informação incompleta em uma ação que não deveria acontecer.
 
-Se essa proposta puder rodar, a Ana recebe 240 de volta por uma compra de 120. Toda chamada que o assistente fez pode continuar devolvendo HTTP 200, o status usual de "esta chamada deu certo".
+Repare no salto entre os dois últimos passos. "O resumo não mostra um estorno" virou "é preciso estornar". Não é a mesma coisa.
 
-A mesma frase da cliente nem sempre é a mesma ação:
+A frase do usuário é o ponto de partida da investigação, não uma autorização para devolver dinheiro. Duas cobranças confirmadas, duas tentativas de pagamento e um estorno em andamento são situações diferentes. Antes de escolher uma ação, a loja precisa descobrir qual delas aconteceu.
 
-| O que "fui cobrada duas vezes" pode significar | O que a loja deveria fazer |
-| --- | --- |
-| Duas cobranças que deram certo | Estornar a que sobrou, uma vez. |
-| Duas tentativas, e só uma cobrança que ficou | Não estornar. |
-| Uma cobrança, e um estorno já em processamento | Não estornar de novo. |
+É por uma **API** (Application Programming Interface, "interface de programação de aplicações") que um programa consulta outro. Nessas consultas, o **HTTP** (Hypertext Transfer Protocol, o protocolo usado na comunicação web) devolve um código de status. Um `200 OK` informa que aquela requisição foi bem-sucedida. Não certifica a conclusão que o assistente tirou dela.
 
-O resto do artigo fica na terceira linha, porque é a linha que um resumo velho esconde. Uma leitura velha é uma cópia que era verdade antes e já não conta a história inteira.
+![Dois retratos do pedido 1842: o resumo das 10:02 mostra uma cobrança de 120 sem estorno, enquanto o pagamento às 10:04 já mostra um estorno em processamento. O assistente consultou apenas o resumo antigo](/images/posts/design-for-failure-agents/story-pt.svg)
 
-Aqui estão as duas fotos, lado a lado:
+Se a aplicação aceitar a proposta sem conferir o pagamento, pode tentar criar uma operação duplicada. Isso não quer dizer que o provedor necessariamente devolverá o dinheiro duas vezes: ele também pode ter controles que bloqueiem a tentativa. O erro que já conseguimos apontar está antes disso, na proposta e na falta de uma barreira para ela.
 
-![Dois cartões do pedido fictício 1842. À esquerda, o que o assistente leu: um resumo tirado às 10:02, uma cobrança de 120, estorno nenhum, e o assistente trata isso como cobrança aberta. À direita, o que o serviço de pagamento sabe às 10:04: a mesma cobrança, mais um estorno de 120 já em processamento, que o assistente não consultou. Uma nota diz que 120 é inventado, que as chamadas podem continuar com HTTP 200, e que um estorno novo é outra operação de negócio, não um retry da leitura](/images/posts/design-for-failure-agents/story-pt.svg)
+**Em resumo:** o assistente consultou um retrato antigo. A aplicação não pode tratar esse retrato como autorização para movimentar dinheiro agora.
 
-**Em resumo:** o assistente respondeu a uma fotografia das 10:02, e o dinheiro está num registro das 10:04.
+## De microservices a agentes: o que muda?
 
-## Um 200 não é atestado de saúde
+Microservices dividem uma aplicação em serviços menores, com responsabilidades próprias. No exemplo do [primeiro artigo](/pt-br/posts/design-for-failure/), a loja conversa com estoque, frete e pagamento. Se o frete não responde, a compra precisa ter um caminho de saída.
 
-Uma API é a interface que outro programa chama. JSON é um formato de texto para dados estruturados, o formato da resposta. Conferir se o JSON tem os campos certos diz que a resposta está bem formada. Não diz que o estorno é o estorno certo.
+Um agente acrescenta uma escolha no meio desse caminho. Em vez de seguir apenas uma sequência definida no código, o modelo pode decidir se deve consultar o pagamento, pedir outra informação ou encerrar o atendimento. É esse recorte que um [artigo da InfoQ chama de decomposição de decisões](https://www.infoq.com/articles/distributed-systems-microservices-agentic-ai/).
 
-Isso não começa com IA. Um serviço comum também pode devolver 200 com o total errado. A diferença aqui é que o modelo escolhe parte do próximo passo: o que consultar, qual nota acreditar e quando parar.
+Não significa que serviços tradicionais só falham quando caem. Eles também podem calcular valores errados ou usar dados antigos. A diferença é ter mais uma origem de decisões para limitar e verificar.
 
-Mallika Rao descreve essa mudança como passar de quebrar o sistema em funções para [quebrá-lo em decisões](https://www.infoq.com/articles/distributed-systems-microservices-agentic-ai/). Acho uma lente útil. Não é uma ordem para trocar os serviços da loja por agentes.
+![Comparação entre uma dependência indisponível, com o frete fora do ar, e uma decisão incorreta, com o assistente propondo outro estorno mesmo quando as consultas respondem sem erro](/images/posts/design-for-failure-agents/compare-pt.svg)
 
-Três perguntas, e só uma delas é o status HTTP:
-
-| Camada | A pergunta | O que ainda pode estar errado no pedido 1842 |
+| Pergunta | Fluxo definido nos serviços | Fluxo com um agente escolhendo passos |
 | --- | --- | --- |
-| Transporte | A chamada respondeu a tempo? | A resposta pode ser de outra compra. |
-| Contrato | Os campos e os tipos são os que a gente espera? | Um valor bem formado ainda pode furar a regra de estorno. |
-| Negócio | Esta proposta combina com a evidência de agora? | O resumo das 10:02 não basta para mandar dinheiro. |
+| Quem escolhe o próximo passo? | O código da aplicação. | Parte da escolha fica com o modelo, dentro de limites definidos pela aplicação. |
+| O que pode falhar? | A chamada, os dados e a regra de negócio. | Tudo isso, mais a escolha da ferramenta, a interpretação e o momento de parar. |
+| O que uma resposta 200 confirma? | Que aquela requisição foi bem-sucedida. | A mesma coisa. Não confirma a qualidade da decisão. |
+| O que vale repetir? | Uma operação cuja repetição seja segura. | A mesma regra. Replanejar não dá permissão para criar outra movimentação. |
+| Quem protege o pagamento? | As regras e os controles do serviço de pagamento. | Os mesmos controles. O modelo não ganha poder para ignorá-los. |
+| Quando não dá para concluir? | O fluxo segue uma alternativa prevista. | A tarefa precisa parar ou seguir para revisão, sem inventar a informação que falta. |
 
-Pedir ao modelo "você tem certeza?" não substitui uma leitura do pagamento.
+Os padrões conhecidos continuam úteis. Mas não basta colocar mais tentativas em volta do agente e torcer para uma delas dar certo.
 
-O artigo da Rao também fala de decisões que pioram conforme passam de etapa em etapa, e de contexto que não bate, mesmo sem nenhum servidor fora do ar. Isso não quer dizer que toda cadeia longa falha. Quer dizer que um painel verde é só metade da história.
+## Primeiro, separe o que foi lido do que foi concluído
 
-## Lado a lado: dependência morta e decisão ruim
+Vamos voltar ao pedido 1842. A proposta do assistente deveria deixar claras duas coisas:
 
-O primeiro artigo usa uma loja em que o frete está fora. O modo novo de falha fica ao lado daquele:
+- **Evidência:** "Foi consultado o resumo do pedido, atualizado às 10:02. Ele não mostrava estorno."
+- **Conclusão:** "O assistente sugere estornar R$ 120."
 
-![Dois desenhos da Ana. À esquerda, uma dependência caiu: a Ana chama a loja, a loja chama o frete, o frete está com borda vermelha tracejada e a palavra fora, e a legenda diz que a falha aparece como timeout ou HTTP 500, que é onde entram retry e fallback. À direita, uma decisão errou: a Ana chama um assistente que propõe um segundo estorno, a caixa do pagamento está verde com HTTP 200, e a legenda diz que as chamadas dão certo enquanto o estorno ainda estaria errado. O rodapé diz que é a mesma cliente e outro tipo de falha, e que o lado esquerdo é a loja do primeiro artigo de Design for Failure, desenhada menor](/images/posts/design-for-failure-agents/compare-pt.svg)
+Isso permite fazer a pergunta que faltou: **essa evidência é suficiente para esta ação?**
 
-Timeout é o tempo máximo que quem chama aceita esperar. HTTP 500 é o status usual de "o servidor falhou". Retry é tentar a mesma chamada de novo. Fallback é um caminho mais simples quando o principal não consegue terminar. Circuit breaker é parar de chamar uma dependência por um tempo, depois de falhas demais, como o disjuntor do primeiro artigo.
+Para responder ao usuário sobre a descrição de um produto, talvez um resumo seja suficiente. Para movimentar dinheiro, o desenho precisa consultar os registros financeiros relevantes e conferir as regras da operação.
 
-| | O frete está fora | A decisão de estorno está errada |
-| --- | --- | --- |
-| A pergunta | O que acontece com a compra quando uma dependência falha? | O que acontece quando o pagamento devolve 200 e a conclusão está errada? |
-| O que aparece | Timeout, HTTP 500 ou circuito aberto. | Chamadas verdes, e uma proposta ruim. |
-| Retry | A mesma chamada de frete, com backoff e jitter. | Um retry da mesma leitura. Um estorno novo é outra operação. |
-| Fallback | Outro jeito de concluir, ou um "hoje não dá para enviar" honesto. | Parar o estorno automático. Guardar o caso e dizer o que falta. |
-| Resposta perdida | A chamada pode já ter tido efeito. | A mesma regra, e a decisão não pode criar uma segunda operação. |
-| Onde a regra mora | No serviço que chama o frete. | Em código fora do modelo, conferida de novo antes de o dinheiro sair. |
+Também não basta exigir um **JSON** (JavaScript Object Notation, um formato de texto para dados estruturados) com os campos corretos. O valor `120` pode ser um número válido e continuar sendo o valor errado para aquela ação.
 
-Backoff é esperar mais a cada falha. Jitter é um pouco de aleatoriedade nessa espera, para vários clientes não tentarem de novo no mesmo instante. O primeiro artigo desenha isso. Não vou redesenhar aqui.
+Eu guardaria junto da proposta a origem da informação, o momento da leitura e a regra aplicada. Não uma transcrição do raciocínio interno do modelo, mas referências que permitam conferir o resultado.
 
-Os padrões antigos continuam valendo do lado esquerdo. Sozinhos, não respondem o lado direito.
+## Depois, separe propor de executar
 
-## Anote o que foi lido
+O agente pode investigar o pedido e escrever uma proposta. A permissão para executar o estorno fica em outra parte da aplicação, o **executor**.
 
-Uma proposta deveria carregar duas coisas diferentes:
+Pense na diferença entre preencher uma solicitação e ter acesso à conta que vai pagar por ela. Preencher corretamente não dá, por si só, permissão para enviar o dinheiro.
 
-- **Evidência:** quais registros foram lidos, e quando. Para a Ana, "resumo do pedido, tirado às 10:02".
-- **Interpretação:** o que o assistente concluiu. "Esta cobrança ainda precisa de um estorno de 120."
+O caminho seria este:
 
-Não precisa de uma transcrição do raciocínio privado do modelo. Precisa de uma trilha que uma pessoa consiga conferir. Pense num recibo grampeado na fotografia, não na fotografia fingindo que é o banco.
+![O usuário faz a solicitação, o agente prepara uma proposta e a política da aplicação verifica identidade, valor e aprovação. O executor revalida o pagamento e as regras antes de registrar e enviar a operação. Casos bloqueados seguem para revisão](/images/posts/design-for-failure-agents/proposal-pt.svg)
 
-E o recibo vence. Antes de o dinheiro sair, o executor (a parte do sistema que tem permissão de chamar o pagamento) lê o pagamento de novo. Uma evidência correta às 10:02 pode ser a base errada às 10:05.
+No nosso pedido, a nova consulta mostraria que já existe um estorno em processamento. **A proposta para ali.** O usuário pode receber uma explicação sobre o estorno existente, em vez de ganhar outra operação que ninguém pediu corretamente.
 
-## O agente propõe. A aplicação envia.
-
-A divisão importante não é "dois agentes". É **escrever uma proposta** versus **ter permissão para executá-la**.
-
-![Um fluxo vertical do pedido 1842. 1, o pedido da Ana. 2, o agente escreve uma proposta de estorno de 120 a partir do resumo das 10:02, numa caixa âmbar. 3, a política mora no código da aplicação e confere identidade, valor e qual aprovação. Uma seta âmbar para a direita diz não, ou falta algo, e cai numa fila de revisão em que uma pessoa vê a proposta e o buraco. Uma seta cinza para baixo diz sim, e a aprovação é desta proposta. 4, o executor lê o pagamento de novo porque o resumo pode estar velho. 5, grava um id da operação e só então envia. 6, numa caixa verde: se a resposta se perdeu, reconcilia com o mesmo id](/images/posts/design-for-failure-agents/proposal-pt.svg)
-
-A política fica em código e em dados que a aplicação controla. Ela confere quem é a Ana, qual é o pedido, quanto ainda pode ser estornado e se esta operação precisa de uma pessoa. Uma pessoa aprova uma proposta: este pedido, este valor. Se o assistente editar a proposta depois do "sim", a aprovação antiga não cobre o texto novo.
-
-Escrevi sobre permissões em [Guardrails e Fitness Functions para uma Arquitetura Amigável à IA](/pt-br/posts/guardrails-and-fitness-functions-for-ai-friendly-architecture/). A consequência para a confiabilidade é a curta: uma sugestão errada não pode virar um pagamento sozinha.
-
-Uma regra no código não prova que a regra de negócio está certa. Ela ainda precisa de revisão. O ganho é que a checagem não depende do humor do assistente.
-
-O esboço abaixo é para ensinar, do mesmo jeito que o PHP do primeiro artigo é para ensinar. Não é uma biblioteca.
+Um esboço ajuda a mostrar onde fica essa parada. É pseudocódigo didático, não uma implementação pronta:
 
 ```text
-proposal = agent.investigate("1842")
-# pode dizer: estorne 120, porque o resumo das 10:02 não mostrava estorno
+proposta = agente.investigar(solicitacao)
+pagamento = pagamentos.consultar(proposta.pagamento)
 
-if not policy.allows(proposal):
-    send_to_review(proposal)
-    stop
+decisao = politica.avaliar(
+    proposta,
+    pagamento,
+    aprovacao_do_caso
+)
 
-if proposal.needs_a_person and not approval.matches(proposal):
-    send_to_review(proposal)
-    stop
+se decisao != "permitido":
+    encaminhar_para_revisao(proposta, decisao)
+    parar
 
-payment = payments.read("1842")       # de novo, na hora de executar
-if payment.refund_in_progress:
-    send_to_review(proposal)
-    stop
-
-operation_id = store.get_or_create_id(case="1842-refund")
-payments.refund(operation_id, order="1842", amount=120)
+registrar_para_execucao_controlada(proposta)
 ```
 
-Leia isso junto com a história. O passo 2 do desenho é o `agent.investigate`. A parada no meio é o registro de pagamento das 10:04 que o resumo não tinha. O `operation_id` nasce no armazenamento, não é inventado de novo pelo modelo na tentativa seguinte.
+A **política** é a regra de negócio aplicada fora do modelo. Ela confere a identidade, o pagamento, o valor disponível e se aquela ação exige aprovação humana. Não é a proposta que escolhe se precisa de aprovação.
 
-## Dê um orçamento para a tarefa inteira
+Quando uma pessoa aprova, aprova aquela operação: aquele pagamento, aquele valor. Se a proposta mudar, a autorização anterior não serve para a nova versão.
 
-Cada chamada pode ter o próprio timeout enquanto a tarefa não tem nenhum.
+E uma leitura recente, sozinha, não resolve concorrência. Duas execuções podem ler o mesmo estado antes de qualquer uma atualizá-lo. O fluxo real ainda precisa de controles no armazenamento e no serviço de pagamento para impedir operações incompatíveis. O esboço mostra a divisão de responsabilidades, não substitui esses controles.
 
-O modelo chama uma ferramenta (uma função que ele pode executar, como "ler o pedido"), não gosta da resposta, chama outra, reescreve o plano e começa de novo. Cada chamada respeita o próprio prazo. A Ana continua esperando.
+A discussão sobre permissões está em [Guardrails e Fitness Functions para uma Arquitetura Amigável à IA](/pt-br/posts/guardrails-and-fitness-functions-for-ai-friendly-architecture/). Aqui, o ponto é não deixar uma sugestão errada atravessar a fronteira entre texto e efeito externo.
 
-Orçamento é um limite para a tarefa inteira. A nota da Anthropic sobre [construir agentes eficazes](https://www.anthropic.com/engineering/building-effective-agents) recomenda condições de parada, como um máximo de iterações, e aponta que erro e custo se acumulam quando um agente segue sozinho. A página diz que as ferramentas mudaram desde a publicação. Estou usando esse conselho de desenho, não uma receita de framework.
+## A tarefa inteira também precisa ter um limite
+
+Agora imagine que o pagamento não responde.
+
+O **timeout** é o máximo que uma chamada aceita esperar. O assistente pode respeitar o timeout, consultar outra ferramenta, reescrever o plano e tentar de novo. Cada chamada é curta. O atendimento inteiro não acaba.
+
+Uma **ferramenta**, aqui, é uma função disponível para o agente, como consultar o pedido. Repetir essa consulta depois de uma falha temporária é um **retry**, uma nova tentativa da mesma operação.
+
+A [orientação da Anthropic sobre construir agentes eficazes](https://www.anthropic.com/engineering/building-effective-agents) inclui condições de parada, como um máximo de iterações. Eu aplicaria isso à tarefa inteira, não só a cada chamada:
 
 ```yaml
-# Política para ensinar. Não é uma configuração real, nem uma recomendação.
+# Exemplo ilustrativo, não configuração de um framework.
 execution_budget:
   deadline_seconds: 20
   max_model_calls: 4
@@ -153,158 +135,129 @@ execution_budget:
   on_exhaustion: review_queue
 ```
 
-Esses números são inventados para mostrar o formato. Não são resultado de teste, e não são o que você deveria copiar para produção.
+Os números só mostram o formato de um orçamento. Não foram medidos neste artigo e não são limites recomendados para produção.
 
-O que importa é quem é dono do contador. O orçamento pertence à execução, não ao prompt. Replanejar não pode zerá-lo. Uma chamada que o agente delega também gasta o mesmo orçamento, inclusive os retries feitos numa camada de baixo.
+O importante é que o contador fique na aplicação. Replanejar não zera o orçamento. Delegar uma consulta também não cria tempo e tentativas extras. E o limite de uma tarefa não substitui um limite de concorrência para o serviço inteiro.
 
-Separe o limite de uma tarefa do limite do serviço inteiro. Muitas tarefas pequenas ainda podem afogar o pagamento. Uma fila só para isso, e um teto de quantas investigações rodam ao mesmo tempo, evitam que elas comam o atendimento normal. Não basta se os dois caminhos ainda dividirem um pool de banco sem limite.
+Se o prazo acabar com uma chamada em andamento, isso não prova que a operação remota foi cancelada. Vamos voltar a esse caso mais adiante.
 
-Mais um lembrete, que já vale para timeout comum: o prazo acabou para quem está esperando. Isso não prova que o estorno remoto foi cancelado.
+**Em resumo:** o agente pode escolher caminhos, mas não pode escolher uma quantidade infinita de caminhos.
 
-## Repita a chamada. Não repita o estorno.
+## Tentar de novo também pode piorar a falha
 
-A [Amazon Builders' Library](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/) faz dois pontos que continuam úteis aqui. Retries empilhados em várias camadas multiplicam a carga. E um timeout não significa que a chamada não teve efeito.
+A [Amazon Builders' Library](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/) mostra por que tentativas em várias camadas se multiplicam.
 
-Com um assistente no caminho, eu separaria três verbos:
+Suponha que o fluxo faça até três tentativas. A ferramenta chamada por ele também faz até três. O cliente que conversa com a API faz mais três. No pior caso dessa combinação, são `3 × 3 × 3 = 27` tentativas na dependência, contando a primeira de cada camada. É uma conta ilustrativa, não um resultado de teste.
 
-- **Retry de transporte:** repetir a mesma leitura depois de um soluço, dentro das regras daquela API.
-- **Revisão:** buscar mais evidência, porque a proposta ainda não passa na política.
-- **Operação nova de negócio:** começar outro estorno. Isso não é um retry inofensivo.
+Dar mais tempo para o modelo "pensar melhor" não resolve essa multiplicação. É preciso definir onde as novas tentativas acontecem e contabilizar o trabalho feito nas camadas de baixo.
 
-Se o fluxo permitir 3 tentativas, a ferramenta permitir 3 e o cliente HTTP permitir 3, o produto é `3 × 3 × 3 = 27` chamadas no pior caso. A conta inclui a primeira tentativa de cada camada. É aritmética, para a multiplicação ficar fácil de ver. Não é um número que a Amazon publicou, e não é resultado de laboratório.
+O primeiro artigo já explica **backoff**, o aumento do intervalo entre tentativas, e **jitter**, a aleatoriedade nesse intervalo para que vários clientes não repitam juntos. Isso continua valendo. A novidade é não confundir três coisas:
 
-Trocar o nome de cada repetição não alivia a carga. O sistema precisa de um lugar explícito onde retry é permitido, e de um limite compartilhado que enxergue o trabalho real.
+1. Repetir uma consulta que falhou.
+2. Buscar outra evidência para revisar uma conclusão.
+3. Criar um novo estorno.
 
-Para qualquer coisa que mexe em dinheiro, a identidade da operação tem de sobreviver à repetição. A camada confiável cria esse id e guarda. O modelo não ganha o direito de criar outro porque a primeira resposta demorou.
+As duas últimas não são retries de transporte. Precisam de limites e regras próprios.
 
-A [documentação de idempotência da Stripe](https://docs.stripe.com/api/idempotent_requests) é um contrato concreto disso, e só para a API v1. Idempotência quer dizer que fazer a operação duas vezes tem o mesmo efeito que fazer uma vez. Na v1, depois que o endpoint começou a rodar, o primeiro resultado fica salvo. A mesma chave devolve esse resultado salvo. A mesma chave com parâmetros diferentes é rejeitada. As chaves podem ser removidas depois de pelo menos 24 horas. A API v2 é outro contrato, então este parágrafo não a descreve.
+## Uma resposta perdida não é um estorno recusado
 
-Isso não é uma promessa universal de execução única. Ainda é preciso respeitar a janela do provedor, e ainda é preciso barrar duplicata no próprio banco.
+A proposta duplicada foi barrada. Agora vamos olhar outra falha possível, no estorno legítimo.
 
-E idempotência não corrige a intenção. Um estorno errado de 120 continua errado se acontecer uma vez só.
+A aplicação envia a solicitação. O provedor aceita. Antes de a resposta chegar, a conexão cai.
 
-## Quando não der para terminar, pare de decidir
+Para o provedor, a operação existe. Para a loja, o resultado ainda não foi confirmado. Se o assistente interpretar o timeout como "não aconteceu" e criar outra operação, pode transformar um problema de comunicação em uma tentativa duplicada.
 
-Trocar de modelo pode ser uma escolha de disponibilidade. Se o problema é que a evidência do pagamento não está lá, outro modelo não inventa a linha que falta.
+Por isso, **desconhecido precisa ser um estado de verdade**, não um sinônimo de falha.
 
-Para a Ana, o fallback é modesto:
+![Três estados da operação: intenção registrada, resultado desconhecido após o envio e resultado conhecido após confirmação. Enquanto o resultado estiver desconhecido, o sistema reconcilia a mesma operação em vez de criar outro estorno](/images/posts/design-for-failure-agents/outcome-pt.svg)
 
-- dizer que a investigação não terminou;
-- guardar o que for preciso para retomar o caso;
-- mandar a proposta e a evidência para a fila de revisão;
-- não criar outro estorno enquanto o primeiro resultado for desconhecido.
+O executor registra a intenção e uma identidade da operação antes do envio. Se precisar retomar, continua investigando **aquela operação**. Esse registro ajuda na recuperação, mas não cria uma transação única entre o banco da loja e o provedor.
 
-O sistema para de resolver o caso sozinho. Ainda consegue dizer o que aconteceu e o que falta.
+É aqui que entra a **idempotência**: repetir a mesma operação sem repetir o efeito de negócio. A [documentação da Stripe](https://docs.stripe.com/api/idempotent_requests) dá um exemplo concreto. Na API v1, a mesma chave permite recuperar o resultado salvo de uma requisição cuja execução começou. Há regras sobre parâmetros e retenção; não é uma promessa de que qualquer repetição será segura para sempre.
 
-A fila precisa de dono, capacidade, prazo e alerta. Mandar todo caso para uma pessoa, e nunca olhar a pilha, só muda o endereço da falha.
+A chave identifica uma operação de negócio, não toda a vida de um pedido. Dois estornos parciais legítimos podem ser operações diferentes. O erro é criar outra identidade para a mesma intenção só porque a resposta se perdeu.
 
-Um circuit breaker que olha timeout pode proteger a API de pagamento e ainda deixar passar uma proposta ruim, porque a proposta ruim volta rápido e com status 200. Se a barra de qualidade deixou de ser atingida, eu pausaria a execução automática deste fluxo com um interruptor separado. Não esperaria um 500.
+A recuperação usa o contrato disponível: consulta de status, evento do provedor ou repetição com a mesma chave quando isso for suportado. Esse processo de conferir o estado local com o remoto é a **reconciliação**.
 
-## Resposta perdida ganha um estado próprio
+E vale separar duas proteções: a idempotência evita repetir o efeito; a política verifica se o efeito deveria acontecer. Um estorno errado continua errado se acontecer uma vez só.
 
-O caso que eu mais quero ver nos testes: o executor envia o estorno, o provedor aceita e a resposta se perde.
+## O plano B pode ser parar
 
-O que o sistema sabe?
+**Fallback** é o caminho alternativo quando o principal não consegue concluir. Neste atendimento, não precisa ser outro modelo tentando adivinhar o pagamento.
 
-Não sabe que o estorno falhou. **Sabe que ainda não confirmou o resultado.**
+Pode ser algo bem mais simples: guardar o caso, informar que a análise ainda não terminou e encaminhar a evidência para uma pessoa responsável. Sem criar outro estorno enquanto o resultado anterior estiver indefinido.
 
-![Três estados de um estorno. REGISTRADO significa que a intenção está salva e nada foi enviado. Uma seta com o rótulo enviou vai para DESCONHECIDO, em que a requisição saiu e a resposta não foi gravada. Uma seta com o rótulo confirmou vai para CONHECIDO, em que sucesso ou falha estão confirmados. Um texto em vermelho diz para não abrir um segundo estorno a partir de DESCONHECIDO. Confirme lendo o provedor, ou repetindo o mesmo id da operação onde a API permitir. Um id para o caso inteiro](/images/posts/design-for-failure-agents/outcome-pt.svg)
+A fila precisa de capacidade, prazo e alerta. Caso contrário, o sistema parece disponível enquanto o trabalho só muda de lugar e se acumula.
 
-O executor deveria gravar a intenção e o id antes de enviar. Isso ajuda se o processo cair. Não cria uma transação atômica entre o seu banco e o provedor. Continuam sendo dois sistemas.
+O **circuit breaker**, o disjuntor que interrompe chamadas a uma dependência após falhas demais, continua útil para falhas de comunicação. Mas uma proposta errada pode chegar rápido, sem erro técnico. Por isso eu também teria uma forma de pausar a execução automática quando os critérios do fluxo deixarem de ser atendidos.
 
-Na volta, use o contrato que você realmente tem: uma leitura de status, um evento do provedor, ou um retry com a mesma chave onde isso for suportado. Enquanto o resultado for desconhecido, o caso não pode ganhar um segundo estorno incompatível. Isso é uma trava no banco, não uma frase no prompt.
+Se uma operação já aconteceu, desligar o agente não a desfaz. Uma **compensação** é outra ação que tenta corrigir seu efeito e também pode falhar. É a discussão de saga, a sequência de operações e compensações do primeiro artigo. E nem todo efeito volta atrás: corrigir o pagamento não apaga uma informação errada que já foi enviada ao usuário.
 
-Uma compensação (uma ação posterior que tenta desfazer a primeira) é outra operação, e também pode falhar. A saga do primeiro artigo é essa conversa para uma compra que ficou pela metade. Nem todo efeito se desfaz: devolver o dinheiro não apaga a mensagem errada que a Ana já recebeu.
+## Como conferir se o desenho funciona
 
-## Teste a falha antes de permitir a ação
+A tabela abaixo é uma proposta de testes, não um relato de testes executados:
 
-Um primeiro conjunto útil de casos, com o comportamento esperado escrito:
-
-| O que é injetado | O que deveria acontecer |
+| Cenário do teste | O que o teste deve verificar |
 | --- | --- |
-| Evidência velha ou contraditória | A execução automática para, e o fato que falta fica visível. |
-| Proposta bem formada que fura a política | O executor rejeita antes de qualquer efeito externo. |
-| O orçamento da tarefa acaba durante um replanejamento | A tarefa para, e o orçamento não é zerado. |
-| A resposta se perde depois de o provedor aceitar | O caso entra em reconciliação, e não aparece um segundo id. |
-| O processo morre depois do envio e antes de gravar a resposta | A retomada trata o resultado como desconhecido. |
-| Duas execuções mexem no mesmo caso | O armazenamento barra estornos incompatíveis. |
-| Existe uma aprovação, e depois o pagamento muda | O executor lê de novo e interrompe a ação se precisar. |
-| A fila de revisão começa a encher | O teto e o alerta tornam a pilha visível. |
+| O assistente recebe o resumo antigo do pedido 1842. | A proposta não é executada sem consultar o pagamento e validar a política. |
+| A proposta tem o formato certo, mas o estorno já está em andamento. | A aplicação bloqueia a nova operação. |
+| O agente replaneja depois de gastar o orçamento. | O contador não recomeça e o caso segue para a saída prevista. |
+| A resposta se perde depois da aceitação do provedor. | A operação entra em reconciliação, sem ganhar outra identidade. |
+| Duas execuções tentam agir sobre o mesmo pagamento. | Os controles impedem operações incompatíveis. |
+| O pagamento muda depois da aprovação humana. | A autorização e o estado são revalidados antes do efeito. |
 
-Esta tabela é um plano. Não é um laboratório executado para este artigo, e as linhas não são medições.
+Um [estudo sobre verificações em agentes de programação](https://martinfowler.com/articles/are-harnesses-worth-the-cost.html) separa orientação de checagens executáveis. O contexto é diferente deste atendimento. O princípio que interessa aqui é o mesmo: "terminei" não substitui uma verificação independente do resultado.
 
-Naresh Jain descreve uma separação útil entre orientação e verificações que de fato rodam, em [Are Harnesses Worth the Cost?](https://martinfowler.com/articles/are-harnesses-worth-the-cost.html). Harness, naquele texto, é a maquinaria em volta de um agente de programação. O experimento é sobre agentes de programação, não sobre este assistente de atendimento, e não é evidência de que o estorno da Ana foi testado. A parte que eu quero é a separação em si: o assistente dizer "terminei" não é a verificação.
+Além dos testes, eu acompanharia propostas rejeitadas, casos que pararam por falta de evidência, operações com resultado desconhecido e tempo de espera na revisão. O artigo sobre [observabilidade de agentes com OpenTelemetry](/pt-br/posts/agent-observability-with-opentelemetry/) explica a infraestrutura. OpenTelemetry é um projeto aberto para instrumentar e transportar dados de observabilidade, como métricas e rastros de execução.
 
-A última frase da proposta não basta. O teste tem de olhar o que foi lido, o que foi barrado e o que de fato mudou.
+Nenhum desses números prova qualidade sozinho. É preciso revisar também casos aprovados e entender se mudou o modelo, a política ou o tipo de solicitação. E não colocar dados pessoais em rótulos de métricas nem guardar todo prompt por padrão. O **prompt** é a entrada de instruções e contexto enviada ao modelo.
 
-## Conte resultados, e só então abra a porteira
+Eu começaria em **modo sombra**: preparar propostas para comparação, sem permissão de estornar. Depois, revisão humana. Só então, se as evidências justificarem, execução automática em um recorte aprovado, com um jeito de desligá-la. O modo sombra também lê dados e consome recursos; não fica fora dos limites.
 
-Em [Observabilidade de Agentes com OpenTelemetry](/pt-br/posts/agent-observability-with-opentelemetry/) eu escrevi sobre ligar atividade a resultado. OpenTelemetry é um jeito comum de exportar rastros e métricas. Para este fluxo, eu olharia estas contagens:
+## Um checklist para levar para o projeto
 
-- Quantas propostas a política rejeitou, e por quê?
-- Quantas tarefas pararam por evidência faltando ou orçamento esgotado?
-- Quantas operações estão desconhecidas, e há quanto tempo?
-- Quantos casos estão esperando, e quantos uma pessoa corrigiu?
-- Depois de uma mudança, quais erros aparecem nos casos que uma pessoa revisou?
+Antes de liberar uma ação, vale conferir:
 
-Uma rejeição não prova que o assistente piorou. Os pedidos podem ter mudado. Uma fila curta também não prova qualidade. O sistema pode estar aceitando o que deveria segurar. As contagens precisam de contexto, inclusive de uma olhada nos casos que foram aprovados.
-
-Eu registraria a versão do modelo, a versão do prompt e a versão da política, mais os ids necessários para investigar uma operação, com acesso e retenção decididos antes. Eu não colocaria os dados da Ana em rótulo de métrica, e não guardaria todo prompt por padrão.
-
-Antes de qualquer escrita, o fluxo pode rodar em modo sombra: ele prepara propostas para comparação, e não tem permissão de estornar. Modo sombra ainda gasta orçamento e ainda lê dados, então precisa dos mesmos limites.
-
-Depois, uma pessoa revisa as propostas. Só então, se a evidência sustentar, execução automática dentro de um recorte que o negócio aprovou, com um interruptor que desliga a autonomia sem parar o atendimento comum. O interruptor barra ações novas. Não desfaz ações que já aconteceram.
-
-## Um checklist deste desenho
-
-Se eu estivesse revisando o desenho do assistente da Ana, eu procuraria estes itens e pararia quando um faltasse:
-
-1. **Uma história.** Um único pedido, com horários, para uma pessoa conseguir apontar o passo que errou.
-2. **Evidência separada da conclusão.** Registros lidos, e quando, grampeados na proposta.
-3. **Política fora do modelo.** Identidade, valor e aprovação moram no código.
-4. **Aprovação grudada numa proposta.** Uma edição depois do "sim" devolve o caso.
-5. **Uma leitura na hora de executar.** O resumo das 10:02 não pode mover dinheiro às 10:05.
-6. **Um orçamento para a tarefa.** Replanejar não zera o contador.
-7. **Retries com nome.** Mesma leitura, mais evidência, ou estorno novo. Só o primeiro é retry de transporte.
-8. **Um id de operação, criado no armazenamento.** O modelo não cria outro a cada tentativa.
-9. **Desconhecido como estado de verdade.** Resposta perdida vai para reconciliação, não para um segundo estorno.
-10. **Um fallback que para.** Evidência faltando vai para uma fila com dono e alerta.
-11. **Um interruptor.** Sombra, depois uma pessoa, depois automático, e um jeito de barrar ações novas.
+- [ ] A proposta distingue o que foi consultado do que foi concluído?
+- [ ] As evidências são adequadas à ação e revalidadas quando necessário?
+- [ ] A política e a exigência de aprovação são controladas fora do modelo?
+- [ ] A aprovação corresponde exatamente à operação que será executada?
+- [ ] Existem controles para concorrência e operações incompatíveis?
+- [ ] A tarefa tem orçamento total, incluindo delegações e novas tentativas?
+- [ ] A mesma operação preserva sua identidade durante a recuperação?
+- [ ] Resultado desconhecido leva à reconciliação, não a uma nova movimentação?
+- [ ] A revisão tem responsável, capacidade e prazo?
+- [ ] É possível observar os resultados e desligar novas ações automáticas?
 
 ## Glossário rápido {#glossary}
 
-Cada termo uma vez, na ordem em que importou acima:
-
-| Termo | Numa frase |
+| Termo | Em uma frase |
 | --- | --- |
-| Agente | Um programa que usa um modelo para escolher o próximo passo. |
-| Modelo | A peça que lê o pedido e propõe o próximo passo. |
-| Ferramenta | Uma função que o modelo pode chamar, como "ler o pedido". |
-| API | A interface que outro programa chama. |
-| JSON | Um formato de texto para dados estruturados. |
-| HTTP 200 / 500 | "Esta chamada deu certo" / "o servidor falhou". |
-| Timeout | O máximo que quem chama espera. |
-| Retry | Tentar a mesma chamada de novo. |
-| Backoff | Esperar mais a cada falha. |
-| Jitter | Um pouco de aleatoriedade nessa espera. |
-| Fallback | Um caminho mais simples quando o principal não termina. |
-| Circuit breaker | Uma pausa nas chamadas a uma dependência depois de falhas demais. |
-| Saga | Um jeito de desfazer uma compra que ficou pela metade, do primeiro artigo. |
-| Evidência | Os registros que foram lidos, e quando. |
-| Proposta | O que o assistente acha que deveria acontecer em seguida. |
-| Executor | A parte que tem permissão de chamar o pagamento. |
-| Idempotência | Fazer duas vezes tem o mesmo efeito que fazer uma vez. |
-| Id da operação | A identidade de um estorno, reusada em todo retry. |
-| Orçamento | Um limite para a tarefa inteira, não para uma chamada. |
-| Resultado desconhecido | A requisição saiu, e a resposta não foi gravada. |
-| Reconciliação | Ler o provedor até o resultado ser conhecido. |
-| Modo sombra | As propostas são preparadas, e escritas não são permitidas. |
-| OpenTelemetry | Um jeito comum de exportar rastros e métricas. |
+| IA | Inteligência artificial; aqui, usada para interpretar pedidos e propor passos. |
+| Agente | Programa que usa um modelo para escolher ações dentro de um fluxo. |
+| Ferramenta | Função que o agente pode chamar, como consultar o pagamento. |
+| API | Interface de programação de aplicações, por onde um programa usa outro. |
+| HTTP | Protocolo de comunicação web; 200 indica sucesso daquela requisição, não da decisão inteira. |
+| JSON | Formato de texto para representar dados estruturados. |
+| Evidência | Informação consultada, com origem e momento da leitura. |
+| Política | Regras que determinam se uma ação pode acontecer. |
+| Executor | Parte da aplicação que tem permissão para realizar a ação. |
+| Timeout | Limite de espera por uma chamada. |
+| Retry | Nova tentativa da mesma operação. |
+| Backoff e jitter | Espera entre tentativas, com aumento de intervalo e aleatoriedade. |
+| Orçamento | Limites de tempo e trabalho para a tarefa inteira. |
+| Idempotência | Repetir uma operação sem repetir seu efeito de negócio. |
+| Reconciliação | Conferir o estado local com o remoto para esclarecer o resultado. |
+| Fallback | Caminho alternativo quando o principal não conclui. |
+| Circuit breaker | Interrupção temporária das chamadas após um limite de falhas. |
+| Saga | Sequência de operações com compensações para lidar com falhas parciais. |
+| Prompt | Entrada de instruções e contexto enviada ao modelo. |
+| Modo sombra | Preparar propostas para avaliação sem executar as ações de negócio. |
 
-Timeout, retry, fallback e recuperação não ficaram menos úteis porque um modelo entrou no fluxo.
+## Para fechar
 
-O alvo ficou maior. Além de impedir que uma dependência morta derrube a loja, a gente precisa impedir que uma conclusão ruim ganhe permissão, se repita sem limite e mova um dinheiro que ninguém consegue explicar depois.
+O pedido 1842 não precisava de um modelo mais convincente. Precisava de uma consulta que faltou, de uma regra fora do modelo e de uma aplicação capaz de dizer "esta ação não pode passar".
 
-Para mim, Design for Failure com um agente começa aqui: **definir o que pode ser proposto, conferir o que pode ser executado e saber o que fazer quando a tarefa não pode terminar.**
+É isso que eu levaria do Design for Failure para agentes. Os cuidados com rede continuam. A responsabilidade pela decisão aumenta.
 
-Às vezes, a decisão mais confiável é não decidir sozinho.
+**Dar autonomia não é retirar as regras. É definir até onde o sistema pode ir e o que acontece quando ele precisa parar.**

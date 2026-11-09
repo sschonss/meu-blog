@@ -1,151 +1,133 @@
 ---
 title: 'From microservices to agents: Design for Failure when the system makes its own decisions'
 date: 2026-11-16T07:00:00-03:00
-description: 'A support assistant can get HTTP 200 from every call and still refund the same order twice. One fictional purchase, walked step by step: evidence, proposal, budget, retries and a lost answer.'
+description: 'The calls succeeded, but the agent proposed the wrong refund. A step-by-step story about limits, retries, approval, and recovering an operation without repeating it.'
 translationKey: design-for-failure-agents
 draft: false
 tags: ['Architecture', 'AI', 'Microservices']
 ---
 
-Ana writes to the store: "I was charged twice."
+"I was charged twice."
 
-The assistant looks the order up, the calls succeed, and the screen stays green. Then it prepares a second refund for a payment that is already being refunded.
+The user contacts the store, the assistant looks up the order, and it suggests a refund. The task looks solved. There is just one detail: that payment was already being refunded.
 
-Nothing crashed. The customer can still lose money.
+No server went down. No call returned an error. The proposal was still wrong.
 
-In [Design for Failure: wait, my system fails?](/posts/design-for-failure/) I wrote about retry, fallback, circuit breaker and saga: what the rest of the system should do when a dependency fails. Those patterns still matter. An agent (a program that asks a model what to do next) does not fix the network, and it does not make a payment safe to repeat.
+In [Design for Failure: wait, my system fails?](/posts/design-for-failure/), the question was what happens to the rest of the store when a dependency stops responding. Now I want to continue that conversation with another question: **what happens when everything responds, but the system chooses the wrong next step?**
 
-It adds a second question. **What happens when the calls work and the decision is wrong?**
+This is part of the challenge of adding AI (artificial intelligence) agents to an application. Here, an agent is a program that uses a language model to choose actions, such as looking up an order, gathering more information, or preparing a response. It does not replace the whole store. It participates in one part of support.
 
-This article follows one fictional order from the message to the refund, and stops there. It does not turn the whole store into agents. Every acronym is explained the first time it shows up, and the [glossary](#glossary) at the end repeats them in one line. The amount 120 and the clock times are made up, so the story is easy to follow. They are not measurements.
+Let's follow that part from beginning to end. The order, amounts, and times below are fictional. They explain the design; they are not a production story or results from a lab.
 
-## One order, from 10:01 to 10:05
+## One order in five moments
 
-Let's stay with Ana. Order 1842. One purchase of 120.
+The order is **1842**, a purchase of **R$120**, in Brazilian reais. The illustrative times use Brasília Time (BRT).
 
-1. **10:01.** Ana pays 120. The payment service (the system that actually moves the money) records one successful charge.
-2. **10:03.** A refund of those same 120 starts. Maybe the item was out of stock. The payment service now knows a refund is processing. Ana does not.
-3. **10:04.** Ana writes "I was charged twice." She is describing the feeling, not the ledger.
-4. **10:04, a few seconds later.** The assistant reads an order summary that was built at 10:02. That summary says: one charge, no refund.
-5. **10:05.** The assistant proposes another refund of 120. It never asks the payment service again.
+1. **At 10:01, payment is confirmed.** The store records one charge of R$120.
+2. **At 10:02, an order summary is updated.** At that moment, it shows one charge and no refund.
+3. **At 10:03, the store starts a refund.** The payment service, which maintains the record of financial movements, already knows about it. The summary has not been updated yet.
+4. **At 10:04, the user asks for help.** They say they were charged twice. The assistant reads the 10:02 summary but does not check the payment's current state.
+5. **At 10:05, the assistant suggests another refund.** It has turned incomplete information into an action that should not happen.
 
-If that proposal is allowed to run, Ana receives 240 back for a purchase of 120. Every call the assistant made can still return HTTP 200, the usual "this call succeeded" status.
+Notice the jump between the last two steps. "The summary shows no refund" became "a refund is needed." Those are not the same statement.
 
-The same sentence from a customer is not always the same action:
+The user's message starts an investigation. It does not authorize a refund. Two confirmed charges, two payment attempts, and a refund in progress are different situations. Before choosing an action, the store needs to determine which one happened.
 
-| What "I was charged twice" might mean | What the store should do |
-| --- | --- |
-| Two successful charges | Refund the extra one, once. |
-| Two attempts, and only one charge stuck | Do not refund. |
-| One charge, and a refund already processing | Do not refund again. |
+An **API** (Application Programming Interface) lets one program interact with another. For these queries, **HTTP** (Hypertext Transfer Protocol, the protocol used for web communication) returns a status code. A `200 OK` means that particular request succeeded. It does not certify the conclusion the assistant drew from the response.
 
-The rest of the article stays on the third row, because that is the row a stale summary hides. A stale read is a copy that was true earlier and is no longer the whole story.
+![Two views of order 1842: the 10:02 summary shows a charge of 120 with no refund, while the payment record at 10:04 already shows a refund processing. The assistant only consulted the old summary](/images/posts/design-for-failure-agents/story-en.svg)
 
-Here are the two pictures, side by side:
+If the application accepts the proposal without checking payment, it might try to create a duplicate operation. That does not mean the provider will necessarily refund the money twice: it might have controls that block the attempt. The error we can already identify happens earlier, in the proposal and the missing barrier around it.
 
-![Two cards for fictional order 1842. On the left, what the assistant read: a summary taken at 10:02, one charge of 120, refund none, and the assistant treats that as an open charge. On the right, what the payment service knows at 10:04: the same charge, plus a refund of 120 already processing, which the assistant did not ask for. A note says 120 is made up, the calls can still return HTTP 200, and a new refund is a new business operation, not a retry of the read](/images/posts/design-for-failure-agents/story-en.svg)
+**In short:** the assistant read an old snapshot. The application cannot treat that snapshot as authorization to move money now.
 
-**In short:** the assistant answered a photograph from 10:02, and the money lives in a record from 10:04.
+## From microservices to agents: what changes?
 
-## A 200 is not a clean bill of health
+Microservices divide an application into smaller services with their own responsibilities. In the [first article's example](/posts/design-for-failure/), the store talks to inventory, shipping, and payment. If shipping does not respond, the purchase needs a way forward.
 
-An API is the interface another program calls. JSON is a text format for structured data, the shape of the answer. Checking that the JSON has the right fields tells you the answer is well formed. It does not tell you the refund is the right one.
+An agent adds a choice along that path. Instead of only following a sequence defined in code, the model can decide whether to query payment, ask for more information, or close the support conversation. This is the perspective an [InfoQ article calls decision decomposition](https://www.infoq.com/articles/distributed-systems-microservices-agentic-ai/).
 
-This did not start with AI. A normal service can also return 200 with the wrong total. The difference here is that the model chooses part of the next step: what to look up, which note to trust, and when to stop.
+It does not mean traditional services only fail by going down. They can also calculate wrong amounts or use old data. The difference is having another source of decisions to constrain and verify.
 
-Mallika Rao describes that shift as moving from breaking a system into functions to [breaking it into decisions](https://www.infoq.com/articles/distributed-systems-microservices-agentic-ai/). I find that a useful lens. It is not an order to replace the store's services with agents.
+![A comparison between an unavailable dependency, with shipping down, and an incorrect decision, with the assistant proposing another refund even though the queries return successfully](/images/posts/design-for-failure-agents/compare-en.svg)
 
-Three questions, and only one of them is the HTTP status:
-
-| Layer | The question | What can still be wrong on order 1842 |
+| Question | Flow defined in services | Flow with an agent choosing steps |
 | --- | --- | --- |
-| Transport | Did the call answer in time? | The answer can be about another purchase. |
-| Contract | Are the fields and types the ones we expect? | A well formed amount can still break the refund rules. |
-| Business | Does this proposal match the current evidence? | The 10:02 summary is not enough to send money. |
+| Who chooses the next step? | Application code. | The model makes some choices within limits set by the application. |
+| What can fail? | The call, the data, and the business rule. | All of those, plus tool selection, interpretation, and deciding when to stop. |
+| What does a 200 response confirm? | That particular request succeeded. | The same thing. It does not confirm decision quality. |
+| What is safe to repeat? | An operation whose repetition is safe. | The same rule applies. Replanning does not authorize another financial operation. |
+| Who protects payment? | The payment service's rules and controls. | The same controls. The model does not gain permission to ignore them. |
+| What if the task cannot be completed? | The flow follows a predefined alternative. | The task must stop or go to review, without inventing missing information. |
 
-Asking the model "are you sure?" does not replace a read of the payment.
+The familiar patterns still help. But wrapping the agent in more retries and hoping one works is not enough.
 
-Rao's article also talks about decisions getting worse as they pass from step to step, and about context that does not match, even when no server is down. That does not mean every long chain fails. It means a green dashboard is only half of the story.
+## First, separate what was read from what was concluded
 
-## Side by side: a dead dependency and a bad decision
+Back to order 1842. The assistant's proposal should make two things clear:
 
-The first article uses a store where shipping is down. The new failure mode sits next to that one:
+- **Evidence:** "The order summary, updated at 10:02, was consulted. It showed no refund."
+- **Conclusion:** "The assistant suggests refunding R$120."
 
-![Two drawings of Ana. On the left, a dependency is down: Ana calls the store, the store calls shipping, shipping is drawn with a dashed red border and the word down, and the caption says the failure is visible as a timeout or HTTP 500, which is where retry and fallback belong. On the right, a decision is wrong: Ana calls an assistant that proposes a second refund, the payment box is green with HTTP 200, and the caption says the calls succeed while the refund would still be wrong. The footer says it is the same customer and a different kind of failure, and that the left side is the store from the first Design for Failure article, drawn smaller](/images/posts/design-for-failure-agents/compare-en.svg)
+That lets us ask the missing question: **is this evidence sufficient for this action?**
 
-A timeout is the maximum time the caller will wait. HTTP 500 is the usual "the server failed" status. Retry means trying the same call again. Fallback means a simpler path when the main one cannot finish. A circuit breaker stops calling a dependency for a while after too many failures, like the electrical breaker in the first article.
+An order summary might be enough to answer a question about a product description. For moving money, the design needs to consult the relevant financial records and check the operation's rules.
 
-| | Shipping is down | The refund decision is wrong |
-| --- | --- | --- |
-| The question | What happens to the purchase when a dependency fails? | What happens when payment returns 200 and the conclusion is wrong? |
-| What you see | Timeout, HTTP 500, or an open circuit. | Green calls, and a bad proposal. |
-| Retry | The same shipping call, with backoff and jitter. | A retry of the same read. A new refund is a different operation. |
-| Fallback | Another way to finish, or an honest "we cannot ship today". | Stop the automatic refund. Keep the case, and say what is missing. |
-| A lost answer | The call may already have had an effect. | Same rule, and the decision must not create a second operation. |
-| Where the rule lives | In the service that calls shipping. | In code outside the model, checked again before the money moves. |
+Requiring a **JSON** (JavaScript Object Notation, a text format for structured data) response with the correct fields does not solve that. The value `120` can be a valid number and still be the wrong amount for the action.
 
-Backoff means waiting longer after each failure. Jitter means a little randomness in that wait, so many clients do not retry on the same instant. The first article draws that. I will not redraw it here.
+I would keep the information's source, the time it was read, and the rule applied alongside the proposal. Not a transcript of the model's internal reasoning, but references that let someone verify the result.
 
-The old patterns still apply on the left. They do not, by themselves, answer the right.
+## Then, separate proposing from executing
 
-## Write down what was read
+The agent can investigate the order and write a proposal. Permission to execute the refund stays in another part of the application: the **executor**.
 
-A proposal should carry two different things:
+Think of the difference between filling out a request and having access to the account that will pay for it. Filling it out correctly does not, by itself, authorize sending the money.
 
-- **Evidence:** which records were read, and when. For Ana, "order summary, taken at 10:02".
-- **Interpretation:** what the assistant concluded. "This charge still needs a refund of 120."
+The path would look like this:
 
-We do not need a transcript of the model's private reasoning. We need a trail a person can check. Think of it as a receipt stapled to the photograph, not as the photograph pretending to be the bank.
+![The user makes a request, the agent prepares a proposal, and application policy checks identity, amount, and approval. The executor revalidates payment and rules before recording and sending the operation. Blocked cases go to review](/images/posts/design-for-failure-agents/proposal-en.svg)
 
-And the receipt expires. Before money moves, the executor (the part of the system that is allowed to call the payment service) reads the payment again. Correct evidence at 10:02 can be the wrong basis at 10:05.
+For our order, the new query would show that a refund is already processing. **The proposal stops there.** The user can receive an explanation about the existing refund instead of another operation that was never properly justified.
 
-## The agent proposes. The application sends.
-
-The important split is not "two agents". It is **writing a proposal** versus **having permission to run it**.
-
-![A vertical flow for order 1842. 1, Ana's request. 2, the agent writes a proposal to refund 120 from the 10:02 summary, in an amber box. 3, policy lives in application code and checks identity, amount and which approval. An amber arrow to the right is labeled not allowed, and lands in a review queue where a person sees the proposal and the gap. A gray arrow down says yes, and the approval matches this proposal. 4, the executor reads the payment again because the summary can be stale. 5, save one operation id, then send. 6, in a green box: if the answer is lost, reconcile with that same id](/images/posts/design-for-failure-agents/proposal-en.svg)
-
-The policy stays in code and data the application owns. It checks who Ana is, which order this is, how much is still refundable, and whether this operation needs a person. A person approves one proposal: this order, this amount. If the assistant edits the proposal after the "yes", the old approval does not cover the new text.
-
-I wrote about permissions in [Guardrails and Fitness Functions for AI-Friendly Architecture](/posts/guardrails-and-fitness-functions-for-ai-friendly-architecture/). The reliability consequence is the short one: a wrong suggestion must not become a payment by itself.
-
-A rule in code is not proof that the rule is the right business rule. It still needs review. The gain is that the check does not depend on the assistant's mood.
-
-The sketch below is for teaching, the same way the PHP in the first article is for teaching. It is not a library.
+A small sketch shows where that stop belongs. This is teaching pseudocode, not a ready-to-use implementation:
 
 ```text
-proposal = agent.investigate("1842")
-# may say: refund 120, because the 10:02 summary showed no refund
+proposal = agent.investigate(request)
+payment = payments.read(proposal.payment)
 
-if not policy.allows(proposal):
-    send_to_review(proposal)
+decision = policy.evaluate(
+    proposal,
+    payment,
+    case_approval
+)
+
+if decision != "allowed":
+    send_to_review(proposal, decision)
     stop
 
-if proposal.needs_a_person and not approval.matches(proposal):
-    send_to_review(proposal)
-    stop
-
-payment = payments.read("1842")       # again, at execution time
-if payment.refund_in_progress:
-    send_to_review(proposal)
-    stop
-
-operation_id = store.get_or_create_id(case="1842-refund")
-payments.refund(operation_id, order="1842", amount=120)
+record_for_controlled_execution(proposal)
 ```
 
-Read it against the story. Step 2 of the drawing is `agent.investigate`. The stop in the middle is the 10:04 payment record the summary did not have. The `operation_id` is created in the store, not invented again by the model on the next try.
+**Policy** means business rules enforced outside the model. It checks identity, payment, the refundable amount, and whether that action needs human approval. The proposal does not decide whether approval is required.
 
-## Give the whole task a budget
+When a person approves, they approve that operation: that payment, that amount. If the proposal changes, the earlier authorization does not cover the new version.
 
-Each call can have its own timeout while the task has none.
+And a fresh read alone does not solve concurrency. Two executions can read the same state before either updates it. The real flow still needs controls in storage and the payment service to prevent conflicting operations. The sketch shows the separation of responsibilities, not a replacement for those controls.
 
-The model calls a tool (a function it is allowed to run, such as "read the order"), dislikes the answer, calls another, rewrites the plan, and starts over. Every call respects its own deadline. Ana is still waiting.
+The permissions discussion is in [Guardrails and Fitness Functions for AI-Friendly Architecture](/posts/guardrails-and-fitness-functions-for-ai-friendly-architecture/). Here, the point is to stop a bad suggestion from crossing the boundary between text and an external side effect.
 
-A budget is a limit for the whole task. Anthropic's note on [building effective agents](https://www.anthropic.com/engineering/building-effective-agents) recommends stopping conditions, such as a maximum number of iterations, and points out that errors and cost can pile up when an agent keeps going. The page says the tooling has moved on since it was published. I am using that design advice, not a framework recipe.
+## The whole task needs a limit too
+
+Now imagine that payment does not respond.
+
+A **timeout** is the maximum time a call will wait. The assistant can respect that timeout, call another tool, rewrite its plan, and try again. Every call is short. The support task never ends.
+
+A **tool**, here, is a function available to the agent, such as looking up an order. Repeating that query after a temporary failure is a **retry**, another attempt at the same operation.
+
+[Anthropic's guidance on building effective agents](https://www.anthropic.com/engineering/building-effective-agents) includes stopping conditions, such as a maximum number of iterations. I would apply that to the whole task, not just individual calls:
 
 ```yaml
-# Teaching policy. Not a real configuration, and not a recommendation.
+# Illustrative example, not a framework configuration.
 execution_budget:
   deadline_seconds: 20
   max_model_calls: 4
@@ -153,158 +135,129 @@ execution_budget:
   on_exhaustion: review_queue
 ```
 
-Those numbers are made up to show the shape. They are not test results, and they are not what you should copy into production.
+The numbers only show the shape of a budget. They were not measured for this article and are not recommended production limits.
 
-What matters is who owns the counter. The budget belongs to the execution, not to the prompt. Replanning must not reset it. A call the agent delegates also spends the same budget, including retries done in a lower layer.
+What matters is keeping the counter in the application. Replanning does not reset the budget. Delegating a query does not create extra time or attempts. And a per-task limit does not replace a service-wide concurrency limit.
 
-Separate the limit of one task from the limit of the whole service. Many small tasks can still swamp payment. A dedicated queue and a cap on how many investigations run at once keep them from eating the normal support traffic. That is not enough if both paths still share one database pool with no limit.
+If the deadline expires with a call still in progress, that does not prove the remote operation was canceled. We will return to that case below.
 
-One more reminder, already true for ordinary timeouts: the deadline expired for the caller. That does not prove the remote refund was cancelled.
+**In short:** the agent can choose paths, but it cannot choose an infinite number of them.
 
-## Retry the call. Do not retry the refund.
+## Trying again can also make a failure worse
 
-The [Amazon Builders' Library](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/) makes two points that stay useful here. Retries stacked in several layers multiply load. And a timeout does not mean the call had no effect.
+The [Amazon Builders' Library](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/) explains why attempts at several layers multiply.
 
-With an assistant in the path, I would keep three verbs separate:
+Suppose the workflow makes up to three attempts. The tool it calls also makes up to three. The client talking to the API makes another three. In the worst case for that combination, there are `3 × 3 × 3 = 27` attempts against the dependency, including the initial attempt at each layer. This is illustrative arithmetic, not a test result.
 
-- **Transport retry:** repeat the same read after a blip, inside that API's own rules.
-- **Revision:** go get more evidence, because the proposal does not pass the policy yet.
-- **New business operation:** start another refund. That is not a harmless retry.
+Giving the model more time to "think harder" does not fix this multiplication. We need to define where retries happen and account for work done in lower layers.
 
-If the workflow allows 3 tries, the tool allows 3, and the HTTP client allows 3, the product is `3 × 3 × 3 = 27` calls in the worst case. The count includes the first try at each layer. It is arithmetic, so the multiplication is easy to see. It is not a number Amazon published, and it is not a lab result.
+The first article already explains **backoff**, increasing the interval between attempts, and **jitter**, randomness in that interval so clients do not all retry together. Those still apply. The new concern is not confusing three things:
 
-Renaming each repeat does not lighten the load. The system needs an explicit place where retries are allowed, and one shared limit that sees the real work.
+1. Repeating a query that failed.
+2. Gathering different evidence to revise a conclusion.
+3. Creating a new refund.
 
-For anything that moves money, the operation's identity has to survive the repeat. The trusted layer creates that id and stores it. The model does not get to create a fresh one because the first answer was slow.
+The last two are not transport retries. They need their own limits and rules.
 
-[Stripe's idempotency docs](https://docs.stripe.com/api/idempotent_requests) are a concrete contract for this, and only for API v1. Idempotency means doing the operation twice has the same effect as doing it once. In v1, after the endpoint has started running, the first result is saved. The same key returns that saved result. The same key with different parameters is rejected. Keys can be removed after at least 24 hours. API v2 is a different contract, so this paragraph does not describe it.
+## A lost response is not a rejected refund
 
-That is not a universal promise of exactly-once execution. You still have to honor the provider's window, and you still have to block duplicates in your own database.
+The duplicate proposal was blocked. Now let's look at another possible failure, this time in the legitimate refund.
 
-And idempotency does not fix intent. A wrong refund of 120 is still wrong if it happens only once.
+The application sends the request. The provider accepts it. Before the response arrives, the connection drops.
 
-## When you cannot finish, stop deciding
+For the provider, the operation exists. For the store, the outcome has not yet been confirmed. If the assistant interprets the timeout as "nothing happened" and creates another operation, it can turn a communication problem into a duplicate attempt.
 
-Switching models can be an availability choice. If the problem is that the payment evidence is missing, another model will not invent the missing row.
+That is why **unknown needs to be a real state**, not another word for failure.
 
-For Ana, the fallback is modest:
+![Three operation states: intent recorded, outcome unknown after sending, and outcome known after confirmation. While the outcome is unknown, the system reconciles the same operation instead of creating another refund](/images/posts/design-for-failure-agents/outcome-en.svg)
 
-- tell her the investigation is not finished;
-- keep what is needed to resume the case;
-- send the proposal and the evidence to the review queue;
-- do not create another refund while the first outcome is unknown.
+The executor records the intent and an operation identity before sending. If it needs to resume, it continues investigating **that operation**. The record helps recovery, but does not create a single transaction across the store's database and the provider.
 
-The system stops resolving the case alone. It can still say what happened and what is missing.
+This is where **idempotency** comes in: repeating the same operation without repeating its business effect. [Stripe's documentation](https://docs.stripe.com/api/idempotent_requests) gives a concrete example. In API v1, the same key lets the client retrieve the saved result of a request whose execution began. There are parameter and retention rules; this is not a promise that any repetition will remain safe forever.
 
-The queue needs an owner, a capacity, a deadline and an alert. Sending every case to a person, and never looking at the pile, only moves the failure.
+The key identifies a business operation, not the entire lifetime of an order. Two legitimate partial refunds can be different operations. The mistake is creating another identity for the same intent just because the response was lost.
 
-A circuit breaker that watches timeouts can protect the payment API and still let a bad proposal through, because the bad proposal comes back quickly and with status 200. If the quality bar is no longer met, I would pause automatic execution for this workflow with a separate switch. I would not wait for a 500.
+Recovery uses the available contract: a status query, a provider event, or a retry with the same key where supported. Comparing local and remote state to establish the outcome is **reconciliation**.
 
-## A lost answer gets its own state
+And it helps to separate two protections: idempotency prevents a repeated effect; policy checks whether the effect should happen. A wrong refund is still wrong if it happens only once.
 
-The case I most want the tests to include: the executor sends the refund, the provider accepts it, and the response is lost.
+## Plan B can be stopping
 
-What does the system know?
+A **fallback** is an alternative path when the main one cannot finish. For this support task, it does not need to be another model guessing what happened to the payment.
 
-It does not know that the refund failed. **It knows it has not confirmed the outcome yet.**
+It can be much simpler: preserve the case, explain that the investigation is not complete, and send the evidence to a responsible person. Without creating another refund while the previous outcome remains unresolved.
 
-![Three states for one refund. RECORDED means the intent is saved and nothing has been sent. An arrow labeled sent goes to UNKNOWN, where the request has left and the answer was not stored. An arrow labeled confirmed goes to KNOWN, where success or failure is confirmed. Red text says not to open a second refund from UNKNOWN. Confirm by reading the provider, or by repeating the same operation id where the API allows it. One id for the whole case](/images/posts/design-for-failure-agents/outcome-en.svg)
+The queue needs capacity, deadlines, and alerts. Otherwise, the system looks available while work simply moves elsewhere and piles up.
 
-The executor should store the intent and the id before it sends. That helps if the process crashes. It does not create one atomic transaction across your database and the provider. Those are still two systems.
+A **circuit breaker**, which stops calls to a dependency after too many failures, still helps with communication failures. But a bad proposal can arrive quickly, without a technical error. That is why I would also have a way to pause automatic execution when the workflow's criteria are no longer being met.
 
-On the way back, use the contract you actually have: a status read, an event from the provider, or a retry with the same key where that is supported. While the outcome is unknown, the case must not gain a second, conflicting refund. That is a lock in the database, not a sentence in the prompt.
+If an operation has already happened, turning off the agent does not undo it. A **compensation** is another action that tries to correct its effect, and can fail too. That is the saga discussion from the first article: a sequence of operations and compensations. Not every effect can be reversed either: correcting payment does not erase incorrect information already sent to the user.
 
-A compensation (a later action that tries to undo the first) is another operation, and it can fail too. The first article's saga is that conversation for a purchase that got halfway. Not every effect can be undone: reversing the money does not erase the wrong message Ana already received.
+## How to check whether the design works
 
-## Test the failure before you allow the action
+The table below proposes tests. It does not report executed tests:
 
-A useful first set of cases, with the expected behavior written down:
-
-| What is injected | What should happen |
+| Test scenario | What the test should verify |
 | --- | --- |
-| Stale or contradictory evidence | Automatic execution stops, and the missing fact is visible. |
-| A well formed proposal that breaks policy | The executor rejects it before any external effect. |
-| The task budget runs out during a replan | The task stops, and the budget is not reset. |
-| The response is lost after the provider accepts | The case is reconciled, and no second id appears. |
-| The process dies after the send and before the answer is saved | Recovery treats the outcome as unknown. |
-| Two executions touch the same case | The store blocks conflicting refunds. |
-| An approval exists, then the payment changes | The executor reads again and stops the action if it must. |
-| The review queue starts to fill | The cap and the alert make the pile visible. |
+| The assistant receives order 1842's old summary. | The proposal is not executed without checking payment and validating policy. |
+| The proposal has the correct format, but a refund is already processing. | The application blocks the new operation. |
+| The agent replans after exhausting its budget. | The counter does not restart, and the case follows the defined exit path. |
+| The response is lost after provider acceptance. | The operation enters reconciliation without acquiring another identity. |
+| Two executions try to act on the same payment. | Controls prevent conflicting operations. |
+| Payment changes after human approval. | Authorization and state are revalidated before the side effect. |
 
-This table is a plan. It is not a lab that was run for this article, and the rows are not measurements.
+A [study of checks around coding agents](https://martinfowler.com/articles/are-harnesses-worth-the-cost.html) separates guidance from executable checks. Its context differs from this support task. The principle that matters here is the same: "done" does not replace an independent check of the outcome.
 
-Naresh Jain describes a useful split between guidance and checks that actually run, in [Are Harnesses Worth the Cost?](https://martinfowler.com/articles/are-harnesses-worth-the-cost.html). A harness, in that piece, is the machinery around a coding agent. The experiment is about coding agents, not about this support assistant, and it is not evidence that Ana's refund was tested. The part I want is the split itself: the assistant saying "I am done" is not the check.
+Beyond tests, I would track rejected proposals, cases stopped for missing evidence, operations with unknown outcomes, and time spent waiting for review. The [article on agent observability with OpenTelemetry](/posts/agent-observability-with-opentelemetry/) covers the infrastructure. OpenTelemetry is an open-source project for instrumenting and transporting observability data, such as metrics and execution traces.
 
-The last sentence of the proposal is not enough. The test has to look at what was read, what was blocked, and what actually changed.
+None of those numbers proves quality alone. We also need to review approved cases and understand whether the model, policy, or type of request changed. And avoid putting personal data in metric labels or saving every prompt by default. A **prompt** is the instructions and context provided as input to the model.
 
-## Count outcomes, then open the gate slowly
+I would begin in **shadow mode**: prepare proposals for comparison without permission to issue refunds. Then, human review. Only after that, if the evidence supports it, automatic execution within an approved scope, with a way to turn it off. Shadow mode also reads data and consumes resources; it is not exempt from limits.
 
-In [Agent Observability with OpenTelemetry](/posts/agent-observability-with-opentelemetry/) I wrote about tying activity to outcomes. OpenTelemetry is a common way to export traces and metrics. For this workflow I would want a few counts:
+## A checklist to take back to your project
 
-- How many proposals did policy reject, and why?
-- How many tasks stopped for missing evidence or a spent budget?
-- How many operations are unknown, and for how long?
-- How many cases are waiting, and how many did a person correct?
-- After a change, which mistakes show up in the cases a person reviewed?
+Before allowing an action, check:
 
-A rejection does not prove the assistant got worse. The requests may have changed. A short queue does not prove quality either. The system might be accepting what it should hold. The counts need context, including a look at cases that were approved.
-
-I would record the model version, the prompt version and the policy version, plus the ids needed to investigate one operation, with access and retention decided up front. I would not put Ana's data on metric labels, and I would not store every prompt by default.
-
-Before any write, the workflow can run in shadow mode: it prepares proposals for comparison, and it is not allowed to refund. Shadow mode still spends budget and still reads data, so it needs the same limits.
-
-Then a person reviews the proposals. Only after that, if the evidence supports it, automatic execution inside a slice the business has approved, with a switch that turns the autonomy off without stopping ordinary support. The switch blocks new actions. It does not undo actions that already happened.
-
-## A checklist for this design
-
-If I were reviewing the design for Ana's assistant, I would look for these and stop when one is missing:
-
-1. **One story.** A single order, with times, so a reader can point at the step that went wrong.
-2. **Evidence separated from the conclusion.** Records read, and when, stapled to the proposal.
-3. **Policy outside the model.** Identity, amount and approval live in code.
-4. **Approval stuck to one proposal.** An edit after the "yes" sends the case back.
-5. **A read at execution time.** The 10:02 summary is not allowed to move money at 10:05.
-6. **One budget for the task.** Replanning does not reset it.
-7. **Retries named by kind.** Same read, more evidence, or a new refund. Only the first is a transport retry.
-8. **One operation id, created in the store.** The model does not create a new one per attempt.
-9. **Unknown as a real state.** A lost answer goes to reconciliation, not to a second refund.
-10. **A fallback that stops.** Missing evidence goes to a queue with an owner and an alert.
-11. **A switch.** Shadow, then a person, then automatic, and a way to stop new actions.
+- [ ] Does the proposal distinguish what was consulted from what was concluded?
+- [ ] Is the evidence appropriate for the action and revalidated when necessary?
+- [ ] Are policy and approval requirements controlled outside the model?
+- [ ] Does approval match the exact operation that will be executed?
+- [ ] Are there controls for concurrency and conflicting operations?
+- [ ] Does the task have a total budget, including delegation and retries?
+- [ ] Does the same operation retain its identity during recovery?
+- [ ] Does an unknown outcome lead to reconciliation rather than another financial operation?
+- [ ] Does review have an owner, capacity, and a deadline?
+- [ ] Can outcomes be observed and new automatic actions be disabled?
 
 ## Quick glossary {#glossary}
 
-Each term once, in the order it mattered above:
-
 | Term | In one sentence |
 | --- | --- |
-| Agent | A program that uses a model to choose the next step. |
-| Model | The piece that reads the request and proposes the next step. |
-| Tool | A function the model may call, such as "read the order". |
-| API | The interface another program calls. |
-| JSON | A text format for structured data. |
-| HTTP 200 / 500 | "This call succeeded" / "the server failed". |
-| Timeout | The longest the caller will wait. |
-| Retry | Trying the same call again. |
-| Backoff | Waiting longer after each failure. |
-| Jitter | A little randomness in that wait. |
-| Fallback | A simpler path when the main one cannot finish. |
-| Circuit breaker | A pause on calls to a dependency after too many failures. |
-| Saga | A way to undo a purchase that got halfway, from the first article. |
-| Evidence | The records that were read, and when. |
-| Proposal | What the assistant thinks should happen next. |
-| Executor | The part that is allowed to call payment. |
-| Idempotency | Doing it twice has the same effect as doing it once. |
-| Operation id | The identity of one refund, reused on every retry. |
-| Budget | A limit for the whole task, not for a single call. |
-| Unknown outcome | The request left, and the answer was not stored. |
-| Reconciliation | Reading the provider until the outcome is known. |
-| Shadow mode | Proposals are prepared, and writes are not allowed. |
-| OpenTelemetry | A common way to export traces and metrics. |
+| AI | Artificial intelligence; here, used to interpret requests and propose steps. |
+| Agent | A program that uses a model to choose actions within a workflow. |
+| Tool | A function the agent can call, such as querying payment. |
+| API | Application Programming Interface, through which one program uses another. |
+| HTTP | Web communication protocol; 200 indicates success for that request, not the whole decision. |
+| JSON | A text format for representing structured data. |
+| Evidence | Information consulted, with its source and the time it was read. |
+| Policy | Rules determining whether an action may happen. |
+| Executor | The application component authorized to perform the action. |
+| Timeout | A limit on how long a call waits. |
+| Retry | Another attempt at the same operation. |
+| Backoff and jitter | Waiting between attempts, with increasing intervals and randomness. |
+| Budget | Time and work limits for the whole task. |
+| Idempotency | Repeating an operation without repeating its business effect. |
+| Reconciliation | Comparing local and remote state to establish the outcome. |
+| Fallback | An alternative path when the main one cannot finish. |
+| Circuit breaker | Temporarily stopping calls after a failure threshold. |
+| Saga | A sequence of operations with compensations for partial failures. |
+| Prompt | Instructions and context provided as input to the model. |
+| Shadow mode | Preparing proposals for evaluation without executing business actions. |
 
-Timeouts, retries, fallbacks and recovery did not get less useful because a model joined the workflow.
+## To close
 
-The target got bigger. Besides keeping a dead dependency from pulling the store down, we have to keep a bad conclusion from gaining permission, repeating without a limit, and moving money nobody can explain afterwards.
+Order 1842 did not need a more convincing model. It needed a missing query, a rule outside the model, and an application able to say "this action cannot go through."
 
-For me, Design for Failure with an agent starts here: **decide what may be proposed, check what may be executed, and know what to do when the task cannot be finished.**
+That is what I would bring from Design for Failure to agents. The network precautions remain. The responsibility for decisions grows.
 
-Sometimes the most reliable decision is not to decide alone.
+**Giving a system autonomy does not mean removing the rules. It means defining how far it may go and what happens when it needs to stop.**
