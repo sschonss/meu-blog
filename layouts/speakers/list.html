@@ -4,9 +4,11 @@
 {{- $profileUrl := "https://sessionize.com/sschonss/" -}}
 {{- $apiUrl := "https://sessionize.com/api/speaker/json/2n3e2etaad" -}}
 {{- $data := site.Data.sessionize -}}
+{{- $roles := partial "sessionize-roles.html" . -}}
 {{- $speaker := $data.speaker -}}
 {{- $sessions := $data.sessions | default slice -}}
-{{- $events := $data.events | default slice -}}
+{{- $events := $roles.talks -}}
+{{- $organized := $roles.organized -}}
 {{- $today := time.AsTime (now.Format "2006-01-02") -}}
 
 {{- /* Build-time render: used for SEO, no-JS visitors, and until the live fetch finishes. */ -}}
@@ -94,7 +96,19 @@
     {{- end }}
   </div>
 
-  {{- /* Built from the data above; the live refresh in talks.js leaves it alone. */ -}}
+  {{- /* Outside the live slot: talks.js replaces [data-slot=live] from the API
+       and must not put organizer-only events back into the talks list.
+       The map stays a list of places he has spoken. */ -}}
+  {{- with sort $organized "eventStartDate" "desc" }}
+  <section class="profile-section" data-organized>
+    <h2>{{ i18n "organizedRole" }}</h2>
+    <ul class="event-list">
+      {{- range . }}{{ partial "event-item.html" (dict "event" . "upcoming" false) }}{{ end }}
+    </ul>
+  </section>
+  {{- end }}
+
+  {{- /* Built from the talks above; the live refresh in talks.js leaves it alone. */ -}}
   {{ partial "talk-map.html" $past }}
 
   {{- with site.Params.feedback }}{{ if .form }}
@@ -120,6 +134,7 @@
   "abstractsNote" (cond $pt (i18n "abstractsNote") "")
   "readAboutIt" (i18n "readAboutIt")
   "series" (i18n "series")
+  "organizerIds" (site.Data.sessionize_overrides.organizer | default slice)
 -}}
 {{- /* Article links per talk, so the live renderer can keep them. */ -}}
 {{- $related := dict -}}

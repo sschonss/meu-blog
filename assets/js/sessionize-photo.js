@@ -25,9 +25,12 @@
       if (s.y === f.y) return s.d + ' ' + sm + ' – ' + f.d + ' ' + fm + ' ' + s.y;
       return s.d + ' ' + sm + ' ' + s.y + ' – ' + f.d + ' ' + fm + ' ' + f.y;
     }
+    var organizerIds = {};
+    (t.organizerIds || []).forEach(function (id) { organizerIds[String(id)] = true; });
     var now = new Date();
     var today = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
     var next = list.filter(function (e) {
+      if (organizerIds[String(e.id)]) return false;
       var s = parse(e.eventStartDate), f = parse(e.eventEndDate || e.eventStartDate);
       var yearLong = s.m === 1 && s.d === 1 && f.m === 12 && f.d === 31;
       return f.key >= today && !yearLong;

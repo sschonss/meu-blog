@@ -26,6 +26,7 @@ statTalks: talks
 statCities: cities
 upcomingEvents: Upcoming & ongoing
 pastEvents: Events I've spoken at
+organizedRole: Organizer
 eventSite: Event website
 throughoutYear: "Throughout {{ .Year }}"
 abstractsNote: Talk abstracts are published in English on Sessionize.

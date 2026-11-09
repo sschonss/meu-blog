@@ -4,7 +4,8 @@
 {{- $pt := eq site.Language.Lang "pt-br" -}}
 {{- $today := time.AsTime (now.Format "2006-01-02") -}}
 {{- $next := slice -}}
-{{- range sort (site.Data.sessionize.events | default slice) "eventStartDate" -}}
+{{- /* Talks only. Organizer-only events stay off "Where to find me". */ -}}
+{{- range sort ((partial "sessionize-roles.html" .).talks) "eventStartDate" -}}
   {{- $s := time.AsTime .eventStartDate -}}
   {{- $e := time.AsTime (.eventEndDate | default .eventStartDate) -}}
   {{- $yearLong := and (eq (int $s.Month) 1) (eq $s.Day 1) (eq (int $e.Month) 12) (eq $e.Day 31) -}}
@@ -13,6 +14,7 @@
 {{- $strings := dict
   "months" (cond $pt (slice "jan" "fev" "mar" "abr" "mai" "jun" "jul" "ago" "set" "out" "nov" "dez") (slice "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"))
   "lang" site.Language.Lang
+  "organizerIds" (site.Data.sessionize_overrides.organizer | default slice)
 -}}
 <section class="home-events" data-home-events{{ if not $next }} hidden{{ end }}>
   <div class="home-section-title"><h2>{{ i18n "whereToFindMe" }}</h2><a href="{{ "speakers/" | relLangURL }}">{{ i18n "allTalks" }} <span>→</span></a></div>
