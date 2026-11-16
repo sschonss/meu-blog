@@ -341,7 +341,7 @@ A receita do Ito tem três passos:
 
 1. A semente é o texto `código da sala|número da partida|número da rodada`.
 2. Um hash chamado xmur3 transforma esse texto num número, e o gerador mulberry32 produz a sequência "aleatória" a partir dele.
-3. O embaralhamento de [Fisher-Yates](https://pt.wikipedia.org/wiki/Embaralhamento_de_Fisher-Yates) usa essa sequência para embaralhar as cartas de 1 a 100.
+3. O embaralhamento de [Fisher-Yates](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle) usa essa sequência para embaralhar as cartas de 1 a 100.
 
 No trecho abaixo, versão simplificada de [js/core.js](https://github.com/sschonss/ito/blob/main/js/core.js), repare que a única entrada é o texto da semente: nada vem da rede.
 
@@ -419,7 +419,7 @@ A ideia, sem matemática, usa um par de chaves (é a [criptografia de chave púb
 - A **chave privada** é um carimbo que só você tem e nunca sai do aparelho.
 - A **chave pública** é uma cópia do desenho do carimbo. Todo mundo pode usar para conferir se um documento foi carimbado por você, mas ninguém consegue carimbar com ela.
 
-Na primeira vez que abre o jogo, cada celular gera o seu par de chaves usando a [WebCrypto](https://developer.mozilla.org/pt-BR/docs/Web/API/SubtleCrypto/sign), a API de criptografia que já vem no navegador e só fica disponível em páginas seguras, servidas por HTTPS (o código está em [js/crypto.js](https://github.com/sschonss/ito/blob/main/js/crypto.js)).
+Na primeira vez que abre o jogo, cada celular gera o seu par de chaves usando a [WebCrypto](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/sign), a API de criptografia que já vem no navegador e só fica disponível em páginas seguras, servidas por HTTPS (o código está em [js/crypto.js](https://github.com/sschonss/ito/blob/main/js/crypto.js)).
 
 O tipo de chave é **ECDSA P-256**. ECDSA (Elliptic Curve Digital Signature Algorithm) é um algoritmo de assinatura baseado em curvas elípticas, e P-256 é a curva usada. É o mesmo algoritmo que o servidor usa para carimbar cada envio no [Web Push](/pt-br/posts/how-web-push-works/).
 
