@@ -11,7 +11,7 @@ draft: false
 
 Almost everyone has received a website notification with the tab closed. Behind it there are three players: your server, a delivery service that belongs to the browser, and a piece of JavaScript that wakes up on its own. And a detail I find beautiful: the service in the middle delivers the message without being able to read it. In this article I walk through that path with real output from a lab run in Chrome, first in a regular tab and then with the site installed as an app (a PWA).
 
-It's a companion to [Programming is still fun](/posts/personal-projects-as-a-lab/), about the joy of building things out of curiosity in the AI era. The lab is [lab-web-push-vapid](https://github.com/sschonss/lab-web-push-vapid): a minimal Node.js server, a page, a manifest and a service worker. Everything here was measured on October 28, 2026, with Chrome 156 on Linux and the [web-push](https://github.com/web-push-libs/web-push) library 3.6.7. Where something was simulated or not tested, I say so.
+It's a companion to [Programming is still fun](/posts/personal-projects-as-a-lab/), about the joy of building things out of curiosity in the AI era. The lab is lab-web-push-vapid: a minimal Node.js server, a page, a manifest and a service worker. Everything here was measured on October 28, 2026, with Chrome 156 on Linux and the [web-push](https://github.com/web-push-libs/web-push) library 3.6.7. Where something was simulated or not tested, I say so.
 
 ## The problem: notifying someone who isn't looking
 
@@ -224,4 +224,4 @@ The server deleted the record. The 410 is the guaranteed cleanup, but it isn't i
 - **A PWA is a site with two extra pieces:** the service worker is what makes push arrive; installation changes where the click takes you.
 - **Platform matters:** the same code behaves differently in incognito, in Chrome, on the iPhone.
 
-The code and the notebook with all the output are in [lab-web-push-vapid](https://github.com/sschonss/lab-web-push-vapid). For reference, [web.dev](https://web.dev/articles/push-notifications-overview) has a push overview and a [PWA course](https://web.dev/learn/pwa/), and the [Push API on MDN](https://developer.mozilla.org/en-US/docs/Web/API/Push_API) details each piece. The context for why this lab exists is in [Programming is still fun](/posts/personal-projects-as-a-lab/). If you've shipped Web Push to production, tell me in the comments what surprised you.
+The lab is a personal project, and the code and the notebook with all the output aren't public yet. For reference, [web.dev](https://web.dev/articles/push-notifications-overview) has a push overview and a [PWA course](https://web.dev/learn/pwa/), and the [Push API on MDN](https://developer.mozilla.org/en-US/docs/Web/API/Push_API) details each piece. The context for why this lab exists is in [Programming is still fun](/posts/personal-projects-as-a-lab/). If you've shipped Web Push to production, tell me in the comments what surprised you.
