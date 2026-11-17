@@ -1,5 +1,5 @@
 ---
-title: 'Os 12 fatores, parte 1: uma base de código, muitos deploys'
+title: '12 fatores: uma base de código, muitos deploys'
 date: 2026-11-23
 description: 'Abrindo a série Doze fatores na prática: o que é a metodologia Twelve-Factor e o fator I, base de código, explicado do zero com exemplos em PHP.'
 translationKey: twelve-factor-codebase

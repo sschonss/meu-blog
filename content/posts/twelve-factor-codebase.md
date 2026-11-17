@@ -1,5 +1,5 @@
 ---
-title: 'The 12 factors, part 1: one codebase, many deploys'
+title: '12 factors: one codebase, many deploys'
 date: 2026-11-23
 description: 'Opening the Twelve factors in practice series: what the Twelve-Factor methodology is, and factor I, codebase, explained from scratch with PHP examples.'
 translationKey: twelve-factor-codebase
