@@ -68,3 +68,4 @@ versionável
 # Códigos de exemplo que aparecem em capturas de tela
 FVGZ
 FYFH
+FrankenPHP
