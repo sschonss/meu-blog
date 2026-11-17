@@ -13,7 +13,7 @@ Almost every project goes through this moment: it works on the machine of whoeve
 
 The [Twelve-Factor App](https://12factor.net/) is a list of 12 practices to avoid exactly these problems. It was written by engineers at [Heroku](https://www.heroku.com/), a platform that hosts applications in the cloud, based on what they saw across hundreds of thousands of apps running there. The text is short, more than ten years old, and still current, because it describes problems everyone still has.
 
-This is the first article in the **Twelve factors in practice** series. The idea is simple: one article per factor, always with PHP and Laravel examples. In this first one, I give a quick introduction to the methodology and then dive into factor I, **codebase**.
+This is the first article in the **Twelve factors in practice** series. The idea is simple: one article per factor, always with plain PHP examples and, when a framework helps, [Hyperf](https://hyperf.wiki/), a PHP framework that runs on [Swoole](https://wiki.swoole.com/en/), an extension that turns PHP into an always-on server. In this first one, I give a quick introduction to the methodology and then dive into factor I, **codebase**.
 
 ## Before we start: three words
 
@@ -59,7 +59,7 @@ Then comes the part that sounds contradictory but isn't: one codebase, **many de
 
 ### Different versions are not different codebases
 
-Picture an online shop built with Laravel. Today:
+Picture an online shop built in PHP. Today:
 
 - production runs the `v1.4` tag;
 - staging runs `v1.5`, which the team is testing;
@@ -75,14 +75,23 @@ APP_VERSION=$(git describe --tags --always)
 echo $APP_VERSION   # v1.4, or v1.4-3-g9f2c1ab if there are commits after the tag
 ```
 
-And in Laravel, expose it on a simple route (or in the admin panel footer):
+In plain PHP, the app's entry point just needs to answer a simple URL (or show the version in the admin panel footer):
 
 ```php
-// config/app.php
-'version' => env('APP_VERSION', 'dev'),
+// public/index.php
+if (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) === '/version') {
+    echo getenv('APP_VERSION') ?: 'dev';
+    exit;
+}
+```
 
-// routes/web.php
-Route::get('/version', fn () => config('app.version'));
+In Hyperf, it's a route:
+
+```php
+// config/routes.php
+use Hyperf\HttpServer\Router\Router;
+
+Router::get('/version', fn () => getenv('APP_VERSION') ?: 'dev');
 ```
 
 If someone asks "what's in production?", the answer is a commit, not "I think it's the latest version".
@@ -102,7 +111,17 @@ The classic scenario: the system is sold to several clients and, for each one, s
 That's exactly the right side of the diagram: several codebases for the same app. The way out is to go back to a single codebase and move the differences out of it:
 
 - what changes from client to client (name, logo, URLs, API keys) becomes **configuration**, which is the subject of factor III;
-- features that only some clients have become **feature flags**: switched on and off through configuration, with the same code for everyone. In Laravel, [Pennant](https://laravel.com/docs/pennant) is the official package for this.
+- features that only some clients have become **feature flags**: switched on and off through configuration, with the same code for everyone.
+
+To get started, you don't even need a library. An `if` reading an environment variable is already a flag:
+
+```php
+if (getenv('FEATURE_CASHBACK') === 'on') {
+    $total = applyCashback($total);
+}
+```
+
+Client A runs with `FEATURE_CASHBACK=on`, client B without it, and both run exactly the same code.
 
 ### 2. Many apps, one codebase: copied and pasted code
 
@@ -163,5 +182,5 @@ The next article in the series covers factor II, **dependencies**: why the app s
 - [The Twelve-Factor App, in English](https://12factor.net/) and [in Portuguese](https://12factor.net/pt_br/)
 - [I. Codebase](https://12factor.net/codebase)
 - [Composer: VCS repositories](https://getcomposer.org/doc/05-repositories.md#vcs)
-- [Laravel Pennant](https://laravel.com/docs/pennant)
+- [Hyperf: routing](https://hyperf.wiki/3.1/#/en/router)
 - [Git: git describe](https://git-scm.com/docs/git-describe)

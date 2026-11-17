@@ -13,7 +13,7 @@ Quase todo projeto passa por esse momento: funciona na máquina de quem escreveu
 
 O [Twelve-Factor App](https://12factor.net/pt_br/) é uma lista de 12 práticas para evitar exatamente esses problemas. Ela foi escrita por engenheiros da [Heroku](https://www.heroku.com/), uma plataforma que hospeda aplicações na nuvem, a partir do que viram em centenas de milhares de apps rodando lá. O texto é curto, tem mais de dez anos e continua atual, porque descreve problemas que todo mundo ainda tem.
 
-Este é o primeiro artigo da série **Doze fatores na prática**. A ideia é simples: um artigo para cada fator, sempre com exemplos em PHP e Laravel. Neste primeiro, faço uma apresentação rápida da metodologia e depois entro no fator I, **base de código**.
+Este é o primeiro artigo da série **Doze fatores na prática**. A ideia é simples: um artigo para cada fator, sempre com exemplos em PHP puro e, quando um framework ajudar, no [Hyperf](https://hyperf.wiki/), um framework PHP que roda sobre o [Swoole](https://wiki.swoole.com/en/), uma extensão que transforma o PHP num servidor que fica sempre ligado. Neste primeiro, faço uma apresentação rápida da metodologia e depois entro no fator I, **base de código**.
 
 ## Antes de começar: três palavras
 
@@ -59,7 +59,7 @@ E aí vem a parte que parece contraditória, mas não é: uma base de código, *
 
 ### Versões diferentes não são bases diferentes
 
-Imagine uma loja virtual em Laravel. Hoje:
+Imagine uma loja virtual em PHP. Hoje:
 
 - a produção roda a tag `v1.4`;
 - a homologação roda a `v1.5`, que o time está testando;
@@ -75,14 +75,23 @@ APP_VERSION=$(git describe --tags --always)
 echo $APP_VERSION   # v1.4, ou v1.4-3-g9f2c1ab se houver commits depois da tag
 ```
 
-E no Laravel, expor isso numa rota simples (ou no rodapé do painel administrativo):
+Em PHP puro, basta o ponto de entrada do app responder a uma URL simples (ou mostrar a versão no rodapé do painel administrativo):
 
 ```php
-// config/app.php
-'version' => env('APP_VERSION', 'dev'),
+// public/index.php
+if (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) === '/version') {
+    echo getenv('APP_VERSION') ?: 'dev';
+    exit;
+}
+```
 
-// routes/web.php
-Route::get('/version', fn () => config('app.version'));
+No Hyperf, é uma rota:
+
+```php
+// config/routes.php
+use Hyperf\HttpServer\Router\Router;
+
+Router::get('/version', fn () => getenv('APP_VERSION') ?: 'dev');
 ```
 
 Se alguém perguntar "o que está em produção?", a resposta é um commit, e não um "acho que é a última versão".
@@ -102,7 +111,17 @@ O cenário clássico: o sistema é vendido para vários clientes e, para cada um
 Isso é exatamente o lado direito do diagrama: várias bases para o mesmo app. A saída é voltar para uma única base de código e mover as diferenças para fora dela:
 
 - o que muda de cliente para cliente (nome, logo, URLs, chaves de API) vira **configuração**, que é o assunto do fator III;
-- funcionalidades que só alguns clientes têm viram **flags de funcionalidade** (*feature flags*): liga e desliga por configuração, com o mesmo código para todos. No Laravel, o [Pennant](https://laravel.com/docs/pennant) é o pacote oficial para isso.
+- funcionalidades que só alguns clientes têm viram **flags de funcionalidade** (*feature flags*): liga e desliga por configuração, com o mesmo código para todos.
+
+Para começar, nem precisa de biblioteca. Um `if` lendo uma variável de ambiente já é uma flag:
+
+```php
+if (getenv('FEATURE_CASHBACK') === 'on') {
+    $total = aplicarCashback($total);
+}
+```
+
+O cliente A sobe com `FEATURE_CASHBACK=on`, o cliente B sem ela, e os dois rodam exatamente o mesmo código.
 
 ### 2. Várias apps numa base: o código copiado e colado
 
@@ -163,5 +182,5 @@ No próximo artigo da série, o assunto é o fator II, **dependências**: por qu
 - [The Twelve-Factor App, em português](https://12factor.net/pt_br/) e [em inglês](https://12factor.net/)
 - [I. Base de código](https://12factor.net/pt_br/codebase)
 - [Composer: repositórios VCS](https://getcomposer.org/doc/05-repositories.md#vcs)
-- [Laravel Pennant](https://laravel.com/docs/pennant)
+- [Hyperf: rotas](https://hyperf.wiki/3.1/#/en/router)
 - [Git: git describe](https://git-scm.com/docs/git-describe)
