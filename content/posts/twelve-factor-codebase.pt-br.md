@@ -1,12 +1,11 @@
 ---
 title: '12 fatores: uma base de código, muitos deploys'
-date: 2026-11-23
+date: 2026-11-17
 description: 'Abrindo a série Doze fatores na prática: o que é a metodologia Twelve-Factor e o fator I, base de código, explicado do zero com exemplos em PHP.'
 translationKey: twelve-factor-codebase
 series: ['Doze fatores na prática']
 series_weight: 1
 tags: ['Arquitetura', 'PHP']
-draft: true
 ---
 
 Quase todo projeto passa por esse momento: funciona na máquina de quem escreveu, mas quebra no servidor. Às vezes é uma senha que só existe num arquivo esquecido, às vezes é um arquivo salvo numa pasta que some no próximo deploy, às vezes é uma correção que alguém fez direto em produção e que ninguém sabe onde está.

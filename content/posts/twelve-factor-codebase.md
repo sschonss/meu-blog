@@ -1,12 +1,11 @@
 ---
 title: '12 factors: one codebase, many deploys'
-date: 2026-11-23
+date: 2026-11-17
 description: 'Opening the Twelve factors in practice series: what the Twelve-Factor methodology is, and factor I, codebase, explained from scratch with PHP examples.'
 translationKey: twelve-factor-codebase
 series: ['Twelve factors in practice']
 series_weight: 1
 tags: ['Architecture', 'PHP']
-draft: true
 ---
 
 Almost every project goes through this moment: it works on the machine of whoever wrote it, but breaks on the server. Sometimes it's a password that only exists in a forgotten file, sometimes it's a file saved in a folder that disappears on the next deploy, sometimes it's a fix someone made straight in production that nobody can find.
