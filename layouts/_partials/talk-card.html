@@ -7,6 +7,13 @@
     <h3><a class="talk-link" href="{{ .sessionUrl }}">{{ .title }}</a></h3>
     <p>{{ .description | plainify | truncate 210 }}</p>
     <span class="talk-view">{{ i18n "viewTalk" }} →</span>
+    {{- with index site.Data.talk_slides (string .id) }}
+    <div class="talk-related talk-slides">
+      <span>{{ i18n "slides" }}</span>
+      {{- with .pt }}<a href="{{ . }}" target="_blank" rel="noopener">{{ i18n "slidesPt" }}</a>{{ end }}
+      {{- with .en }}<a href="{{ . }}" target="_blank" rel="noopener">{{ i18n "slidesEn" }}</a>{{ end }}
+    </div>
+    {{- end }}
     {{- if or $rel.posts $rel.series }}
     <div class="talk-related">
       <span>{{ i18n "readAboutIt" }}</span>
