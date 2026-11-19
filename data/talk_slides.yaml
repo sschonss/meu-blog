@@ -2,3 +2,7 @@
 # pt: link to the Portuguese slides; en: link to the English slides.
 # Leave a language out while its slides don't exist; the card shows only
 # the links that are set. Talks not listed here show no slide links.
+"187690":   # AI-Friendly Architecture: Preparing Real Systems for AI Agents
+  pt: https://sschonss.github.io/talk-ai-friendly-architecture/
+"193490":   # AI Agents Don't Escape: We Leave the Door Open
+  pt: https://sschonss.github.io/talk-agents-dont-escape/
