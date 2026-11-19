@@ -69,3 +69,5 @@ versionável
 FVGZ
 FYFH
 FrankenPHP
+ramsey
+Autoloader
