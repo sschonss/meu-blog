@@ -105,12 +105,18 @@
         el('div', { 'class': 'talk-grid' }, sessions.map(function (s) {
           // Articles about this talk come from the build (data/talk_articles.yaml).
           var links = (t.related || {})[String(s.id)] || [];
+          // Slide links come from the build too (data/talk_slides.yaml).
+          var sl = (t.slides || {})[String(s.id)] || {};
+          var slideLinks = [];
+          if (sl.pt) slideLinks.push(el('a', { href: sl.pt, target: '_blank', rel: 'noopener', text: t.slidesPt }));
+          if (sl.en) slideLinks.push(el('a', { href: sl.en, target: '_blank', rel: 'noopener', text: t.slidesEn }));
           return el('article', { 'class': 'talk-card', id: 'talk-' + s.id }, [
             el('div', { 'class': 'talk-icon', text: '↗' }),
             el('div', {}, [
               el('h3', {}, [el('a', { 'class': 'talk-link', href: s.sessionUrl || t.profile, text: s.title })]),
               el('p', { text: plain(s.description, 210) }),
               el('span', { 'class': 'talk-view', text: t.viewTalk + ' →' }),
+              slideLinks.length ? el('div', { 'class': 'talk-related talk-slides' }, [el('span', { text: t.slidesLabel })].concat(slideLinks)) : null,
               links.length ? el('div', { 'class': 'talk-related' }, [el('span', { text: t.readAboutIt })].concat(
                 links.map(function (l) { return el('a', { href: l.url, text: l.title }); }))) : null
             ])

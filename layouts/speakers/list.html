@@ -147,6 +147,8 @@
   {{- if $links }}{{ $related = merge $related (dict $id $links) }}{{ end -}}
 {{- end -}}
 {{- $strings = merge $strings (dict "related" $related) -}}
+{{- /* Slide links per talk (data/talk_slides.yaml), so the live renderer keeps them. */ -}}
+{{- $strings = merge $strings (dict "slides" (site.Data.talk_slides | default dict) "slidesLabel" (i18n "slides") "slidesPt" (i18n "slidesPt") "slidesEn" (i18n "slidesEn")) -}}
 <script type="application/json" id="talks-strings">{{ $strings | jsonify | safeJS }}</script>
 {{- $js := resources.Get "js/talks.js" | minify | fingerprint }}
 <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
