@@ -1,7 +1,6 @@
 ---
 title: '12 fatores: dependências declaradas, nada presumido'
 date: 2026-11-23
-draft: true
 description: 'Fator II da série Doze fatores na prática: como declarar e isolar as dependências de um app PHP com o Composer, e como npm, pip e outros gerenciadores resolvem o mesmo problema.'
 translationKey: twelve-factor-dependencies
 series: ['Doze fatores na prática']

@@ -1,7 +1,6 @@
 ---
 title: '12 fatores: configuração fora do código'
 date: 2026-11-30
-draft: true
 description: 'Fator III da série Doze fatores na prática: por que senhas e endereços ficam em variáveis de ambiente, e como ler, validar e passar essas configurações num app PHP.'
 translationKey: twelve-factor-config
 series: ['Doze fatores na prática']
@@ -11,7 +10,7 @@ tags: ['Arquitetura', 'PHP']
 
 Todo time já viu um commit com a mensagem "remove senha". O problema é que o Git não esquece: a senha continua no histórico, ao alcance de qualquer pessoa que clonar o repositório. E quase sempre ela foi parar ali pelo mesmo motivo: alguém escreveu a configuração direto no código.
 
-Este é o terceiro artigo da série **Doze fatores na prática**. No [primeiro](/pt-br/posts/twelve-factor-codebase/), o assunto foi o fator I, base de código. O segundo tratou do fator II, dependências. Agora é a vez do fator III, **configuração**: o que é, onde ela deve morar e como ler tudo isso em PHP puro, sem framework.
+Este é o terceiro artigo da série **Doze fatores na prática**. No [primeiro](/pt-br/posts/twelve-factor-codebase/), o assunto foi o fator I, base de código. O [segundo](/pt-br/posts/twelve-factor-dependencies/) tratou do fator II, dependências. Agora é a vez do fator III, **configuração**: o que é, onde ela deve morar e como ler tudo isso em PHP puro, sem framework.
 
 ## Antes de começar: três palavras
 
