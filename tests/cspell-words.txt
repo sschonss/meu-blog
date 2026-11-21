@@ -71,3 +71,5 @@ FYFH
 FrankenPHP
 ramsey
 Autoloader
+gitleaks
+phpdotenv
