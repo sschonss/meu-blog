@@ -1,7 +1,6 @@
 ---
 title: '12 factors: config outside the code'
 date: 2026-11-30
-draft: true
 description: 'Factor III of the Twelve factors in practice series: why passwords and addresses live in environment variables, and how to read, validate and pass that config in a PHP app.'
 translationKey: twelve-factor-config
 series: ['Twelve factors in practice']
@@ -11,7 +10,7 @@ tags: ['Architecture', 'PHP']
 
 Every team has seen a commit with the message "remove password". The problem is that Git does not forget: the password is still in the history, within reach of anyone who clones the repository. And it almost always got there for the same reason: someone wrote the config straight into the code.
 
-This is the third article in the **Twelve factors in practice** series. The [first one](/posts/twelve-factor-codebase/) covered factor I, codebase. The second covered factor II, dependencies. Now it is time for factor III, **config**: what it is, where it should live and how to read it in plain PHP, with no framework.
+This is the third article in the **Twelve factors in practice** series. The [first one](/posts/twelve-factor-codebase/) covered factor I, codebase. The [second one](/posts/twelve-factor-dependencies/) covered factor II, dependencies. Now it is time for factor III, **config**: what it is, where it should live and how to read it in plain PHP, with no framework.
 
 ## Before we start: three words
 

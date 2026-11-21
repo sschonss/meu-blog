@@ -1,7 +1,6 @@
 ---
 title: '12 factors: dependencies declared, nothing assumed'
 date: 2026-11-23
-draft: true
 description: 'Factor II of the Twelve factors in practice series: how to declare and isolate a PHP app''s dependencies with Composer, and how npm, pip and other package managers solve the same problem.'
 translationKey: twelve-factor-dependencies
 series: ['Twelve factors in practice']
