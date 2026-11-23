@@ -50,12 +50,12 @@ jobs:
       - name: Build
         run: hugo --minify
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./public
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
       - name: Newsletter for new articles
         # After the site is live: creates a Buttondown email for articles
         # published in the last 2 days (never twice for the same article).
