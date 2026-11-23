@@ -99,8 +99,14 @@ article img {
 .article-content code { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: .3rem; font-size: .88em; padding: .12em .35em; }
 .article-content pre { background: #0f172a; border: 1px solid #1e293b; border-radius: .7rem; color: #e2e8f0; font-size: .88rem; line-height: 1.65; margin: 1.6rem 0; overflow-x: auto; padding: 1.2rem; white-space: pre; }
 .article-content pre code { background: transparent; border: 0; color: inherit; padding: 0; }
-.article-content table { border-collapse: collapse; display: block; margin: 1.6rem 0; max-width: 100%; overflow-x: auto; width: max-content; }
-.article-content th, .article-content td { border: 1px solid #e2e8f0; padding: .65rem .8rem; text-align: left; }
+/* Wide tables scroll sideways on small screens instead of breaking words letter by letter.
+   Markdown tables are wrapped by layouts/_markup/render-table.html. Raw HTML tables use the
+   display:block overflow-x rule below. overflow-wrap:anywhere on .article-content (mobile)
+   must not apply inside cells, or min-content width collapses to one letter. */
+.article-table-wrap { -webkit-overflow-scrolling: touch; margin: 1.6rem 0; max-width: 100%; overflow-x: auto; }
+.article-content table { border-collapse: collapse; display: block; margin: 1.6rem 0; max-width: 100%; overflow-x: auto; overflow-wrap: normal; width: max-content; word-break: normal; }
+.article-table-wrap > table { display: table; margin: 0; max-width: none; min-width: 100%; overflow: visible; width: 100%; }
+.article-content th, .article-content td { border: 1px solid #e2e8f0; overflow-wrap: normal; padding: .65rem .8rem; text-align: left; word-break: normal; }
 .article-content th { background: #f8fafc; font-weight: 650; }
 .article-content blockquote { border-left: 3px solid #2563eb; color: #64748b; padding-left: 1.2rem; }
 .article-meta .article-translation { font-weight: 600; }
@@ -215,6 +221,7 @@ article img {
   .article-page,
   .profile-page { padding-left: 1.1rem; padding-right: 1.1rem; }
   .article-content { font-size: 1rem; line-height: 1.75; overflow-wrap: anywhere; }
+  .article-content th code, .article-content td code { white-space: nowrap; }
   .article-header h1 { font-size: clamp(2.25rem, 11vw, 3.25rem); }
   .article-content pre { margin-left: 0; margin-right: 0; max-width: 100%; }
   .article-content img { box-sizing: border-box; }
