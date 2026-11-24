@@ -14,17 +14,20 @@ permissions:
   pages: write
   id-token: write
 
+# One Pages deploy at a time; a newer run waits instead of cancelling one that
+# is already publishing.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   checks:
     # Mesmos checks do check.yml (artigos, build, links internos, ortografia e
     # Playwright). Se algum falhar, o deploy não roda, inclusive no cron.
     uses: ./.github/workflows/check.yml
 
-  deploy:
+  build:
     needs: checks
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -53,9 +56,22 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./public
+
+  deploy:
+    # Separate job, as in GitHub's Pages starter workflows: deploy-pages lists
+    # the run's artifacts, and right after an upload in the same job that list
+    # can still come back empty ("Found 0 artifact(s)", actions/deploy-pages#451).
+    # Waiting for the build job to finish avoids that race.
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v5
+      - uses: actions/checkout@v4
       - name: Newsletter for new articles
         # After the site is live: creates a Buttondown email for articles
         # published in the last 2 days (never twice for the same article).
