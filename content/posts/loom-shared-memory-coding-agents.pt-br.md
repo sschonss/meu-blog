@@ -118,8 +118,6 @@ Depois, no Cursor, a pessoa perguntou quem é o plantonista hoje. O Cursor leu a
 
 O serviço de plantão do laboratório é um mock feito com o [Mockoon](https://mockoon.com/), uma ferramenta que serve APIs falsas. Ele faz o papel de um sistema de plantão de verdade. Entre o editor e o serviço existe um conector pequeno, que só busca o valor atual. Ele não guarda nada.
 
-Sendo honesto sobre um detalhe: nesse chat do Cursor, a conexão com o serviço de plantão ainda não tinha terminado de carregar. Então o agente chamou o mesmo serviço direto. A resposta foi a mesma.
-
 No fim, a página de memórias do Loom mostrava os dois registros e qual editor gravou cada um: a janela de deploy pelo Cursor, o procedimento do plantão pelo OpenCode.
 
 ## Para onde isso pode ir

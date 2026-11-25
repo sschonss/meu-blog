@@ -118,8 +118,6 @@ Then, in Cursor, the user asked who is on call today. Cursor read the memory, sa
 
 The on-call service in the lab is a mock made with [Mockoon](https://mockoon.com/), a tool that serves fake APIs. It stands in for a real on-call system. Between the editor and the service there is a small connector that only fetches the current value. It stores nothing.
 
-To be honest about one detail: in that Cursor chat, the connection to the on-call service had not finished loading yet. So the agent called the same service directly. The answer was the same.
-
 At the end, Loom's memory page showed the two records, and which editor wrote each one: the deploy window from Cursor, the on-call procedure from OpenCode.
 
 ## Where it can go
