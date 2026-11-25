@@ -91,6 +91,16 @@ No Cursor, uma regra do projeto diz ao agente para buscar no Loom antes de respo
 
 Só o Cursor e o OpenCode foram testados. O Claude Code entraria do mesmo jeito, apontando a configuração MCP dele para o mesmo Loom. O laboratório não testou isso.
 
+## Por que isso importa para um time
+
+Muito conhecimento do time mora na máquina de um dev. Fica num caderno, num arquivo de texto ou no histórico de chat daquela pessoa. Quando outra pessoa precisa, tem que achar quem sabe.
+
+Times também têm fluxos comuns que todo dev deveria fazer do mesmo jeito. Fazer deploy em produção é um. Procurar nos logs é outro. Cada pessoa acaba fazendo um pouco diferente, porque o jeito certo nunca foi escrito num lugar que todo mundo alcança.
+
+Com um Loom compartilhado, esse conhecimento tem um lugar só. Um dev novo pergunta para o agente que já usa, no editor que já usa, e recebe o jeito do time de fazer aquilo. Não precisa sair caçando quem sabe.
+
+Para deixar claro: esse uso no onboarding é a motivação, não algo que o laboratório testou. O laboratório só provou o mecanismo, numa máquina, com dois editores.
+
 ## Para onde o mesmo mecanismo vai
 
 A pergunta do plantão é trivial de propósito. Ela deixa o mecanismo visível. As perguntas triviais são a prova, não o destino.

@@ -93,6 +93,16 @@ In Cursor, a project rule tells the agent to search Loom before answering. OpenC
 
 Only Cursor and OpenCode were tested. Claude Code would join the same way, by pointing its MCP config at the same Loom. The lab did not test it.
 
+## Why this matters for a team
+
+A lot of team knowledge lives on one developer's machine. It sits in a notebook, in a text file, or in that person's own chat history. When someone else needs it, they have to find the person who knows.
+
+Teams also have common flows that every developer should do the same way. Deploying to production is one. Searching the logs is another. Each person ends up doing them a little differently, because the right way was never written where everyone can reach it.
+
+With a shared Loom, that knowledge has one place. A new developer asks the agent they already use, in the editor they already use, and gets the team's way of doing it. They do not have to hunt for the person who knows.
+
+To be clear: this onboarding use is the motivation, not something the lab tested. The lab only proved the mechanism, on one machine, with two editors.
+
 ## Where the same mechanism goes
 
 The on-call question is trivial on purpose. It makes the mechanism visible. The trivial questions are the proof, not the destination.
