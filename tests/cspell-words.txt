@@ -29,8 +29,10 @@ Hyperf
 Hyperf's
 luizschons
 METR
+Mockoon
 Nostr
 Ollama
+opencode
 opentelemetry
 pthreads
 Sessionize
@@ -59,6 +61,7 @@ commitada
 commitar
 corrotina
 entregável
+devs
 Exfiltrar
 mensageria
 retentativas
