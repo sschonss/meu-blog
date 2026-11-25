@@ -61,6 +61,7 @@ commitada
 commitar
 corrotina
 entregável
+devs
 Exfiltrar
 mensageria
 retentativas
@@ -75,4 +76,3 @@ ramsey
 Autoloader
 gitleaks
 phpdotenv
-plantao

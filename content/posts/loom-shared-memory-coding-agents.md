@@ -1,126 +1,167 @@
 ---
-title: 'One memory, any editor: sharing team knowledge across coding agents with Loom'
+title: 'Teach it once: a shared memory for every coding agent on the team'
 date: 2026-11-28
-description: 'A lab with Loom, Cursor and OpenCode: one shared memory over MCP, where a fact written in one editor is read in another, and live values come from the system that owns them.'
+description: 'Every developer teaches their own AI agent how the team searches logs or deploys. An essay on putting that knowledge in one shared memory, with a small lab as proof.'
 translationKey: loom-shared-memory-coding-agents
 tags: ['AI', 'Architecture']
 ---
 
-Most teams are not building an AI product. People already use a coding agent for everyday work. Some prefer [Cursor](https://cursor.com/), some [OpenCode](https://opencode.ai/), some [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview). That part is settled.
+Think about the last time you asked your AI agent to find a log in production. You probably had to explain where the logs live, which tool to use and which filter works. Now think about the developer sitting next to you. They did the same thing last week, with their own agent, from scratch.
 
-The problem is what happens to what they learn. Someone figures out the deploy window, or who is on call, or where a log lives. That answer stays in one person's chat. The next person asks again, in a different editor, and starts from zero.
+Every team has a few standard flows: search the logs, deploy a service, find out who is on call. Everyone does them, and everyone should do them the same way. But each developer ends up teaching the same lesson to their own agent, again and again.
 
-The usual fix is a specialist bot per topic. A deploy bot, an on-call bot, a logs bot. That is more things to build and maintain, and it ties the knowledge to whoever hosts the bot.
+This article presents a different way to think about that knowledge: put it in **one memory shared by every agent on the team**, whatever editor or AI provider each person uses. Then it shows a small lab that tested the idea with two editors.
 
-The idea tested here is simpler. One shared memory. Whoever figures something out writes it. Whoever asks later, in another editor, gets the same answer. Switching providers does not switch the knowledge.
+## Before we start: three words
 
-A small lab tested this on 24 Nov 2026, on one machine, with two editors: Cursor and OpenCode. The code and the notes are in [sschonss/loom-lab](https://github.com/sschonss/loom-lab).
+- **Coding agent:** the AI assistant inside the editor, like the ones in Cursor, OpenCode or Claude Code. You ask in plain language and it reads code, runs tools and answers.
+- **MCP (Model Context Protocol):** a standard way to plug external tools into an agent. If a tool speaks MCP, any editor that speaks MCP can use it.
+- **Shared memory:** a place outside the editor where agents save and look up what they learned. In this article, the memory is [Loom](https://loom.clickhouse.com/), a memory server for agents.
 
-## The setup in one paragraph
+## The problem: every agent learns alone
 
-[Loom](https://loom.clickhouse.com/) is a memory server for agents. In the lab, Loom 1.3.0 ran locally at `http://127.0.0.1:7777`, in single-user mode, namespace `local`, with no login. Both editors talk to it over [MCP](https://modelcontextprotocol.io/) (Model Context Protocol, the standard way an editor plugs in external tools) at `http://127.0.0.1:7777/mcp?toolset=coding`. Cursor has that URL in `~/.cursor/mcp.json`. OpenCode has it in `~/.config/opencode/opencode.json`. Both files are global to the user, not to a project. The [connection guide](https://loom.clickhouse.com/docs/getting-started/connect-a-coding-agent) covers each editor.
+Team knowledge rarely lives in a shared place. It lives in someone's head, in a personal notebook, or in the chat history on one developer's machine.
 
-There are two ways to answer a question, and the lab tested both:
+Coding agents made this worse in a quiet way. When a developer explains to their agent how the team searches logs, that explanation stays in that chat, in that editor. The agent in the next editor knows nothing about it. So the next developer explains it again. And when someone switches AI provider, they start over too.
 
-1. **A stable fact lives in the memory.** The text itself is the answer.
-2. **A live value does not get copied into memory.** The memory stores only the path to it. The value comes from the system that owns it.
+![Diagram: on the left, today, three developers each teach their own agent (Cursor, OpenCode, Claude Code) and each agent keeps its own notes on how to search logs. On the right, the three agents read and write one shared memory with the team flows.](/images/posts/loom-shared-memory-coding-agents/problem-en.svg)
 
-## Test 1: a fact, two editors
+An analogy helps. Picture a restaurant kitchen where every cook keeps the recipes in their own head. Each new cook has to ask around, and each one learns a slightly different version of the same dish. The fix is not to train every cook separately. The fix is a recipe book that stays in the kitchen, where the cooks already are.
 
-The chats in the lab were in Portuguese. The screenshots below were translated to English in place. Keys, tool names, editor names and returned values were left exactly as they were.
+The new developer feels this the most. They start from zero, and so does their agent.
 
-In Cursor, the user said the deploy window is now Monday to Friday, 8am to 2pm. Cursor looked for an existing record, found none, and saved the fact under the key `work/decision/deploy-window`.
+## The idea: one memory for every agent
 
-![Cursor chat: the user says the deploy window is now Monday to Friday from 8am to 2pm, and Cursor answers that it saved the fact at work/decision/deploy-window, with no previous record](/images/posts/loom-shared-memory-coding-agents/01-cursor-saves-deploy-window-en.webp)
-*Cursor saves the deploy window under `work/decision/deploy-window` (translated from Portuguese).*
+What if the team's standard flows lived in one memory that every agent can read and write?
 
-Then, in OpenCode, the user asked what the deploy window is. OpenCode called `loom_context_pack` and then `loom_search`. It returned the same text, plus the memory key it came from.
+It works like this, step by step:
 
-![OpenCode calls loom_loom_context_pack and loom_loom_search, then answers that the deploy window is Monday to Friday, from 8am to 2pm, citing work/decision/deploy-window](/images/posts/loom-shared-memory-coding-agents/02-opencode-reads-deploy-window-en.webp)
-*OpenCode finds the same fact and cites the key `work/decision/deploy-window` (translated from Portuguese).*
+1. Someone figures out how to do a task the team's way.
+2. Their agent writes it to the shared memory, once.
+3. Later, another developer asks their own agent about the same task, in any editor.
+4. That agent looks in the shared memory first, and follows what is there.
 
-One detail matters here. OpenCode was opened in a random folder, not in the lab repository. It still read the memory. The Loom connection lives in the user's global OpenCode config, so the open folder did not matter.
+The knowledge belongs to the team, not to one machine or one vendor. Switching from one AI provider to another does not mean teaching everything again, because the memory stays where it is.
 
-## Test 2: the memory points at another service
+## Two kinds of knowledge: facts and paths
 
-Who is on call changes every day. Copying the name into memory would make the memory wrong by tomorrow. So the memory stores the procedure, not the value.
+Not everything should be copied into the memory. There are two kinds of knowledge, and they need different treatment.
 
-In OpenCode, the user asked it to note the on-call procedure. OpenCode saved `work/procedure/plantonista-de-hoje` ("plantonista de hoje" is Portuguese for "today's on-call person"). The procedure says: do not guess the name, call the tool `plantonista_de_hoje` on the `plantao` MCP server, and return exactly what it returns. No person's name went into the memory.
+A **fact** changes rarely. "The deploy window is Monday to Friday, 8am to 2pm." It is fine to write the fact itself into the memory.
 
-![OpenCode confirms it noted work/procedure/plantonista-de-hoje in Loom: do not guess the name, call the plantonista_de_hoje tool on the plantao MCP server and answer with what it returns](/images/posts/loom-shared-memory-coding-agents/03-opencode-saves-oncall-procedure-en.webp)
-*OpenCode saves the procedure under `work/procedure/plantonista-de-hoje`, with no name in it (translated from Portuguese).*
+A **live value** changes all the time, or belongs to another system. "Who is on call today?" If you write the name into the memory, it is wrong tomorrow. So the memory stores the **path** instead: which tool to call to get the answer. The agent follows the path and gets the current value from the system that owns it.
 
-Then, in Cursor, the user asked "who is on call today?". Cursor read Loom, saw that the roster is not in memory, and went to the service. The answer was Luiz Schons, channel `#plantao`, until 25/11/2026 at 09:00 (America/Sao_Paulo). That is exactly what the mock service returned.
+Think of the note on the office fridge. Nobody writes "today the on-call person is X" on it, because it would be wrong by morning. The note says "check the roster on the board". The note is the path. The board has the value.
 
-![Cursor chat: asked who is on call today, Cursor says the roster is not in memory, notes the on-call server has not finished loading, and answers Luiz Schons, channel #plantao, until 25/11/2026 at 09:00](/images/posts/loom-shared-memory-coding-agents/04-cursor-reads-oncall-en.webp)
-*Cursor follows the stored path and answers with the value from the service (translated from Portuguese).*
+## Why not just write documentation?
 
-To be honest about this run: in that Cursor chat, the `plantao` MCP server had not finished loading yet. The screenshot shows Cursor saying so. The editor invoked the same server process directly instead, and the value still matched the mock. In a chat opened after a reload, the call shows up as the tool `plantonista_de_hoje`, as expected.
+This is the obvious question, and it deserves an honest answer. What follows is reasoning, not something the lab measured.
 
-## What ended up in Loom
+Documentation is still needed. A good runbook or wiki page helps people, and nothing here replaces it. The difference is in who reads it, and when.
 
-After both tests, the memory held two records, one written from each editor:
-
-| Key | What it stores | Written from |
+| | Documentation | Shared memory |
 | --- | --- | --- |
-| `work/decision/deploy-window` | The deploy window is Monday to Friday, 8am to 2pm. | Cursor |
-| `work/procedure/plantonista-de-hoje` | Do not guess the name. Call `plantonista_de_hoje` on the `plantao` MCP and return exactly what it returns. | OpenCode |
+| Written for | People | The agent, which then helps the person |
+| Read when | Someone remembers to open it | The agent checks it before answering |
+| Written by | Often someone else, later | Whoever just figured it out, right away |
+| Where it lives | A wiki, outside the editor | The place the agent already looks |
 
-The stored values are in Portuguese, as typed in the chats; the screenshot below shows them translated. The Memories page labels each record with the client that wrote it: `opencode` and `cursor-vscode`.
+The main point is the moment of need. When a developer asks their agent how to find a log, the agent does not open the wiki unless someone told it to, and told it where. The shared memory sits in its path.
 
-![Loom Memories page on Nov 24 with two records: work/procedure/plantonista-de-hoje written by opencode and work/decision/deploy-window written by cursor-vscode](/images/posts/loom-shared-memory-coding-agents/05-loom-memories-dashboard-en.webp)
-*The Loom Memories page on 24 November 2026 (translated from Portuguese).*
+The memory has costs too, and they are real:
 
-## The pieces
+- **It goes stale.** Just like docs. Worse, a wrong entry spreads to every agent that reads it.
+- **It needs curation.** Someone has to review what goes in and remove what is outdated.
+- **It needs access control.** In a team, not everyone should be able to rewrite everything.
 
-**Loom** stores the fact and the procedure. Its dashboard runs at `http://127.0.0.1:7777/`, on the Memories page, namespace `local`, shown above.
+So it is not a free upgrade over documentation. It is a different tool, closer to where the work happens, with its own care.
 
-**[Mockoon](https://mockoon.com/)** plays the outside system. It is a tool that serves fake HTTP APIs. In the lab it answers `GET /plantonista` on port 3010, at `http://127.0.0.1:3010/plantonista`. The response body lives in `mockoon/plantao.json`. Changing who is on call means editing that file and recreating the container. In a real team, this would be the actual on-call system.
+## The lab: testing the idea
 
-**The thin MCP**, `plantao/server.py`, is the door between the editor and that service. It exposes one tool, `plantonista_de_hoje`. The tool makes a GET to `/plantonista` and returns the JSON. Nothing else. It holds no data and no logic about who is on call.
+To check that the mechanism works, a small lab connected two editors, [Cursor](https://cursor.com/) and [OpenCode](https://opencode.ai/), to the same Loom memory. Both connect to it through MCP. Everything ran on one machine.
 
-```text
-Cursor or OpenCode
-        |
-        |  MCP
-        v
-      Loom                         Mockoon :3010
- team memory                       GET /plantonista
- "call tool X"  --------------->   { "nome": "Luiz Schons", ... }
-```
+The goal was not to build a product. It was to answer one question: **does something written from one editor really show up in the other?**
 
-In Cursor, a project rule tells the agent to search Loom before answering. OpenCode uses the same Loom URL in its own config.
+The full write-up, with the real screenshots of each chat, is in the repository: [sschonss/loom-lab](https://github.com/sschonss/loom-lab/blob/main/docs/how-it-works.md). The diagrams below show what happened, in a simpler form.
 
-Only Cursor and OpenCode were tested. Claude Code would join the same way, by pointing its MCP config at the same Loom. The lab did not test it.
+### Test 1: a fact written in one editor, read in the other
 
-## Why this matters for a team
+In Cursor, the user said the deploy window is now Monday to Friday, 8am to 2pm. Cursor saved that fact in Loom.
 
-A lot of team knowledge lives on one developer's machine. It sits in a notebook, in a text file, or in that person's own chat history. When someone else needs it, they have to find the person who knows.
+Then, in OpenCode, the user asked what the deploy window is. OpenCode searched Loom and answered with the same text, and it said where the answer came from.
 
-Teams also have common flows that every developer should do the same way. Deploying to production is one. Searching the logs is another. Each person ends up doing them a little differently, because the right way was never written where everyone can reach it.
+![Diagram of the first test: in Cursor, the user states the deploy window and Cursor writes it to the shared memory. In OpenCode, the user asks what the deploy window is, OpenCode reads the memory and answers with the same text.](/images/posts/loom-shared-memory-coding-agents/fact-en.svg)
 
-With a shared Loom, that knowledge has one place. A new developer asks the agent they already use, in the editor they already use, and gets the team's way of doing it. They do not have to hunt for the person who knows.
+One detail matters: OpenCode was opened in an unrelated folder, not in the lab project. It still found the answer. The memory is not tied to a project or to an editor.
 
-To be clear: this onboarding use is the motivation, not something the lab tested. The lab only proved the mechanism, on one machine, with two editors.
+### Test 2: the memory stores the path, not the value
 
-## Where the same mechanism goes
+In OpenCode, the user asked it to note how to find out who is on call. OpenCode saved only the procedure: do not guess the name, ask the on-call service and answer with what it returns. No name went into the memory.
 
-The on-call question is trivial on purpose. It makes the mechanism visible. The trivial questions are the proof, not the destination.
+Then, in Cursor, the user asked who is on call today. Cursor read the memory, saw that the roster is not there, followed the procedure and asked the service. The name in the answer came from the service.
 
-The same shape fits real team questions. **None of the following is implemented. This is the possibility, not something the lab built.**
+![Diagram of the second test: OpenCode writes to the shared memory only the procedure, ask the on-call service. In Cursor, the user asks who is on call. Cursor reads the procedure from memory, calls the on-call service through a small connector, and the service returns the name of the person on call today.](/images/posts/loom-shared-memory-coding-agents/path-en.svg)
 
-| Question | What lives in Loom | Where the answer comes from |
+The on-call service in the lab is a mock made with [Mockoon](https://mockoon.com/), a tool that serves fake APIs. It stands in for a real on-call system. Between the editor and the service there is a small connector that only fetches the current value. It stores nothing.
+
+To be honest about one detail: in that Cursor chat, the connection to the on-call service had not finished loading yet. So the agent called the same service directly. The answer was the same.
+
+At the end, Loom's memory page showed the two records, and which editor wrote each one: the deploy window from Cursor, the on-call procedure from OpenCode.
+
+### What the lab did not test
+
+Only Cursor and OpenCode were tested. [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) would connect the same way, by pointing it at the same memory, but the lab did not try it.
+
+## Where it can go
+
+The lab questions are trivial on purpose, so the mechanism is easy to see. They are the proof, not the destination.
+
+The same shape fits the questions a team really asks. **None of the following is built.** It is where the idea points:
+
+| Question | What the memory stores | Where the answer comes from |
 | --- | --- | --- |
-| What is the deploy window? *(tested)* | The fact, as text. | The memory itself. |
-| Who is on call? *(tested)* | The procedure: call `plantonista_de_hoje`. | Mockoon, through the `plantao` MCP. |
-| How do I find a specific production log? *(not built)* | Where to look, which query, which tool. | The log system returns the line. |
-| What is our deploy process? *(not built)* | The steps and what to check before moving on. | The memory, plus a tool when a step depends on a system. |
-| I am deploying this service. What do I look at? *(not built)* | The dashboards, the order, and what each one shows. | The memory points at the dashboard. The dashboard shows the number. |
+| How do I find this production log? | Where to look, which query, which tool | The log system returns the line |
+| What is our deploy process? | The steps and what to check before moving on | The memory, plus a tool when a step needs one |
+| I am deploying this service. What do I watch? | Which dashboards matter, and in which order | The dashboard shows the number |
 
-In these cases the memory is not loose text. It is a path: which tool to call, what to check, which dashboard to open. The agent the person already uses follows that path. No new bot per subject. No lock-in to one vendor.
+In every row, the agent the person already uses follows the path. No new bot per subject. No lock-in to one vendor.
 
-## What this local mode does not do
+## One limit
 
-There is no team separation. Anyone who can reach port 7777 can read and write the memory. That is fine for two editors on one machine, and nothing more.
+The lab ran in a local, single-user mode, with no accounts. Anyone who could reach the memory could read and write everything. That is fine for a test on one machine, and nothing more. A real team needs accounts and access per person, which Loom documents in [Tokens and grants](https://loom.clickhouse.com/docs/guides/tokens-and-grants).
 
-A team on separate machines needs accounts, a namespace, and a token per person. Loom documents that in [Tokens and grants](https://loom.clickhouse.com/docs/guides/tokens-and-grants). The lab did not set that up.
+## How to tell if your team would benefit
+
+A few questions to ask, as a starting point:
+
+- Does more than one person on the team explain the same flow to their own agent?
+- When a new developer needs to search logs or deploy, do they have to find a specific person?
+- Does the team use more than one editor or AI provider?
+- Is there someone willing to curate what goes into a shared memory?
+
+If the first three answers are "yes", the idea is worth a test. If the last one is "no", start there.
+
+## Conclusion
+
+The point is not Loom, or any one editor. It is a different place for team knowledge: written once, by whoever learned it, where every agent already looks. The lab showed that the mechanism works between two editors. Making it work for a whole team is the next step, with curation and access control.
+
+If you want to see how the lab was put together, and the real screenshots, it is all in [sschonss/loom-lab](https://github.com/sschonss/loom-lab).
+
+## Glossary
+
+- **Coding agent:** the AI assistant inside an editor that reads code, runs tools and answers.
+- **MCP:** Model Context Protocol, a standard way to plug external tools into an agent.
+- **Shared memory:** a place outside the editor where every agent on the team saves and looks up knowledge.
+- **Fact:** knowledge that changes rarely and can be stored as text.
+- **Path:** instructions for getting a value that changes, like which tool to call.
+- **Mock:** a fake service that answers like the real one, used for tests.
+- **Curation:** reviewing what goes into the memory and removing what is outdated.
+
+## Sources
+
+- [Loom](https://loom.clickhouse.com/)
+- [Loom: connect a coding agent](https://loom.clickhouse.com/docs/getting-started/connect-a-coding-agent)
+- [Loom: tokens and grants](https://loom.clickhouse.com/docs/guides/tokens-and-grants)
+- [Model Context Protocol](https://modelcontextprotocol.io/)
+- [Mockoon](https://mockoon.com/)
+- [The lab: sschonss/loom-lab](https://github.com/sschonss/loom-lab)
