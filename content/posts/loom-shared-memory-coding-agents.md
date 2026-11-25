@@ -43,38 +43,52 @@ It works like this, step by step:
 
 The knowledge belongs to the team, not to one machine or one vendor. Switching from one AI provider to another does not mean teaching everything again, because the memory stays where it is.
 
-## Two kinds of knowledge: facts and paths
+## What goes in the memory: facts and paths
 
-Not everything should be copied into the memory. There are two kinds of knowledge, and they need different treatment.
+Not everything should be copied into the memory. Entries come in two kinds, and each one needs a different treatment.
 
 A **fact** changes rarely. "The deploy window is Monday to Friday, 8am to 2pm." It is fine to write the fact itself into the memory.
 
-A **live value** changes all the time, or belongs to another system. "Who is on call today?" If you write the name into the memory, it is wrong tomorrow. So the memory stores the **path** instead: which tool to call to get the answer. The agent follows the path and gets the current value from the system that owns it.
+A **path** is for when the answer lives somewhere else. The memory does not copy the answer. It stores how to get there. And "somewhere else" can be two different places:
 
-Think of the note on the office fridge. Nobody writes "today the on-call person is X" on it, because it would be wrong by morning. The note says "check the roster on the board". The note is the path. The board has the value.
+- **A tool**, for live values. "Who is on call today?" If you write the name into the memory, it is wrong tomorrow. So the memory stores which tool to call, and the agent gets the current value from the system that owns it.
+- **A document**, for long or complex procedures. "How do I test a credit card transaction in QA?" That takes several steps, test cards and some setup. It belongs in the documentation. The memory stores the question and, as the answer, the link to the right doc page.
 
-## Why not just write documentation?
+Think of the note on the office fridge. Nobody writes "today the on-call person is X" on it, because it would be wrong by morning. Nobody copies the whole equipment manual onto it either. The note says "check the roster on the board" or "the manual is in the second drawer". The note is the path. The board and the manual have the content.
 
-This is the obvious question, and it deserves an honest answer. What follows is reasoning, not something the lab measured.
+## Documentation and memory, together
 
-Documentation is still needed. A good runbook or wiki page helps people, and nothing here replaces it. The difference is in who reads it, and when.
+If the team already has documentation, why add a memory? Because they do different jobs, and they work better together. What follows is reasoning, not something the lab measured.
+
+**Documentation is the place for complex things.** Long procedures, context, decisions, diagrams. Testing a credit card transaction in QA is a good example: it needs explanation, and a three-line answer would not do it justice.
+
+**The shared memory is the place for short, operational, day-to-day answers.** How to find the log of a transaction in QA. How to find the log of a transaction in production. Things a developer needs in the middle of a task, in a few lines.
+
+And the two connect. When someone asks their agent how to test a card transaction in QA, the memory does not hold the whole procedure. It holds the link. The agent answers with the right doc page, at the moment of need, and the documentation gets read exactly when it is useful.
+
+![Diagram: an agent asks the shared memory. For an operational question, like how to find the log of a transaction in QA or production, the memory answers directly. For a complex question, like how to test a credit card transaction in QA, the memory returns the link to the documentation, which holds the full procedure.](/images/posts/loom-shared-memory-coding-agents/together-en.svg)
 
 | | Documentation | Shared memory |
 | --- | --- | --- |
-| Written for | People | The agent, which then helps the person |
-| Read when | Someone remembers to open it | The agent checks it before answering |
-| Written by | Often someone else, later | Whoever just figured it out, right away |
-| Where it lives | A wiki, outside the editor | The place the agent already looks |
+| Best for | Complex, long procedures | Short, operational answers |
+| Example | How to test a credit card transaction in QA | How to find the log of a transaction in production |
+| Who reads it | People, from start to finish | The agent, in the middle of a task |
+| How they connect | Holds the full content | Answers directly, or points to the right doc page |
 
-The main point is the moment of need. When a developer asks their agent how to find a log, the agent does not open the wiki unless someone told it to, and told it where. The shared memory sits in its path.
+### Keeping it up to date is cheap
 
-The memory has costs too, and they are real:
+Any shared knowledge goes out of date at some point. What matters is how much it costs to fix.
 
-- **It goes stale.** Just like docs. Worse, a wrong entry spreads to every agent that reads it.
-- **It needs curation.** Someone has to review what goes in and remove what is outdated.
-- **It needs access control.** In a team, not everyone should be able to rewrite everything.
+With the shared memory, fixing is part of the work:
 
-So it is not a free upgrade over documentation. It is a different tool, closer to where the work happens, with its own care.
+1. A developer gets an answer from their agent, and the answer is wrong.
+2. They find out the right way, as they would anyway.
+3. They correct the entry, once.
+4. From that moment, every agent on the team gets the corrected answer.
+
+Nobody has to schedule time to update a page, and nobody keeps teaching their own agent the old way. The team corrects the memory while using it. A doc page gets fixed too, but it usually waits until someone sets time aside for it.
+
+Two things still need care. Someone should keep an eye on what goes in, so the memory does not fill up with noise. And in a team, not everyone should be able to rewrite everything, which is a matter of access control.
 
 ## The lab: testing the idea
 
@@ -108,10 +122,6 @@ To be honest about one detail: in that Cursor chat, the connection to the on-cal
 
 At the end, Loom's memory page showed the two records, and which editor wrote each one: the deploy window from Cursor, the on-call procedure from OpenCode.
 
-### What the lab did not test
-
-Only Cursor and OpenCode were tested. [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) would connect the same way, by pointing it at the same memory, but the lab did not try it.
-
 ## Where it can go
 
 The lab questions are trivial on purpose, so the mechanism is easy to see. They are the proof, not the destination.
@@ -120,7 +130,8 @@ The same shape fits the questions a team really asks. **None of the following is
 
 | Question | What the memory stores | Where the answer comes from |
 | --- | --- | --- |
-| How do I find this production log? | Where to look, which query, which tool | The log system returns the line |
+| How do I find the log of a transaction in QA or production? | Where to look, which query, which tool | The log system returns the line |
+| How do I test a credit card transaction in QA? | The link to the right doc page | The documentation |
 | What is our deploy process? | The steps and what to check before moving on | The memory, plus a tool when a step needs one |
 | I am deploying this service. What do I watch? | Which dashboards matter, and in which order | The dashboard shows the number |
 
@@ -136,14 +147,14 @@ A few questions to ask, as a starting point:
 
 - Does more than one person on the team explain the same flow to their own agent?
 - When a new developer needs to search logs or deploy, do they have to find a specific person?
+- Does the team have good documentation that is hard to find in the middle of a task?
 - Does the team use more than one editor or AI provider?
-- Is there someone willing to curate what goes into a shared memory?
 
-If the first three answers are "yes", the idea is worth a test. If the last one is "no", start there.
+If most answers are "yes", the idea is worth a test. Start small: a few operational answers, and a few links to the docs you already have.
 
 ## Conclusion
 
-The point is not Loom, or any one editor. It is a different place for team knowledge: written once, by whoever learned it, where every agent already looks. The lab showed that the mechanism works between two editors. Making it work for a whole team is the next step, with curation and access control.
+The point is not Loom, or any one editor. It is a different place for team knowledge: written once, by whoever learned it, where every agent already looks. It does not replace the documentation. It brings the documentation closer to the moment someone needs it. The lab showed that the mechanism works between two editors. Making it work for a whole team is the next step, with access control and someone looking after what goes in.
 
 If you want to see how the lab was put together, and the real screenshots, it is all in [sschonss/loom-lab](https://github.com/sschonss/loom-lab).
 
@@ -153,9 +164,9 @@ If you want to see how the lab was put together, and the real screenshots, it is
 - **MCP:** Model Context Protocol, a standard way to plug external tools into an agent.
 - **Shared memory:** a place outside the editor where every agent on the team saves and looks up knowledge.
 - **Fact:** knowledge that changes rarely and can be stored as text.
-- **Path:** instructions for getting a value that changes, like which tool to call.
+- **Path:** instructions for reaching an answer that lives somewhere else: which tool to call, or which doc page to open.
 - **Mock:** a fake service that answers like the real one, used for tests.
-- **Curation:** reviewing what goes into the memory and removing what is outdated.
+- **Curation:** keeping an eye on what goes into the memory and removing what is outdated.
 
 ## Sources
 

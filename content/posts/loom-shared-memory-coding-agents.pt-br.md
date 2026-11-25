@@ -43,38 +43,52 @@ Funciona assim, passo a passo:
 
 O conhecimento passa a ser do time, não de uma máquina nem de um fornecedor. Trocar de provedor de IA não significa ensinar tudo de novo, porque a memória continua no mesmo lugar.
 
-## Dois tipos de conhecimento: fatos e caminhos
+## O que entra na memória: fatos e caminhos
 
-Nem tudo deve ser copiado para a memória. Existem dois tipos de conhecimento, e cada um pede um tratamento.
+Nem tudo deve ser copiado para a memória. As entradas são de dois tipos, e cada um pede um tratamento.
 
 Um **fato** muda pouco. "A janela de deploy é de segunda a sexta, das 8h às 14h." Tudo bem gravar o próprio fato na memória.
 
-Um **dado vivo** muda o tempo todo, ou pertence a outro sistema. "Quem está de plantão hoje?" Se o nome for gravado na memória, amanhã ele está errado. Então a memória guarda o **caminho**: qual ferramenta chamar para conseguir a resposta. O agente segue o caminho e pega o valor atual no sistema que é dono dele.
+Um **caminho** serve para quando a resposta mora em outro lugar. A memória não copia a resposta. Ela guarda como chegar lá. E esse "outro lugar" pode ser duas coisas:
 
-Pense no bilhete na geladeira do escritório. Ninguém escreve "hoje o plantão é de tal pessoa", porque de manhã já estaria errado. O bilhete diz "confira a escala no quadro". O bilhete é o caminho. O quadro tem o valor.
+- **Uma ferramenta**, para dados vivos. "Quem está de plantão hoje?" Se o nome for gravado na memória, amanhã ele está errado. Então a memória guarda qual ferramenta chamar, e o agente pega o valor atual no sistema que é dono dele.
+- **Um documento**, para procedimentos longos ou complexos. "Como eu testo uma transação com cartão de crédito em QA?" Isso tem vários passos, cartões de teste e alguma preparação. O lugar disso é a documentação. A memória guarda a pergunta e, como resposta, o link para a página certa.
 
-## Por que não escrever uma documentação?
+Pense no bilhete na geladeira do escritório. Ninguém escreve "hoje o plantão é de tal pessoa", porque de manhã já estaria errado. Ninguém copia o manual inteiro de um equipamento no bilhete também. O bilhete diz "confira a escala no quadro" ou "o manual está na segunda gaveta". O bilhete é o caminho. O quadro e o manual têm o conteúdo.
 
-É a pergunta óbvia, e ela merece uma resposta honesta. O que vem a seguir é raciocínio, não algo que o laboratório mediu.
+## Documentação e memória, juntas
 
-Documentação continua sendo necessária. Um bom runbook ou uma boa página de wiki ajuda as pessoas, e nada aqui substitui isso. A diferença está em quem lê, e quando.
+Se o time já tem documentação, para que uma memória? Porque as duas fazem trabalhos diferentes, e funcionam melhor juntas. O que vem a seguir é raciocínio, não algo que o laboratório mediu.
+
+**A documentação é o lugar das coisas complexas.** Procedimentos longos, contexto, decisões, diagramas. Testar uma transação com cartão de crédito em QA é um bom exemplo: precisa de explicação, e uma resposta de três linhas não daria conta.
+
+**A memória compartilhada é o lugar das respostas curtas, operacionais, do dia a dia.** Como buscar o log de uma transação em QA. Como buscar o log de uma transação em produção. Coisas que um dev precisa no meio de uma tarefa, em poucas linhas.
+
+E as duas se conectam. Quando alguém pergunta ao agente como testar uma transação com cartão em QA, a memória não guarda o procedimento inteiro. Ela guarda o link. O agente responde com a página certa da documentação, na hora em que a pessoa precisa, e a documentação é lida justamente quando é útil.
+
+![Diagrama: um agente consulta a memória compartilhada. Para uma pergunta operacional, como buscar o log de uma transação em QA ou em produção, a memória responde direto. Para uma pergunta complexa, como testar uma transação com cartão de crédito em QA, a memória devolve o link da documentação, que tem o procedimento completo.](/images/posts/loom-shared-memory-coding-agents/together-pt.svg)
 
 | | Documentação | Memória compartilhada |
 | --- | --- | --- |
-| Escrita para | Pessoas | O agente, que então ajuda a pessoa |
-| Lida quando | Alguém lembra de abrir | O agente consulta antes de responder |
-| Escrita por | Muitas vezes outra pessoa, depois | Quem acabou de descobrir, na hora |
-| Onde fica | Numa wiki, fora do editor | No lugar onde o agente já olha |
+| Melhor para | Procedimentos longos e complexos | Respostas curtas e operacionais |
+| Exemplo | Como testar uma transação com cartão de crédito em QA | Como buscar o log de uma transação em produção |
+| Quem lê | Pessoas, do começo ao fim | O agente, no meio de uma tarefa |
+| Como se conectam | Guarda o conteúdo completo | Responde direto, ou aponta para a página certa da documentação |
 
-O ponto principal é o momento da necessidade. Quando um dev pergunta ao agente como achar um log, o agente não abre a wiki se ninguém mandou, e se ninguém disse onde ela está. A memória compartilhada fica no caminho dele.
+### Manter atualizada custa pouco
 
-A memória também tem custos, e eles são reais:
+Todo conhecimento compartilhado fica desatualizado em algum momento. O que importa é quanto custa corrigir.
 
-- **Ela fica desatualizada.** Igual à documentação. Pior: uma informação errada se espalha para todo agente que lê.
-- **Ela precisa de curadoria.** Alguém tem que revisar o que entra e tirar o que ficou velho.
-- **Ela precisa de controle de acesso.** Num time, nem todo mundo deveria poder reescrever tudo.
+Com a memória compartilhada, corrigir faz parte do trabalho:
 
-Então não é uma melhoria de graça em relação à documentação. É outra ferramenta, mais perto de onde o trabalho acontece, com os cuidados dela.
+1. Um dev recebe uma resposta do agente, e a resposta está errada.
+2. Ele descobre o jeito certo, como faria de qualquer forma.
+3. Ele corrige a entrada, uma vez só.
+4. A partir desse momento, todo agente do time recebe a resposta corrigida.
+
+Ninguém precisa reservar um tempo para atualizar uma página, e ninguém continua ensinando o jeito antigo para o próprio agente. O próprio time corrige a memória enquanto usa. Uma página de documentação também é corrigida, mas normalmente espera alguém separar um tempo para isso.
+
+Duas coisas ainda pedem cuidado. Alguém precisa ficar de olho no que entra, para a memória não encher de ruído. E num time, nem todo mundo deveria poder reescrever tudo, o que é uma questão de controle de acesso.
 
 ## O laboratório: testando a ideia
 
@@ -108,10 +122,6 @@ Sendo honesto sobre um detalhe: nesse chat do Cursor, a conexão com o serviço 
 
 No fim, a página de memórias do Loom mostrava os dois registros e qual editor gravou cada um: a janela de deploy pelo Cursor, o procedimento do plantão pelo OpenCode.
 
-### O que o laboratório não testou
-
-Só o Cursor e o OpenCode foram testados. O [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) se conectaria do mesmo jeito, apontando para a mesma memória, mas o laboratório não testou.
-
 ## Para onde isso pode ir
 
 As perguntas do laboratório são triviais de propósito, para o mecanismo ficar fácil de ver. Elas são a prova, não o destino.
@@ -120,7 +130,8 @@ A mesma forma serve para as perguntas que um time faz de verdade. **Nada disto e
 
 | Pergunta | O que a memória guarda | De onde vem a resposta |
 | --- | --- | --- |
-| Como eu acho este log em produção? | Onde olhar, qual consulta, qual ferramenta | O sistema de logs devolve a linha |
+| Como eu busco o log de uma transação em QA ou em produção? | Onde olhar, qual consulta, qual ferramenta | O sistema de logs devolve a linha |
+| Como eu testo uma transação com cartão de crédito em QA? | O link para a página certa da documentação | A documentação |
 | Qual é o nosso processo de deploy? | Os passos e o que conferir antes de seguir | A memória, mais uma ferramenta quando um passo precisa |
 | Vou fazer o deploy deste serviço. O que eu acompanho? | Quais dashboards importam, e em que ordem | O dashboard mostra o número |
 
@@ -136,14 +147,14 @@ Algumas perguntas para começar:
 
 - Mais de uma pessoa do time explica o mesmo fluxo para o próprio agente?
 - Quando um dev novo precisa buscar logs ou fazer deploy, ele tem que achar uma pessoa específica?
+- O time tem uma boa documentação, mas difícil de achar no meio de uma tarefa?
 - O time usa mais de um editor ou provedor de IA?
-- Tem alguém disposto a cuidar do que entra numa memória compartilhada?
 
-Se as três primeiras respostas forem "sim", vale testar a ideia. Se a última for "não", comece por ela.
+Se a maioria das respostas for "sim", vale testar a ideia. Comece pequeno: algumas respostas operacionais e alguns links para a documentação que vocês já têm.
 
 ## Conclusão
 
-O ponto não é o Loom, nem um editor específico. É outro lugar para o conhecimento do time: escrito uma vez, por quem aprendeu, onde todo agente já olha. O laboratório mostrou que o mecanismo funciona entre dois editores. Fazer funcionar para um time inteiro é o próximo passo, com curadoria e controle de acesso.
+O ponto não é o Loom, nem um editor específico. É outro lugar para o conhecimento do time: escrito uma vez, por quem aprendeu, onde todo agente já olha. Ela não substitui a documentação. Ela aproxima a documentação do momento em que alguém precisa dela. O laboratório mostrou que o mecanismo funciona entre dois editores. Fazer funcionar para um time inteiro é o próximo passo, com controle de acesso e alguém cuidando do que entra.
 
 Se você quiser ver como o laboratório foi montado, e os prints reais, está tudo em [sschonss/loom-lab](https://github.com/sschonss/loom-lab).
 
@@ -153,9 +164,9 @@ Se você quiser ver como o laboratório foi montado, e os prints reais, está tu
 - **MCP:** Model Context Protocol, um jeito padrão de plugar ferramentas externas num agente.
 - **Memória compartilhada:** um lugar fora do editor onde todos os agentes do time guardam e consultam conhecimento.
 - **Fato:** conhecimento que muda pouco e pode ficar guardado como texto.
-- **Caminho:** instruções para conseguir um valor que muda, como qual ferramenta chamar.
+- **Caminho:** instruções para chegar a uma resposta que mora em outro lugar: qual ferramenta chamar, ou qual página da documentação abrir.
 - **Mock:** um serviço falso que responde como o de verdade, usado em testes.
-- **Curadoria:** revisar o que entra na memória e tirar o que ficou desatualizado.
+- **Curadoria:** ficar de olho no que entra na memória e tirar o que ficou desatualizado.
 
 ## Fontes
 
