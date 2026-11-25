@@ -29,8 +29,10 @@ Hyperf
 Hyperf's
 luizschons
 METR
+Mockoon
 Nostr
 Ollama
+opencode
 opentelemetry
 pthreads
 Sessionize
@@ -73,3 +75,4 @@ ramsey
 Autoloader
 gitleaks
 phpdotenv
+plantao
