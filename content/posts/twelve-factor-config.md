@@ -1,6 +1,6 @@
 ---
 title: '12 factors: config outside the code'
-date: 2026-11-30
+date: 2026-11-24
 description: 'Factor III of the Twelve factors in practice series: why passwords and addresses live in environment variables, and how to read, validate and pass that config in a PHP app.'
 translationKey: twelve-factor-config
 series: ['Twelve factors in practice']

@@ -1,6 +1,6 @@
 ---
 title: '12 fatores: configuração fora do código'
-date: 2026-11-30
+date: 2026-11-24
 description: 'Fator III da série Doze fatores na prática: por que senhas e endereços ficam em variáveis de ambiente, e como ler, validar e passar essas configurações num app PHP.'
 translationKey: twelve-factor-config
 series: ['Doze fatores na prática']
